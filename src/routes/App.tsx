@@ -1,5 +1,5 @@
-import logoSuzano from './assets/logo_suzano.png'
-import { CardEquipamento } from './components/CardEquipamento'
+import logoSuzano from '../assets/logo_suzano.png'
+import { CardEquipamento } from '../components/CardEquipamento'
 
 export function App() {
   return (

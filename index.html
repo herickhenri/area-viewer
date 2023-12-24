@@ -8,6 +8,16 @@
   </head>
   <body class="bg-slate-800">
     <div id="root"></div>
+
+    <script type="importmap">
+      {
+          "imports": {
+              "three": "https://cdn.jsdelivr.net/npm/three/build/three.module.js",
+              "@photo-sphere-viewer/core": "https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.module.js"
+          }
+      }
+  </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

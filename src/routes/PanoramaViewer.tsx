@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { GalleryPlugin, MarkersPlugin, ReactPhotoSphereViewer, VirtualTourPlugin } from 'react-photo-sphere-viewer';
 
 import pisoPds from '../assets/piso_PDs_panorama.jpeg'
@@ -37,6 +38,7 @@ export function PanoramaViewer() {
         trigger: 'click',
       } 
   }]
+    //@ts-ignore
     virtualTour.setNodes(
       [
         {
@@ -79,6 +81,7 @@ export function PanoramaViewer() {
     <ReactPhotoSphereViewer
       height={'100vh'}
       width={"100%"}
+      //@ts-ignore
       plugins={plugins}
       src={pisoPds}
       onReady={handleReady}

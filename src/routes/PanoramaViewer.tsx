@@ -1,19 +1,12 @@
 import { GalleryPlugin, MarkersPlugin, ReactPhotoSphereViewer, VirtualTourPlugin } from 'react-photo-sphere-viewer';
 
-// import casa360 from '../assets/casa_360.jpg'
 import pisoPds from '../assets/piso_PDs_panorama.jpeg'
 import pisoPdsFundo from '../assets/piso_PDs_fundo_panorama.jpeg'
 import point from '../assets/point.svg'
 import { bb113, bb114 } from '../components/equipamentos';
-import React from 'react';
 import { Viewer } from '@photo-sphere-viewer/core';
 
-const baseUrl = "https://photo-sphere-viewer-data.netlify.app/assets/";
-const caption = "Cape Florida Light, Key Biscayne <b>&copy; Pixexid</b>";
-
 export function PanoramaViewer() {
-  const pSRef = React.createRef();
-
   const handleReady = (instance: Viewer) => {
     const virtualTour = instance.getPlugin(VirtualTourPlugin);
     if (!virtualTour) return;
@@ -50,7 +43,7 @@ export function PanoramaViewer() {
           id: "1",
           panorama: pisoPds,
           name: "Piso dos PD's",
-          links: [{ nodeId: "2", position:{ textureX: -100, textureY: 0 }}],
+          links: [{ nodeId: "2", position:{ textureX: 100, textureY: 0 }}],
           markers: makerPisoPds,
         },
         {
@@ -84,13 +77,13 @@ export function PanoramaViewer() {
   return (
     <div id={"container-360"}>
     <ReactPhotoSphereViewer
-      ref={pSRef}
       height={'100vh'}
       width={"100%"}
       plugins={plugins}
       src={pisoPds}
       onReady={handleReady}
       panoData={{
+        isEquirectangular: true,
         fullWidth: 4000,
         fullHeight: 2000,
         croppedWidth: 4000,

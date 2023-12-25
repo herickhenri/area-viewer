@@ -3,7 +3,7 @@ import { GalleryPlugin, MarkersPlugin, ReactPhotoSphereViewer, VirtualTourPlugin
 
 import pisoPds from '../assets/piso_PDs_panorama.jpeg'
 import pisoPdsFundo from '../assets/piso_PDs_fundo_panorama.jpeg'
-import point from '../assets/point.svg'
+// import point from '../assets/point.svg'
 import { bb113, bb114 } from '../components/equipamentos';
 import { Viewer } from '@photo-sphere-viewer/core';
 
@@ -29,7 +29,7 @@ export function PanoramaViewer() {
       defaultHoverScale: true,
       id: 'bb114',
       position: { pitch: 0, yaw: -3.6 },
-      image: point,
+      image: "https://www.svgrepo.com/show/292182/pointer-pin.svg",
       size: { width: 32, height: 32 },
       anchor: 'top center',
       tooltip: {

@@ -16,7 +16,7 @@ export function PanoramaViewer() {
       defaultHoverScale: true,
       id: 'bb113',
       position: { pitch: 0.05, yaw: -2 },
-      image: point,
+      image: "https://www.svgrepo.com/show/292182/pointer-pin.svg",
       size: { width: 32, height: 32 },
       anchor: 'top center',
       tooltip: {

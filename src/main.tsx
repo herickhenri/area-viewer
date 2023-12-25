@@ -5,6 +5,7 @@ import './styles/global.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { PanoramaViewer } from './routes/PanoramaViewer.tsx'
 import { App } from './routes/App.tsx'
+import { Viewer360 } from './routes/Viewer360.tsx'
 
 const router = createBrowserRouter([
   {
@@ -14,7 +15,11 @@ const router = createBrowserRouter([
   {
     path: 'viewer',
     element: <PanoramaViewer />
-  }
+  },
+  {
+    path: 'casa360',
+    element: <Viewer360 />
+  },
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

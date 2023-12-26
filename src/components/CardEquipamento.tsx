@@ -27,7 +27,7 @@ export function CardEquipamento({ tag, image }: CardEquipamentoProps) {
       href={`equipamento/${tag}`}
     >
       Mais Informações
-      </a>
+    </a>
   </div>
   )
 }

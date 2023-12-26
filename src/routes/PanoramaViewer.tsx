@@ -1,10 +1,12 @@
 /* eslint-disable */
 import { GalleryPlugin, MarkersPlugin, ReactPhotoSphereViewer, VirtualTourPlugin } from 'react-photo-sphere-viewer';
 
-import pisoPds from '../assets/piso_PDs_panorama.jpeg'
-import pisoPdsFundo from '../assets/piso_PDs_fundo_panorama.jpeg'
+import pisoPds from '../assets/panoramas/piso_PDs_panorama.jpeg'
+import pisoPdsFundo from '../assets/panoramas/piso_PDs_fundo_panorama.jpeg'
+import areaDregs from '../assets/panoramas/area_dregs.jpeg'
+
 // import point from '../assets/point.svg'
-import { bb113, bb114 } from '../components/equipamentos';
+import { bb113, bb114, bb218, mx215 } from '../components/equipamentos';
 import { Viewer } from '@photo-sphere-viewer/core';
 
 export function PanoramaViewer() {
@@ -37,7 +39,35 @@ export function PanoramaViewer() {
         className: "bg-transparent",
         trigger: 'click',
       } 
-  }]
+    }]
+
+    const makersAreaDregs = [{
+      defaultHoverScale: true,
+      id: 'bb218',
+      position: { textureX: 610, textureY: 200 },
+      image: "https://www.svgrepo.com/show/292182/pointer-pin.svg",
+      size: { width: 32, height: 32 },
+      anchor: 'top center',
+      tooltip: {
+        content: bb218,
+        className: "bg-transparent",
+        trigger: 'click',
+      }
+    },
+    {
+      defaultHoverScale: true,
+      id: 'mx215',
+      position: { textureX: 3420, textureY: 160 },
+      image: "https://www.svgrepo.com/show/292182/pointer-pin.svg",
+      size: { width: 32, height: 32 },
+      anchor: 'top center',
+      tooltip: {
+        content: mx215,
+        className: "bg-transparent",
+        trigger: 'click',
+      } 
+    }]
+
     //@ts-ignore
     virtualTour.setNodes(
       [
@@ -52,8 +82,18 @@ export function PanoramaViewer() {
           id: "2",
           panorama: pisoPdsFundo,
           name: "Fundo do piso dos PD's",
-          links: [{ nodeId: "1", position:{ textureX: -100, textureY: 0 } }],
+          links: [
+            {nodeId: "1", position:{ textureX: 100, textureY: 0 }},
+            {nodeId: "3", position:{ textureX: 2500, textureY: 0 }}
+          ],
           // markers: [markerLighthouse],
+        },
+        {
+          id: "3",
+          panorama: areaDregs,
+          name: "area dos dregs",
+          links: [{ nodeId: "2", position:{ textureX: -800, textureY: 0 } }],
+          markers: makersAreaDregs,
         },
       ],
       "2",

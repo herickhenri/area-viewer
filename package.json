@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.0.15",
     "@photo-sphere-viewer/core": "^5.5.1",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.32",
@@ -17,7 +18,8 @@
     "react-dom": "^18.2.0",
     "react-innertext": "^1.1.5",
     "react-photo-sphere-viewer": "^4.0.2-psv5.4.4",
-    "react-router-dom": "^6.21.1"
+    "react-router-dom": "^6.21.1",
+    "swiper": "^11.0.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

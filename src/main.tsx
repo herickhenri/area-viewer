@@ -6,6 +6,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { PanoramaViewer } from './routes/PanoramaViewer.tsx'
 import { App } from './routes/App.tsx'
 import { Viewer360 } from './routes/Viewer360.tsx'
+import { DetalhesEquipamento } from './routes/DetalhesEquipamento.tsx'
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
     path: 'casa360',
     element: <Viewer360 />
   },
+  {
+    path: 'equipamento/:tag',
+    element: <DetalhesEquipamento />
+  }
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

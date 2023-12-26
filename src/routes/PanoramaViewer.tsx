@@ -75,6 +75,7 @@ export function PanoramaViewer() {
       },
     ],
   ];
+  
 
   return (
     <div id={"container-360"}>

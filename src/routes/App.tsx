@@ -28,6 +28,15 @@ export function App() {
         <CardEquipamento tag={'I1502BB218'} image={bombaDregs}/>
         <CardEquipamento tag={'I1502MX215'} image={misturadorPoco}/>
       </div>
+
+      <footer className='flex justify-center'>
+        <a 
+        className='text-lg font-semibold text-gray-300 py-3 px-4 rounded-lg bg-violet-600 hover:bg-violet-500 transition-colors'
+        href="/viewer"
+        >
+          Acesse a área
+        </a>
+      </footer>
     </div>
   )
 }

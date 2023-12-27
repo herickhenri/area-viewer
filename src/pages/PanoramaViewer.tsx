@@ -75,24 +75,30 @@ export function PanoramaViewer() {
           id: "1",
           panorama: pisoPds,
           name: "Piso dos PD's",
-          links: [{ nodeId: "2", position:{ textureX: 100, textureY: 0 }}],
+          // links: [{ nodeId: "2", position:{ textureX: 100, textureY: 0 }}],
+          links: [{ nodeId: "2"}],
+          gps: [250, 0],
           markers: makerPisoPds,
         },
         {
           id: "2",
           panorama: pisoPdsFundo,
           name: "Fundo do piso dos PD's",
-          links: [
-            {nodeId: "1", position:{ textureX: 100, textureY: 0 }},
-            {nodeId: "3", position:{ textureX: 2500, textureY: 0 }}
-          ],
+          // links: [
+          //   {nodeId: "1", position:{ textureX: 100, textureY: 0 }},
+          //   {nodeId: "3", position:{ textureX: 2500, textureY: 0 }}
+          // ],
+          links: [{nodeId: "1"}, {nodeId: "3"}],
+          gps: [25, 0],
           // markers: [markerLighthouse],
         },
         {
           id: "3",
           panorama: areaDregs,
           name: "area dos dregs",
-          links: [{ nodeId: "2", position:{ textureX: -800, textureY: 0 } }],
+          // links: [{ nodeId: "2", position:{ textureX: -800, textureY: 0 } }],
+          links: [{ nodeId: "2"}],
+          gps: [300, -150],
           markers: makersAreaDregs,
         },
       ],
@@ -111,6 +117,7 @@ export function PanoramaViewer() {
     [
       VirtualTourPlugin,
       {
+        positionMode: "gps",
         renderMode: "3d",
       },
     ],

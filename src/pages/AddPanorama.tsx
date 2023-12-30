@@ -1,9 +1,8 @@
-import { Camera, MapPin, PencilSimple } from "@phosphor-icons/react";
 import { Header } from "../components/header";
-import { MouseEvent, useState } from "react";
-import UploadImage from "../components/UploadImage";
+import { useState } from "react";
 import { MarkingInput } from "../components/MarkingInput";
 import { equipamentos } from "../data/DataEquip";
+import { PanoramaArea } from "../components/PanoramaArea";
 
 export type Coord = {
   x: number,
@@ -16,48 +15,23 @@ export type Marking = {
 }
 
 export function AddPanorama() {
-  const [panorama, setPanorama] = useState<string | null>(null)
   const [coord, setCoord] = useState<Coord | null>(null)
   const [markings, setMarkings] = useState<Marking[]>([])
+  const [panorama, setPanorama] = useState<string | null>(null)
 
   function updateImgSrc(source: string) {
     setPanorama(source)
   }
 
-  const handleClick = (e: MouseEvent) => {
-    // Obtém as coordenadas relativas à imagem
-    const x = e.nativeEvent.offsetX;
-    const y = e.nativeEvent.offsetY;
-
-    // Atualiza o estado com as coordenadas do clique
-    console.log({x, y})
-    setCoord({ x, y });
-  };
+  function changeCoord(coordenada : Coord) {
+    setCoord(coordenada)
+  }
 
   const markings_tags = markings.map(marking => marking.tag_equip)
 
   const optionsSelect = equipamentos
   .filter((equip) => !markings_tags.includes(equip.tag))
   .map(equip => ({value: equip.tag, label: equip.title}))
-
-  function deleteMark(tag_equip: string | undefined) {
-    const equip = markings.find(marking => marking.tag_equip === tag_equip)
-
-    if(equip) {
-      setMarkings((prevMarkings) => {
-        const uploadMarkings = prevMarkings.filter(prevMark => 
-          prevMark.tag_equip !== tag_equip
-        )
-        
-        return uploadMarkings
-      })
-
-      return
-    }
-
-    setCoord(null)
-  }
-  
 
   function handleMarking(coord: Coord, tag_equip: string) {
     const equip = markings.find((marking) => marking.tag_equip === tag_equip)
@@ -76,6 +50,23 @@ export function AddPanorama() {
     setMarkings(prevMarkings => [...prevMarkings, {coord, tag_equip}])
     setCoord(null)
   }
+
+  function deleteMark(tag_equip: string | undefined) {
+    const equip = markings.find(marking => marking.tag_equip === tag_equip)
+
+    if(!equip) {
+      setCoord(null)
+      return
+    }
+
+    setMarkings((prevMarkings) => {
+      const uploadMarkings = prevMarkings.filter(prevMark => 
+        prevMark.tag_equip !== tag_equip
+      )       
+      return uploadMarkings
+    })
+  }
+  
   return (
     <div>
       <Header />
@@ -99,52 +90,13 @@ export function AddPanorama() {
           />
         </label>
 
-        <label className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <span>Foto panorâmica:</span>
-            <UploadImage updateImgSrc={updateImgSrc}>
-              <PencilSimple size={32} className="p-1 rounded-full bg-blue-600 hover:bg-blue-700 transition-colors text-white cursor-pointer"/>
-            </UploadImage>
-          </div>
-          <div className="h-40 md:h-80 rounded bg-slate-300 hover:bg-slate-400 transition-colors overflow-hidden cursor-pointer">
-            {panorama ?(
-              <div key={panorama} className="relative h-full overflow-x-auto">
-                <img
-                  onClick={handleClick}
-                  className="h-full min-w-min" 
-                  src={panorama} 
-                  alt="Foto panorâmica" 
-                  />
-                {markings.map((mark) => (
-                  <MapPin
-                    key={mark.tag_equip}  
-                    className="w-4 h-4 md:w-6 md:h-6 -translate-x-1/2 -translate-y-full text-red-600 absolute"
-                    weight="fill"
-                    style={{
-                      left: mark.coord.x,
-                      top: mark.coord.y,
-                    }}
-                  />
-                ))}
-                {coord && (
-                  <MapPin 
-                    className="w-4 h-4 md:w-6 md:h-6 -translate-x-1/2 -translate-y-full text-red-600 absolute"
-                    weight="fill"
-                    style={{
-                      left: coord.x,
-                      top: coord.y,
-                    }}
-                  />
-                )}
-              </div>
-              ) : (
-                <UploadImage className="h-full w-full flex justify-center items-center" updateImgSrc={updateImgSrc}>
-                  <Camera size={32} className="text-black/50"/>
-                </UploadImage>
-              )
-            }
-          </div>
-        </label>
+        <PanoramaArea
+          panorama={panorama}
+          markings={markings}
+          coord={coord}
+          changeCoord={changeCoord}
+          updateImgSrc={updateImgSrc}
+        />
 
         <div className="flex flex-col gap-2">
           <span>Marcações:</span>
@@ -175,7 +127,7 @@ export function AddPanorama() {
           </span>
         </div>
 
-        <a href="" className="py-1 px-6 mx-auto max-w-max text-white text-2xl font-medium  rounded bg-blue-800 hover:bg-blue-700 transition-colors">
+        <a href="/mapa-area" className="py-1 px-6 mx-auto max-w-max text-white text-2xl font-medium  rounded bg-blue-800 hover:bg-blue-700 transition-colors">
           Adicionar ao mapa
         </a>
       </form>

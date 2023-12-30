@@ -5,6 +5,8 @@ import { PanoramaViewer } from "../pages/PanoramaViewer"
 import { Viewer360 } from "../pages/Viewer360"
 import { DetalhesEquipamento } from "../pages/DetalhesEquipamento"
 import { AddPanorama } from "../pages/AddPanorama"
+import { AreaMap } from "../pages/AreaMap"
+import { Admin } from "../pages/Admin"
 
 export function Routes() {
   const router = createBrowserRouter([
@@ -27,6 +29,14 @@ export function Routes() {
     {
       path: 'add-panorama',
       element: <AddPanorama />
+    },
+    {
+      path: 'mapa-area',
+      element: <AreaMap />
+    },
+    {
+      path: 'admin',
+      element: <Admin />
     },
   ])
   

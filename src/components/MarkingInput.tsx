@@ -1,9 +1,7 @@
 import Select from 'react-select'
 
-import { Check, PencilSimple, X } from "@phosphor-icons/react"
-import { Coord, Marking } from "../pages/AddPanorama"
-import { useState } from 'react'
-import { equipamentos } from '../data/DataEquip'
+import { X } from "@phosphor-icons/react"
+import { Coord } from "../pages/AddPanorama"
 
 type Item = {
     value: string;

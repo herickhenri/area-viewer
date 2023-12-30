@@ -1,4 +1,4 @@
-import { Camera, MapPin, PencilSimple, PlusCircle } from "@phosphor-icons/react";
+import { Camera, MapPin, PencilSimple } from "@phosphor-icons/react";
 import { Header } from "../components/header";
 import { MouseEvent, useState } from "react";
 import UploadImage from "../components/UploadImage";

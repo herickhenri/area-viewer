@@ -20,6 +20,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
+    "react-hook-form": "^7.49.2",
     "react-photo-sphere-viewer": "^4.0.2-psv5.4.4",
     "react-router-dom": "^6.21.1",
     "react-select": "^5.8.0",

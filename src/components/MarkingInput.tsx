@@ -34,7 +34,7 @@ export function MarkingInput({
   }
   
   return (
-    <div className="px-2 flex justify-between items-center border border-black/25 rounded">
+    <div className="focus-within:border-transparent focus-within:outline outline-2 outline-blue-500 px-2 flex justify-between items-center border border-black/25 rounded">
       <Select
         id={tag_equip}
         options={options}

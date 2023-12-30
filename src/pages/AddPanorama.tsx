@@ -93,7 +93,7 @@ export function AddPanorama() {
             Nome do local:
           </span>
           <input 
-            className="py-2 px-4 w-full border border-solid border-black/25 rounded-lg focus:outline-blue-500"
+            className="py-2 px-4 w-full border border-solid border-black/25 rounded focus:outline-blue-500"
             type="text" 
             placeholder="Nome"
           />
@@ -103,10 +103,10 @@ export function AddPanorama() {
           <div className="flex items-center justify-between">
             <span>Foto panorâmica:</span>
             <UploadImage updateImgSrc={updateImgSrc}>
-              <PencilSimple size={32} className="p-1 rounded-full bg-blue-600 text-white cursor-pointer"/>
+              <PencilSimple size={32} className="p-1 rounded-full bg-blue-600 hover:bg-blue-700 transition-colors text-white cursor-pointer"/>
             </UploadImage>
           </div>
-          <div className="h-40 md:h-80 rounded bg-slate-300 overflow-hidden cursor-pointer">
+          <div className="h-40 md:h-80 rounded bg-slate-300 hover:bg-slate-400 transition-colors overflow-hidden cursor-pointer">
             {panorama ?(
               <div key={panorama} className="relative h-full overflow-x-auto">
                 <img

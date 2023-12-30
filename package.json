@@ -22,6 +22,8 @@
     "react-dropzone": "^14.2.3",
     "react-photo-sphere-viewer": "^4.0.2-psv5.4.4",
     "react-router-dom": "^6.21.1",
+    "react-select": "^5.8.0",
+    "reactflow": "^11.10.1",
     "swiper": "^11.0.5"
   },
   "devDependencies": {

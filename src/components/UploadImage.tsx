@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone'
 interface UploadImageProps {
   updateImgSrc: (source: string) => void
   children: ReactNode
-  className: string
+  className?: string
 }
 
 export default function UploadImage({

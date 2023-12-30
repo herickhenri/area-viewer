@@ -3,7 +3,21 @@ import bombaCondensado from '../assets/equipamentos/i1502bb220.jpeg'
 import bombaDregs from '../assets/equipamentos/i1502bb218.jpeg'
 import misturadorPoco from '../assets/equipamentos/i1502mx215.jpeg'
 
-export const equipamentos = [
+export type Equip = {
+  tag: string,
+  image: string,
+  title: string,
+  loc: string,
+  fontes_energ?: string[],
+  param: {
+    vazao: number,
+    vel_nom: number,
+    cabecote: number,
+    potencia: number,
+  },
+}
+
+export const equipamentos: Equip[] = [
   { 
     tag: "I1501BB101",
     image: bombaLama,

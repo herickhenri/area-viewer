@@ -1,27 +1,56 @@
-import { PencilSimple, X } from "@phosphor-icons/react"
-import { Marking } from "../pages/AddPanorama"
+import Select from 'react-select'
 
+import { Check, PencilSimple, X } from "@phosphor-icons/react"
+import { Coord, Marking } from "../pages/AddPanorama"
+import { useState } from 'react'
+import { equipamentos } from '../data/DataEquip'
+
+type Item = {
+    value: string;
+    label: string;
+}
+ 
 interface MarkingInputProps {
-  mark: Marking
-  deleteMark: (mark: Marking) => void
+  options: Item[]
+  coord: Coord
+  defaultValue?: Item
+  tag_equip?: string
+  deleteMark: (tag_equip: string | undefined) => void
+  handleMarking: (coord: Coord, tag_equip: string) => void
 }
 
-export function MarkingInput({ mark, deleteMark }: MarkingInputProps) {
+export function MarkingInput({ 
+  coord, 
+  defaultValue,
+  options,
+  tag_equip,
+  deleteMark, 
+  handleMarking,
+}: MarkingInputProps) {
+
+
+  function changeValue(valueItem: Item | null) {
+    if(valueItem) {
+      handleMarking(coord, valueItem.value)
+    }
+  }
+  
   return (
-    <div className="py-3 px-4 flex justify-between items-center border border-solid border-black/25 rounded">
-      {mark.tag_equip ? (
-        <span>{mark.tag_equip}</span>
-      ) : (
-        <input 
-          className="outline-none"
-          type="text"
-          placeholder="Encontre o equipamento"
-        />
-      )}
-      <div className="flex items-center gap-2">
-        <PencilSimple size={24}/>
-        <X size={24} onClick={() => deleteMark(mark)}/>
-      </div>
+    <div className="px-2 flex justify-between items-center border border-black/25 rounded">
+      <Select
+        id={tag_equip}
+        options={options}
+        classNames={{
+          container: () => "flex-1",
+          control: () => "border-none shadow-none flex-1",
+        }}
+        onChange={value => changeValue(value)}
+        defaultValue={defaultValue}
+        placeholder="Selecione um equipamento"
+        autoFocus={!tag_equip}
+      />
+      
+      <X size={16} className='block mr-2' onClick={() => deleteMark(tag_equip)}/>
   </div>
   )
 }

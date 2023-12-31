@@ -1,16 +1,11 @@
 import { Camera, MapPin, PencilSimple } from "@phosphor-icons/react";
 import UploadImage from "./UploadImage";
 import { MouseEvent, useEffect, useRef, useState } from "react";
-import { Marking } from "../pages/AddPanorama";
+import { Coord, Marking } from "../pages/AddPanorama";
 
 type Size = {
   width: number;
   height: number;
-}
-
-type Coord = {
-  x: number,
-  y: number
 }
 
 interface PanoramaAreaProps {
@@ -37,13 +32,13 @@ export function PanoramaArea({
     height: intrinsicSize.height / renderedSize.height
   }
 
-  useEffect(() => {
+  function getSizes() {
     if (!panoramaRef.current) {
       return
     }
 
     //Tamanho original da imagem
-    const { naturalWidth, naturalHeight } = panoramaRef.current;
+    const { naturalWidth, naturalHeight } = panoramaRef.current
     //tamanho gerado pela página
     const { offsetWidth, offsetHeight } = panoramaRef.current
 
@@ -56,8 +51,11 @@ export function PanoramaArea({
       width: offsetWidth, 
       height: offsetHeight 
     })
-  }, [panorama])
-  console.log(coord)
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', getSizes)
+  }, [])
 
   const handleClick = (e: MouseEvent) => {
     // Obtém as coordenadas relativas à imagem
@@ -85,8 +83,9 @@ export function PanoramaArea({
           <img
             ref={panoramaRef}
             onClick={handleClick}
+            onLoad={getSizes}
             className="h-full min-w-min" 
-            src={panorama} 
+            src={panorama}
             alt="Foto panorâmica" 
             />
           {markings.map((mark) => (

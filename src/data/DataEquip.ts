@@ -76,5 +76,5 @@ export const equipamentos: Equip[] = [
       cabecote: 65,
       potencia: 110
     }
-  }
+  },
 ]

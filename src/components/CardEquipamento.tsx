@@ -13,22 +13,22 @@ export function CardEquipamento({ tag, image }: CardEquipamentoProps) {
   }
 
   return (
-    <div className='w-full shadow-xl shadow-black/40'>
-    <img
-      className='w-full aspect-square object-cover'
-      src={image} 
-      alt="bomba de dregs"
-    />
-    <div className='px-4 mb-4'>
-      <span className='text-xs'>I-1502-BB-218</span>
-      <h2 className='text-lg font-semibold'>Bomba de dregs do fundo do spill</h2>
-      <a
-        className='block mt-2 w-full font-semibold text-center py-3 px-4 text-white bg-green-700 rounded'
-        href="/equipamento/I1502BB218"
-      >
-        Mais informações
-      </a>
+    <div className='flex flex-col w-full md:w-60 shadow-xl shadow-black/40'>
+      <img
+        className='w-full aspect-square object-cover'
+        src={image} 
+        alt="bomba de dregs"
+      />
+      <div className='flex flex-col px-4 mb-4 flex-1'>
+        <span className='text-xs'>{equip.tag}</span>
+        <h2 className='text-lg font-semibold flex-1'>{equip.title}</h2>
+        <a
+          className='block mt-2 w-full font-semibold text-center py-3 px-4 text-white rounded bg-green-700 hover:bg-green-800 transition-colors'
+          href={`/equipamento/${equip.tag}`}
+        >
+          Mais informações
+        </a>
+      </div>
     </div>
-  </div>
   )
 }

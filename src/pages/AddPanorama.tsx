@@ -19,6 +19,12 @@ export function AddPanorama() {
   const [markings, setMarkings] = useState<Marking[]>([])
   const [panorama, setPanorama] = useState<string | null>(null)
 
+  const markings_tags = markings.map(marking => marking.tag_equip)
+
+  const optionsSelect = equipamentos
+  .filter((equip) => !markings_tags.includes(equip.tag))
+  .map(equip => ({value: equip.tag, label: equip.title}))
+
   function updateImgSrc(source: string) {
     setPanorama(source)
   }
@@ -26,12 +32,6 @@ export function AddPanorama() {
   function changeCoord(coordenada : Coord) {
     setCoord(coordenada)
   }
-
-  const markings_tags = markings.map(marking => marking.tag_equip)
-
-  const optionsSelect = equipamentos
-  .filter((equip) => !markings_tags.includes(equip.tag))
-  .map(equip => ({value: equip.tag, label: equip.title}))
 
   function handleMarking(coord: Coord, tag_equip: string) {
     const equip = markings.find((marking) => marking.tag_equip === tag_equip)

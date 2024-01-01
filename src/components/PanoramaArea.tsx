@@ -1,7 +1,7 @@
 import { Camera, MapPin, PencilSimple } from "@phosphor-icons/react";
-import { UploadImage } from "./UploadImage";
 import { MouseEvent, useEffect, useRef, useState } from "react";
 import { Coord, Marking } from "../pages/AddPanorama";
+import { useDropzone } from "react-dropzone";
 
 type Size = {
   width: number;
@@ -23,6 +23,12 @@ export function PanoramaArea({
   changeCoord,
   updateImgSrc }: PanoramaAreaProps) {
   const panoramaRef= useRef<HTMLImageElement>(null)
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: (files) => updateImgSrc(URL.createObjectURL(files[0])),
+    accept: { 'image/*': ['.png', '.jpeg', '.jpg'] },
+    maxFiles: 1,
+  })
 
   const [renderedSize, setRenderedSize] = useState<Size>({} as Size)
   const [intrinsicSize, setIntrinsicSize] = useState<Size>({} as Size)
@@ -73,9 +79,10 @@ export function PanoramaArea({
     <div className="flex flex-col gap-2">
     <div className="flex items-center justify-between">
       <span>Foto panorâmica:</span>
-      <UploadImage updateImgSrc={updateImgSrc}>
+      <div {...getRootProps()}>
+        <input {...getInputProps()}/>
         <PencilSimple size={32} className="p-1 rounded-full bg-blue-600 hover:bg-blue-700 transition-colors text-white cursor-pointer"/>
-      </UploadImage>
+      </div>
     </div>
     <div className="h-40 md:h-80 rounded bg-slate-300 hover:bg-slate-400 transition-colors overflow-hidden cursor-pointer">
       {panorama ?(
@@ -111,9 +118,13 @@ export function PanoramaArea({
           )}
         </div>
         ) : (
-          <UploadImage className="h-full w-full flex justify-center items-center" updateImgSrc={updateImgSrc}>
+          <div 
+            className="h-full w-full flex justify-center items-center"
+            {...getRootProps()}
+            >
+            <input {...getInputProps()}/>
             <Camera size={32} className="text-black/50"/>
-          </UploadImage>
+          </div>
         )
       }
     </div>

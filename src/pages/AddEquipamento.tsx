@@ -1,18 +1,35 @@
+import { useDropzone } from "react-dropzone";
+
 import { PlusCircle, X } from "@phosphor-icons/react";
 import { Header } from "../components/header";
-import { UploadImage } from "../components/UploadImage";
 import { useState } from "react";
 
-export function AddEquipamento() {
-  const [photos, setPhotos] = useState<string[]>([])
+type Photo = {
+  source: string
+  name: string
+}
 
-  function updateImgSrc(source: string) {
-    setPhotos(prevPhotos => [...prevPhotos, source])
+export function AddEquipamento() {
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: (files) => updateImgSrc(files),
+    accept: { 'image/*': ['.png', '.jpeg', '.jpg'] },
+  })
+
+  const [photos, setPhotos] = useState<Photo[]>([])
+
+  function updateImgSrc(files: File[]) {
+    const images: Photo[] = files.map(file => {
+      const source = URL.createObjectURL(file)
+      const name = file.name
+      
+      return {source, name}
+    })
+    setPhotos(prevPhotos => [...prevPhotos, ...images])
   }
 
-  function deletePhoto(source: string) {
+  function deletePhoto(photo: Photo) {
     setPhotos(prevPhotos => {
-      const updatePhoto = prevPhotos.filter(photo => photo !== source)
+      const updatePhoto = prevPhotos.filter(prevPhoto => prevPhoto !== photo)
 
       return updatePhoto
     })
@@ -73,17 +90,18 @@ export function AddEquipamento() {
 
         <div className="flex flex-col gap-2">
           <span>Fotos:</span>
-          <UploadImage
+          <div
             className="text-black/50 w-full h-20 flex items-center justify-center gap-2 border-2 border-dashed border-black/25 rounded hover:border-blue-500 transition-colors cursor-pointer"
-            updateImgSrc={updateImgSrc}
+            {...getRootProps()}
           >
+            <input {...getInputProps()}/>
             <PlusCircle size={32} weight="light"/>
             <span>Adicione as fotos aqui</span>
-          </UploadImage>
-          {photos.map(photo => (
-            <div key={photo} className="flex gap-2 items-center">
-              <img src={photo} alt="" className="w-10 aspect-square object-cover rounded"/>
-              <span className="flex-1">Nome da foto</span>
+          </div>
+          {photos.map((photo, key) => (
+            <div key={key} className="flex gap-2 items-center">
+              <img src={photo.source} alt="" className="w-10 aspect-square object-cover rounded"/>
+              <span className="flex-1 truncate">{photo.name}</span>
               <X 
                 className="mr-2 cursor-pointer"
                 onClick={() => deletePhoto(photo)}

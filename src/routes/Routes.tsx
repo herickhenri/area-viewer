@@ -7,6 +7,7 @@ import { DetalhesEquipamento } from "../pages/DetalhesEquipamento"
 import { AddPanorama } from "../pages/AddPanorama"
 import { AreaMap } from "../pages/AreaMap"
 import { Admin } from "../pages/Admin"
+import { AddEquipamento } from "../pages/AddEquipamento"
 
 export function Routes() {
   const router = createBrowserRouter([
@@ -37,6 +38,10 @@ export function Routes() {
     {
       path: 'admin',
       element: <Admin />
+    },
+    {
+      path: 'add-equipamento',
+      element: <AddEquipamento />,
     },
   ])
   

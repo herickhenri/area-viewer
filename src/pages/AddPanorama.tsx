@@ -33,13 +33,15 @@ export function AddPanorama() {
     setCoord(coordenada)
   }
 
-  function handleMarking(coord: Coord, tag_equip: string) {
-    const equip = markings.find((marking) => marking.tag_equip === tag_equip)
- 
-    if(equip) {
+  function handleMarking(marking: Marking | undefined, tag_equip: string) {
+      if(!coord) {
+        return
+      }
+
+     if(marking) {
       setMarkings(prevMarkings => {
-        const uploadMarkings = prevMarkings.map(marking => 
-          marking.coord === coord ? {tag_equip, coord} : marking
+        const uploadMarkings: Marking[] = prevMarkings.map(mark => 
+          mark === marking ? {tag_equip, coord} : mark
         )
 
         return uploadMarkings
@@ -51,17 +53,16 @@ export function AddPanorama() {
     setCoord(null)
   }
 
-  function deleteMark(tag_equip: string | undefined) {
-    const equip = markings.find(marking => marking.tag_equip === tag_equip)
-
-    if(!equip) {
+  function deleteMark(marking?: Marking) {
+    if (!marking) {
       setCoord(null)
+
       return
     }
 
     setMarkings((prevMarkings) => {
-      const uploadMarkings = prevMarkings.filter(prevMark => 
-        prevMark.tag_equip !== tag_equip
+      const uploadMarkings = prevMarkings.filter(prevMarking => 
+        prevMarking !== marking
       )       
       return uploadMarkings
     })
@@ -108,21 +109,19 @@ export function AddPanorama() {
               key={key}
               options={optionsSelect}
               handleMarking={handleMarking}
-              coord={marking.coord}
               defaultValue={defaultValue}
               deleteMark={deleteMark}
-              tag_equip={marking.tag_equip}
+              marking={marking}
               />        
           )})}
           {coord && (
             <MarkingInput
               options={optionsSelect}
-              coord={coord}
               handleMarking={handleMarking}
               deleteMark={deleteMark}
             />
           )}
-          <span className="flex md:mx-auto text-blue-500 text-center">
+          <span className="flex md:mx-auto text-red-500 text-center">
             Clique na imagem para adicionar uma nova marcação.
           </span>
         </div>

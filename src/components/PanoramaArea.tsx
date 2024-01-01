@@ -1,5 +1,5 @@
 import { Camera, MapPin, PencilSimple } from "@phosphor-icons/react";
-import UploadImage from "./UploadImage";
+import { UploadImage } from "./UploadImage";
 import { MouseEvent, useEffect, useRef, useState } from "react";
 import { Coord, Marking } from "../pages/AddPanorama";
 

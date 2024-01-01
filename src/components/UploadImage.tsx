@@ -1,13 +1,14 @@
 import { ReactNode } from 'react'
 import { useDropzone } from 'react-dropzone'
 
+
 interface UploadImageProps {
   updateImgSrc: (source: string) => void
   children: ReactNode
   className?: string
 }
 
-export default function UploadImage({
+export function UploadImage({
   updateImgSrc,
   children,
   className,

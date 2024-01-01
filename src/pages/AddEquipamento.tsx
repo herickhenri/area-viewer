@@ -3,6 +3,7 @@ import { useDropzone } from "react-dropzone";
 import { PlusCircle, X } from "@phosphor-icons/react";
 import { Header } from "../components/header";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 type Photo = {
   source: string
@@ -43,7 +44,7 @@ export function AddEquipamento() {
           Adicionar novo equipamento
       </h1>
 
-      <form className="px-6 mb-10 flex flex-col gap-5">
+      <form className="md:mx-56 px-6 mb-10 flex flex-col gap-5">
         <label className="flex flex-col gap-2">
           <span>
             Nome:
@@ -57,9 +58,9 @@ export function AddEquipamento() {
 
         <div className="flex flex-col gap-2">
           <span>Tag:</span>
-          <div className="flex w-full items-center justify-between">
+          <div className="flex w-full items-center justify-between md:justify-normal md:gap-2">
             <input 
-              className="text-black/25 py-2 w-10 text-center border border-solid border-black/25 rounded focus:outline-blue-500"
+              className="text-black/50 py-2 w-10 text-center border border-solid border-black/25 rounded focus:outline-blue-500"
               type="text"
               disabled
               value={"I"}
@@ -110,12 +111,12 @@ export function AddEquipamento() {
           ))}
         </div>
 
-        <a
+        <Link
           className="py-2 px-6 mx-auto max-w-max text-white text-lg font-medium rounded bg-blue-800 hover:bg-blue-900 transition-colors" 
-          href=""
+          to="/"
         >
           Cadastrar equipamento
-        </a>
+        </Link>
       </form>
     </div>
   )

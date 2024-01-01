@@ -3,7 +3,7 @@ import { Header } from '../components/header';
 import { equipamentos } from '../data/DataEquip';
 
 
-export function DetalhesEquipamento() {
+export function DetailsEquipamento() {
   const currentURL = new URL(window.location.href);
   const path = currentURL.pathname
   const pathArray = path.split('/')

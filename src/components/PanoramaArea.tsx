@@ -1,7 +1,8 @@
 import { Camera, MapPin, PencilSimple } from "@phosphor-icons/react";
 import { MouseEvent, useEffect, useRef, useState } from "react";
-import { Coord, Marking } from "../pages/AddPanorama";
 import { useDropzone } from "react-dropzone";
+import { Coord, createPanoramaFormData } from "../pages/AddPanorama";
+import { useFormContext } from "react-hook-form";
 
 type Size = {
   width: number;
@@ -9,19 +10,18 @@ type Size = {
 }
 
 interface PanoramaAreaProps {
-  markings: Marking[]
   panorama: string | null
-  coord : Coord | null
-  changeCoord: (coord: Coord) => void
   updateImgSrc: (source: string) => void
+  changeCoord: (coordenada: Coord) => void
 }
 
 export function PanoramaArea({ 
-  markings, 
   panorama, 
-  coord, 
-  changeCoord,
-  updateImgSrc }: PanoramaAreaProps) {
+  updateImgSrc,
+  changeCoord
+}: PanoramaAreaProps) {
+  const { watch } = useFormContext<createPanoramaFormData>()
+  const markings = watch("markings")
   const panoramaRef= useRef<HTMLImageElement>(null)
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -63,6 +63,7 @@ export function PanoramaArea({
     window.addEventListener('resize', getSizes)
   }, [])
 
+
   const handleClick = (e: MouseEvent) => {
     // Obtém as coordenadas relativas à imagem
     const x = e.nativeEvent.offsetX;
@@ -70,8 +71,8 @@ export function PanoramaArea({
 
     // Atualiza o estado com as coordenadas do clique
     changeCoord({
-      x: x * conversionRate.width,
-      y: y * conversionRate.height
+      x: Math.round(x * conversionRate.width),
+      y: Math.round(y * conversionRate.height)
     });
   };
 
@@ -106,16 +107,6 @@ export function PanoramaArea({
               }}
             />
           ))}
-          {coord && (
-            <MapPin 
-              className="w-4 h-4 md:w-6 md:h-6 -translate-x-1/2 -translate-y-full text-red-600 absolute"
-              weight="fill"
-              style={{
-                left: coord.x / conversionRate.width,
-                top: coord.y / conversionRate.height,
-              }}
-            />
-          )}
         </div>
         ) : (
           <div 

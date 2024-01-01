@@ -3,7 +3,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import { App } from "../pages/App"
 import { PanoramaViewer } from "../pages/PanoramaViewer"
 import { Viewer360 } from "../pages/Viewer360"
-import { DetalhesEquipamento } from "../pages/DetalhesEquipamento"
+import { DetailsEquipamento } from "../pages/DetailsEquipamento"
 import { AddPanorama } from "../pages/AddPanorama"
 import { AreaMap } from "../pages/AreaMap"
 import { Admin } from "../pages/Admin"
@@ -25,22 +25,22 @@ export function Routes() {
     },
     {
       path: 'equipamento/:tag',
-      element: <DetalhesEquipamento />
-    },
-    {
-      path: 'add-panorama',
-      element: <AddPanorama />
-    },
-    {
-      path: 'mapa-area',
-      element: <AreaMap />
+      element: <DetailsEquipamento />
     },
     {
       path: 'admin',
       element: <Admin />
     },
     {
-      path: 'add-equipamento',
+      path: 'admin/add-panorama',
+      element: <AddPanorama />
+    },
+    {
+      path: 'admin/mapa-area',
+      element: <AreaMap />
+    },
+    {
+      path: 'admin/add-equipamento',
       element: <AddEquipamento />,
     },
   ])

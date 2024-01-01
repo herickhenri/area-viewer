@@ -1,8 +1,9 @@
-import { Header } from "../components/header";
 import { useState } from "react";
-import { MarkingInput } from "../components/MarkingInput";
-import { equipamentos } from "../data/DataEquip";
+import { Header } from "../components/header";
+import { Markings } from "../components/Markings";
 import { PanoramaArea } from "../components/PanoramaArea";
+import { Controller, FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
 
 export type Coord = {
   x: number,
@@ -11,62 +12,43 @@ export type Coord = {
 
 export type Marking = {
   coord: Coord
-  tag_equip: string,
+  tag_equip: string
 }
+
+const createPanoramaFormSchema = z.object({
+  name: z.string(),
+  panorama: z.string(),
+  markings: z.array(z.object({
+    tag_equip: z.string(),
+    coord: z.object({
+      x: z.number(),
+      y: z.number()
+    }),
+  }))
+})
+
+export type createPanoramaFormData = z.infer<typeof createPanoramaFormSchema>
 
 export function AddPanorama() {
   const [coord, setCoord] = useState<Coord | null>(null)
-  const [markings, setMarkings] = useState<Marking[]>([])
-  const [panorama, setPanorama] = useState<string | null>(null)
 
-  const markings_tags = markings.map(marking => marking.tag_equip)
+  const newCycleForm = useForm<createPanoramaFormData>()
 
-  const optionsSelect = equipamentos
-  .filter((equip) => !markings_tags.includes(equip.tag))
-  .map(equip => ({value: equip.tag, label: equip.title}))
+  const {
+    control,
+    register,
+    handleSubmit,
+  } = newCycleForm
 
-  function updateImgSrc(source: string) {
-    setPanorama(source)
+  async function createPanorama(data: createPanoramaFormData) {
+    const blob = await fetch(data.panorama).then((response) => response.blob())
+    console.log(data, blob)
   }
 
-  function changeCoord(coordenada : Coord) {
+  function changeCoord(coordenada: Coord) {
     setCoord(coordenada)
   }
 
-  function handleMarking(marking: Marking | undefined, tag_equip: string) {
-      if(!coord) {
-        return
-      }
-
-     if(marking) {
-      setMarkings(prevMarkings => {
-        const uploadMarkings: Marking[] = prevMarkings.map(mark => 
-          mark === marking ? {tag_equip, coord} : mark
-        )
-
-        return uploadMarkings
-      })
-      
-      return
-    }
-    setMarkings(prevMarkings => [...prevMarkings, {coord, tag_equip}])
-    setCoord(null)
-  }
-
-  function deleteMark(marking?: Marking) {
-    if (!marking) {
-      setCoord(null)
-
-      return
-    }
-
-    setMarkings((prevMarkings) => {
-      const uploadMarkings = prevMarkings.filter(prevMarking => 
-        prevMarking !== marking
-      )       
-      return uploadMarkings
-    })
-  }
   
   return (
     <div>
@@ -76,60 +58,41 @@ export function AddPanorama() {
           Adicionar novo panorama
       </h1>
 
-      <form 
-        className="mb-10 mx-5 md:mx-56 flex flex-col gap-5"
-        action=""
-      >
-        <label className="flex flex-col gap-2">
-          <span>
-            Nome do local:
-          </span>
-          <input 
-            className="py-2 px-4 w-full border border-solid border-black/25 rounded focus:outline-blue-500"
-            type="text" 
-            placeholder="Nome"
-          />
-        </label>
-
-        <PanoramaArea
-          panorama={panorama}
-          markings={markings}
-          coord={coord}
-          changeCoord={changeCoord}
-          updateImgSrc={updateImgSrc}
-        />
-
-        <div className="flex flex-col gap-2">
-          <span>Marcações:</span>
-          {markings.map((marking, key) =>{
-            const equip = equipamentos.find((equip) => equip.tag === marking.tag_equip)
-            const defaultValue = equip && {value: equip.tag, label: equip.title}
-            return (
-              <MarkingInput
-              key={key}
-              options={optionsSelect}
-              handleMarking={handleMarking}
-              defaultValue={defaultValue}
-              deleteMark={deleteMark}
-              marking={marking}
-              />        
-          )})}
-          {coord && (
-            <MarkingInput
-              options={optionsSelect}
-              handleMarking={handleMarking}
-              deleteMark={deleteMark}
+      <FormProvider {...newCycleForm}>
+        <form 
+          className="mb-10 mx-5 md:mx-56 flex flex-col gap-5"
+          action=""
+          onSubmit={handleSubmit(createPanorama)}
+        >
+          <label className="flex flex-col gap-2">
+            <span>
+              Nome do local:
+            </span>
+            <input 
+              className="py-2 px-4 w-full border border-solid border-black/25 rounded focus:outline-blue-500"
+              type="text" 
+              placeholder="Nome"
+              {...register("name")}
             />
-          )}
-          <span className="flex md:mx-auto text-red-500 text-center">
-            Clique na imagem para adicionar uma nova marcação.
-          </span>
-        </div>
+          </label>
+          <Controller 
+            name="panorama"
+            control={control}
+            render={({ field }) => (
+              <PanoramaArea
+                panorama={field.value}
+                updateImgSrc={field.onChange}
+                changeCoord={changeCoord}
+              />
+            )}
+          /> 
+            <Markings coord={coord}/>
 
-        <a href="/mapa-area" className="py-1 px-6 mx-auto max-w-max text-white text-2xl font-medium  rounded bg-blue-800 hover:bg-blue-700 transition-colors">
-          Adicionar ao mapa
-        </a>
-      </form>
+          <button className="py-1 px-6 mx-auto max-w-max text-white text-2xl font-medium  rounded bg-blue-800 hover:bg-blue-700 transition-colors">
+            Adicionar ao mapa
+          </button>
+        </form>  
+      </FormProvider>
     </div>
   )
 }

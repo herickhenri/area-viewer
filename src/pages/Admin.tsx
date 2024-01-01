@@ -28,12 +28,12 @@ export function Admin() {
         <ButtonAdm 
           content="Cadastrar Panoramas" 
           icon={CubeTransparent}
-          link={"/add-panorama"}
+          link={"add-panorama"}
         />
         <ButtonAdm 
           content="Editar Panoramas" 
           icon={CubeTransparent}
-          link={"/admin"}
+          link={""}
         />
 
         <div className="w-full h-px bg-black my-5"/>

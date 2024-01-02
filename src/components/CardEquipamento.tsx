@@ -1,17 +1,13 @@
+import { Link } from "react-router-dom"
 import { equipamentos } from "../data/DataEquip"
 
 interface CardEquipamentoProps {
-  tag:{
-    unit: string
-    area: string
-    equipCode: string
-    seqNumber: string
-  }
+  tag: string
   image: string
 }
 
 export function CardEquipamento({ tag, image }: CardEquipamentoProps) {
-  const equip = equipamentos.find((equip) => equip.tag === tag)
+  const equip = equipamentos.find((equip) => equip.tag.id === tag)
 
   if(!equip) {
     return <h1>Equipamento não encontrado</h1>
@@ -30,12 +26,12 @@ export function CardEquipamento({ tag, image }: CardEquipamentoProps) {
       <div className='flex flex-col px-4 mb-4 flex-1'>
         <span className='text-xs'>{tagString}</span>
         <h2 className='text-lg font-semibold flex-1'>{equip.name}</h2>
-        <a
+        <Link
           className='block mt-2 w-full font-semibold text-center py-3 px-4 text-white rounded bg-green-700 hover:bg-green-800 transition-colors'
-          href={`/equipamento/${equip.tag}`}
+          to={`/equipamento/${equip.tag.id}`}
         >
           Mais informações
-        </a>
+        </Link>
       </div>
     </div>
   )

@@ -2,29 +2,12 @@ import bombaLama from '../assets/equipamentos/i1501bb101.jpeg'
 import bombaCondensado from '../assets/equipamentos/i1502bb220.jpeg'
 import bombaDregs from '../assets/equipamentos/i1502bb218.jpeg'
 import misturadorPoco from '../assets/equipamentos/i1502mx215.jpeg'
-
-export type Equip = {
-  tag: {
-    unit: string
-    area: string
-    equipCode: string
-    seqNumber: string
-  },
-  image: string,
-  name: string,
-  loc: string,
-  fontes_energ?: string[],
-  param: {
-    vazao: number,
-    vel_nom: number,
-    cabecote: number,
-    potencia: number,
-  },
-}
+import { Equip } from '../types/Equip'
 
 export const equipamentos: Equip[] = [
   { 
     tag: {
+      id: "I1501BB101",
       unit: "I",
       area: "1501",
       equipCode: "BB",
@@ -46,6 +29,7 @@ export const equipamentos: Equip[] = [
   },
   {
     tag: {
+      id: "I1502BB218",
       unit: "I",
       area: "1502",
       equipCode: "BB",
@@ -67,6 +51,7 @@ export const equipamentos: Equip[] = [
   },
   {
     tag: {
+      id: "I1502BB220",
       unit: "I",
       area: "1502",
       equipCode: "BB",
@@ -87,6 +72,7 @@ export const equipamentos: Equip[] = [
   },
   {
     tag: {
+      id: "I1502MX215",
       unit: "I",
       area: "1501",
       equipCode: "MX",

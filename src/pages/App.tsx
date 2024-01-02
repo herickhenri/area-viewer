@@ -4,6 +4,7 @@ import logoSuzano from '../assets/logo_suzano.png'
 import { CardEquipamento } from '../components/CardEquipamento'
 import { equipamentos } from '../data/DataEquip'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 export function App() {
   const [search, setSearch] = useState("")
@@ -21,9 +22,9 @@ export function App() {
   return (
     <div>
       <header className='py-2 bg-white flex flex-col items-center gap-2 shadow-xl'>
-        <a href="/" className='h-8'>
+        <Link to="/" className='h-8'>
           <img className='h-full' src={logoSuzano} alt="Logo da suzano"/>
-        </a>
+        </Link>
         <div className='px-4 py-2 border border-black/25 border-solid rounded-full flex items-center gap-2 focus-within:outline focus-within:border-transparent outline-2 outline-blue-500'>
           <MagnifyingGlass size={16} className='text-black/25'/>
           <input 
@@ -45,9 +46,9 @@ export function App() {
         <div className='px-6 mb-5 flex gap-5 flex-wrap'>
           {filteredEquip.map(equip => (
             <CardEquipamento 
-            key={equip.tag.area+equip.tag.equipCode+equip.tag.seqNumber} 
+            key={equip.tag.id} 
             image={equip.image} 
-            tag={equip.tag}
+            tag={equip.tag.id}
             />
           ))}    
         </div>
@@ -55,12 +56,16 @@ export function App() {
         <div className='px-6 mb-5 flex gap-5 flex-wrap'>
           {equipamentos.map(equip => (
             <CardEquipamento 
-            key={equip.tag.area+equip.tag.equipCode+equip.tag.seqNumber} 
+            key={equip.tag.id} 
             image={equip.image} 
-            tag={equip.tag}
+            tag={equip.tag.id}
             />
           ))}
         </div>
+      )}
+
+      {(search.length > 0 && filteredEquip.length === 0) && (
+        <span className='block w-screen text-black/50 text-center text-lg font-medium'>Nenhum equipamento encontrado</span>
       )}
     </div>
   )

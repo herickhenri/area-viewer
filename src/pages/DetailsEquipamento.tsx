@@ -10,7 +10,7 @@ export function DetailsEquipamento() {
 
   const slug = pathArray[pathArray.length-1]
 
-  const equip = equipamentos.find((equip) => equip.tag == slug)
+  const equip = equipamentos.find((equip) => equip.tag.id == slug)
 
   if(!equip) {
     return <h1>Equipamento não encontrado</h1>
@@ -25,7 +25,7 @@ export function DetailsEquipamento() {
 
         <div className='h-full flex-1 flex flex-col gap-4'>
           <h1 className='text-3xl font-semibold'>
-            {equip.title}
+            {equip.name}
           </h1>
         </div>
       </div>

@@ -26,8 +26,8 @@ export function Markings({ coord } : MarkingsProps) {
   const markings_tags = markings.map(marking => marking.tag_equip)
 
   const options: Item[] = equipamentos
-  .filter((equip) => !markings_tags.includes(equip.tag))
-  .map(equip => ({value: equip.tag, label: equip.title}))
+  .filter((equip) => !markings_tags.includes(equip.tag.id))
+  .map(equip => ({value: equip.tag.id, label: equip.name}))
 
   useEffect(() => {
     if(!coord) {
@@ -48,8 +48,8 @@ export function Markings({ coord } : MarkingsProps) {
     <div className="flex flex-col gap-2">
       <span>Marcações:</span>
       {markings.map((marking, index) =>{
-      const equip = equipamentos.find((equip) => equip.tag === marking.tag_equip)
-      const defaultValue = equip && {value: equip.tag, label: equip.title}
+      const equip = equipamentos.find((equip) => equip.tag.id === marking.tag_equip)
+      const defaultValue = equip && {value: equip.tag.id, label: equip.name}
 
       return (
         <div 
@@ -65,7 +65,7 @@ export function Markings({ coord } : MarkingsProps) {
             onChange={item => update(index, {tag_equip: item?.value || '', coord: marking.coord})}
             defaultValue={defaultValue}
             placeholder="Selecione um equipamento"
-            autoFocus={!marking}
+            autoFocus
           />
           
           <X size={16} className='block mr-2 cursor-pointer' onClick={() => remove(index)}/>

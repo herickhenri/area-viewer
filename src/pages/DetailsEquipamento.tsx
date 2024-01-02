@@ -1,5 +1,5 @@
 import { SwiperEquipamento } from '../components/SwiperEquipamento';
-import { Header } from '../components/header';
+import { Header } from '../components/Header';
 import { equipamentos } from '../data/DataEquip';
 
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Header } from "../components/header";
+import { HeaderAdmin } from "../components/HeaderAdmin";
 import { Markings } from "../components/Markings";
 import { PanoramaArea } from "../components/PanoramaArea";
 import { Controller, FormProvider, useForm } from "react-hook-form";
@@ -52,7 +52,7 @@ export function AddPanorama() {
   
   return (
     <div>
-      <Header />
+      <HeaderAdmin />
       
       <h1 className="text-center font-semibold text-2xl md:text-4xl my-5">
           Adicionar novo panorama

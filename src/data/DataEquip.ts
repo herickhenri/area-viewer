@@ -4,9 +4,14 @@ import bombaDregs from '../assets/equipamentos/i1502bb218.jpeg'
 import misturadorPoco from '../assets/equipamentos/i1502mx215.jpeg'
 
 export type Equip = {
-  tag: string,
+  tag: {
+    unit: string
+    area: string
+    equipCode: string
+    seqNumber: string
+  },
   image: string,
-  title: string,
+  name: string,
   loc: string,
   fontes_energ?: string[],
   param: {
@@ -19,9 +24,14 @@ export type Equip = {
 
 export const equipamentos: Equip[] = [
   { 
-    tag: "I1501BB101",
+    tag: {
+      unit: "I",
+      area: "1501",
+      equipCode: "BB",
+      seqNumber: "101",
+    },
     image: bombaLama,
-    title: "Bomba de lama para o LMCD 1",
+    name: "Bomba de lama para o LMCD 1",
     loc: "em frente ao tranque de lama de cal, ao lado das bombas de vacuo dos LMCDs.",
     fontes_energ: [
       "Condensado",
@@ -35,9 +45,14 @@ export const equipamentos: Equip[] = [
     }
   },
   {
-    tag: "I1502BB218",
+    tag: {
+      unit: "I",
+      area: "1502",
+      equipCode: "BB",
+      seqNumber: "218",
+    },
     image: bombaDregs,
-    title: "Bomba do fundo do spill",
+    name: "Bomba do fundo do spill",
     loc: "em ao spill, ao lado do piso dos PD's",
     fontes_energ: [
       "Condensado",
@@ -51,9 +66,14 @@ export const equipamentos: Equip[] = [
     }
   },
   {
-    tag: "I1502BB220",
+    tag: {
+      unit: "I",
+      area: "1502",
+      equipCode: "BB",
+      seqNumber: "220",
+    },
     image: bombaCondensado,
-    title: "Bomba de condensado de alta",
+    name: "Bomba de condensado de alta",
     loc: "em frente ao tanque de condensado",
     fontes_energ: [
       "Condensado"
@@ -66,9 +86,14 @@ export const equipamentos: Equip[] = [
     }
   },
   {
-    tag: "I1502MX215",
+    tag: {
+      unit: "I",
+      area: "1501",
+      equipCode: "MX",
+      seqNumber: "215",
+    },
     image: misturadorPoco,
-    title: "Misturador do poço de agua de selagem",
+    name: "Misturador do poço de agua de selagem",
     loc: "em cima do poço de agua de selagem, ao lado do piso dos PD's",
     param: {
       vazao: 240,

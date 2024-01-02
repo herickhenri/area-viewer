@@ -1,11 +1,11 @@
 import { CubeTransparent, GearSix, Lock } from "@phosphor-icons/react";
-import { Header } from "../components/header";
+import { HeaderAdmin } from "../components/HeaderAdmin";
 import { ButtonAdm } from "../components/ButtonAdmin";
 
 export function Admin() {
   return (
     <div>
-      <Header />
+      <HeaderAdmin />
 
       <h1 className="text-center font-semibold text-2xl md:text-4xl my-5">
           Página admnistrativa
@@ -15,12 +15,12 @@ export function Admin() {
         <ButtonAdm 
           content="Cadastrar Equipamentos" 
           icon={GearSix}
-          link={"/admin"}
+          link={"add-equipamento"}
         />
         <ButtonAdm 
           content="Editar Equipamentos" 
           icon={GearSix}
-          link={"/admin"}
+          link={"edit-equip-list"}
         />
 
         <div className="w-full h-px bg-black my-5"/>
@@ -33,7 +33,7 @@ export function Admin() {
         <ButtonAdm 
           content="Editar Panoramas" 
           icon={CubeTransparent}
-          link={""}
+          link={"edit-panorama-list"}
         />
 
         <div className="w-full h-px bg-black my-5"/>

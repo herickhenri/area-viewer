@@ -8,6 +8,8 @@ import { AddPanorama } from "../pages/AddPanorama"
 import { AreaMap } from "../pages/AreaMap"
 import { Admin } from "../pages/Admin"
 import { AddEquipamento } from "../pages/AddEquipamento"
+import { EditEquipList } from "../pages/EditEquipList"
+import { EditPanoramaList } from "../pages/EditPanoramaList"
 
 export function Routes() {
   const router = createBrowserRouter([
@@ -42,6 +44,14 @@ export function Routes() {
     {
       path: 'admin/add-equipamento',
       element: <AddEquipamento />,
+    },
+    {
+      path: "admin/edit-equip-list",
+      element: <EditEquipList />
+    },
+    {
+      path: "admin/edit-panorama-list",
+      element: <EditPanoramaList />
     },
   ])
   

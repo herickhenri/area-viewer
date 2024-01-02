@@ -65,7 +65,6 @@ export function Markings({ coord } : MarkingsProps) {
             onChange={item => update(index, {tag_equip: item?.value || '', coord: marking.coord})}
             defaultValue={defaultValue}
             placeholder="Selecione um equipamento"
-            autoFocus
           />
           
           <X size={16} className='block mr-2 cursor-pointer' onClick={() => remove(index)}/>

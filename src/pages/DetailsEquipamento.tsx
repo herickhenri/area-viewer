@@ -1,7 +1,8 @@
-import { Header } from '../components/Header';
+import { Link } from 'react-router-dom';
 import { SwiperEquipamento } from '../components/SwiperEquipamento';
 import { equipamentos } from '../data/DataEquip';
 
+import logoSuzano from '../assets/logo_suzano.png'
 
 export function DetailsEquipamento() {
   const currentURL = new URL(window.location.href);
@@ -18,7 +19,11 @@ export function DetailsEquipamento() {
 
   return (
     <div>
-      <Header />
+      <header className='py-4 px-4 shadow-lg flex w-full justify-between items-center gap-8'>
+        <Link to="/">
+          <img src={logoSuzano} alt="Logo da suzano" className='h-8'/>
+        </Link>
+    </header>
 
       <div className='px-8 my-6 md:px-28 md:mt-11 flex flex-col md:flex-row gap-4 md:gap-20'>
         <SwiperEquipamento image={equip.image}/>

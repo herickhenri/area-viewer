@@ -1,7 +1,7 @@
 import Select from 'react-select'
 
 import { X } from "@phosphor-icons/react"
-import { Coord, createPanoramaFormData } from '../pages/AddPanorama';
+import { Coord, createPanoramaFormData } from '../pages/PanoramaForm';
 import { equipamentos } from '../data/DataEquip';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useEffect } from 'react';
@@ -23,7 +23,7 @@ export function Markings({ coord } : MarkingsProps) {
     name: 'markings',
   })
 
-  const markings_tags = markings.map(marking => marking.tag_equip)
+  const markings_tags = markings.map(marking => marking.equip_tag)
 
   const options: Item[] = equipamentos
   .filter((equip) => !markings_tags.includes(equip.tag.id))
@@ -35,20 +35,20 @@ export function Markings({ coord } : MarkingsProps) {
     }
 
     //Verifica se ja há alguma marcação sem tag
-    if(markings[markings.length -1]?.tag_equip === "") {
-      update(markings.length-1, {tag_equip: "", coord})
+    if(markings[markings.length -1]?.equip_tag === "") {
+      update(markings.length-1, {equip_tag: "", coord})
       return
     }
 
     //Se não houver, é criada uma nova
-    append({tag_equip: "", coord})
+    append({equip_tag: "", coord})
   }, [coord])
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex-1 flex flex-col gap-2">
       <span>Marcações:</span>
       {markings.map((marking, index) =>{
-      const equip = equipamentos.find((equip) => equip.tag.id === marking.tag_equip)
+      const equip = equipamentos.find((equip) => equip.tag.id === marking.equip_tag)
       const defaultValue = equip && {value: equip.tag.id, label: equip.name}
 
       return (
@@ -62,7 +62,7 @@ export function Markings({ coord } : MarkingsProps) {
               container: () => "flex-1",
               control: () => "border-none shadow-none flex-1",
             }}
-            onChange={item => update(index, {tag_equip: item?.value || '', coord: marking.coord})}
+            onChange={item => update(index, {equip_tag: item?.value || '', coord: marking.coord})}
             defaultValue={defaultValue}
             placeholder="Selecione um equipamento"
           />

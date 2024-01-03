@@ -3,10 +3,13 @@ import { equipamentos } from "../data/DataEquip"
 
 interface CardEquipamentoProps {
   tag: string
-  image: string
+  photos: {
+    source: string,
+    name: string,
+  }[]
 }
 
-export function CardEquipamento({ tag, image }: CardEquipamentoProps) {
+export function CardEquipamento({ tag, photos }: CardEquipamentoProps) {
   const equip = equipamentos.find((equip) => equip.tag.id === tag)
 
   if(!equip) {
@@ -15,12 +18,13 @@ export function CardEquipamento({ tag, image }: CardEquipamentoProps) {
   const tagString = `
     ${equip.tag.unit}-${equip.tag.area}-${equip.tag.equipCode}-${equip.tag.seqNumber}
   `
+  const sources = photos.map(photo => photo.source)
 
   return (
     <div className='flex flex-col w-full md:w-60 shadow-xl shadow-black/40'>
       <img
         className='w-full aspect-square object-cover'
-        src={image} 
+        src={sources[0]} 
         alt="bomba de dregs"
       />
       <div className='flex flex-col px-4 mb-4 flex-1'>

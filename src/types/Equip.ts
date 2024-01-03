@@ -2,7 +2,10 @@ import { Tag } from "./Tag";
 
 export type Equip = {
   tag: Tag,
-  image: string,
+  photos: {
+    source: string,
+    name: string,
+  }[],
   name: string,
   loc: string,
   fontes_energ?: string[],

@@ -1,7 +1,7 @@
 import { Camera, MapPin, PencilSimple } from "@phosphor-icons/react";
 import { MouseEvent, useEffect, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Coord, createPanoramaFormData } from "../pages/AddPanorama";
+import { Coord, createPanoramaFormData } from "../pages/PanoramaForm";
 import { useFormContext } from "react-hook-form";
 
 type Size = {
@@ -98,7 +98,7 @@ export function PanoramaArea({
             />
           {markings.map((mark) => (
             <MapPin
-              key={mark.tag_equip}  
+              key={mark.equip_tag}  
               className="w-4 h-4 md:w-6 md:h-6 -translate-x-1/2 -translate-y-full text-red-600 absolute"
               weight="fill"
               style={{

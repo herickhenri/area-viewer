@@ -47,7 +47,7 @@ export function App() {
           {filteredEquip.map(equip => (
             <CardEquipamento 
             key={equip.tag.id} 
-            image={equip.image} 
+            photos={equip.photos} 
             tag={equip.tag.id}
             />
           ))}    
@@ -57,7 +57,7 @@ export function App() {
           {equipamentos.map(equip => (
             <CardEquipamento 
             key={equip.tag.id} 
-            image={equip.image} 
+            photos={equip.photos} 
             tag={equip.tag.id}
             />
           ))}

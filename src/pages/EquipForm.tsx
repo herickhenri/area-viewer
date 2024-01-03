@@ -4,6 +4,8 @@ import { PlusCircle, X } from "@phosphor-icons/react";
 import { HeaderAdmin } from "../components/HeaderAdmin";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
+import { useParams } from "react-router-dom";
+import { equipamentos } from "../data/DataEquip";
 
 type Photo = {
   source: string
@@ -26,16 +28,27 @@ const newEquipFormSchema = z.object({
 
 type newEquipFormSchema = z.infer<typeof newEquipFormSchema>
 
-export function AddEquipamento() {
+export function EquipForm() {
+  const { tag } = useParams()
+
+  const equip = equipamentos.find(equipamento => equipamento.tag.id === tag)
+  const editMode = Boolean(equip)
+
   const { 
     handleSubmit,
     register,
     control
   } = useForm<newEquipFormSchema>({
     defaultValues: {
+      name: equip?.name,
       tag: {
-        unit: "I"
-      }
+        unit: "I",
+        area: equip?.tag.area,
+        equipCode: equip?.tag.equipCode,
+        seqNumber: equip?.tag.seqNumber,
+      },
+      photos: equip?.photos
+
     }
   })
 
@@ -69,7 +82,7 @@ export function AddEquipamento() {
       <HeaderAdmin />
 
       <h1 className="mx-6 text-center font-semibold text-2xl md:text-4xl my-5">
-          Adicionar novo equipamento
+          {editMode ? "Editar equipamento" : "Adicionar novo equipamento"}
       </h1>
 
       <form 

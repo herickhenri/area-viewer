@@ -13,7 +13,10 @@ export const equipamentos: Equip[] = [
       equipCode: "BB",
       seqNumber: "101",
     },
-    image: bombaLama,
+    photos: [{
+      source: bombaLama,
+      name: "bomba de lama",
+    }],
     name: "Bomba de lama para o LMCD 1",
     loc: "em frente ao tranque de lama de cal, ao lado das bombas de vacuo dos LMCDs.",
     fontes_energ: [
@@ -35,7 +38,10 @@ export const equipamentos: Equip[] = [
       equipCode: "BB",
       seqNumber: "218",
     },
-    image: bombaDregs,
+    photos: [{
+      source: bombaDregs,
+      name: "bomba de lama",
+    }],
     name: "Bomba do fundo do spill",
     loc: "em ao spill, ao lado do piso dos PD's",
     fontes_energ: [
@@ -57,7 +63,10 @@ export const equipamentos: Equip[] = [
       equipCode: "BB",
       seqNumber: "220",
     },
-    image: bombaCondensado,
+    photos: [{
+      source: bombaCondensado,
+      name: "bomba de lama",
+    }],
     name: "Bomba de condensado de alta",
     loc: "em frente ao tanque de condensado",
     fontes_energ: [
@@ -78,7 +87,10 @@ export const equipamentos: Equip[] = [
       equipCode: "MX",
       seqNumber: "215",
     },
-    image: misturadorPoco,
+    photos: [{
+      source: misturadorPoco,
+      name: "bomba de lama",
+    }],
     name: "Misturador do poço de agua de selagem",
     loc: "em cima do poço de agua de selagem, ao lado do piso dos PD's",
     param: {

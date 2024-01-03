@@ -4,10 +4,10 @@ import { App } from "../pages/App"
 import { PanoramaViewer } from "../pages/PanoramaViewer"
 import { Viewer360 } from "../pages/Viewer360"
 import { DetailsEquipamento } from "../pages/DetailsEquipamento"
-import { AddPanorama } from "../pages/AddPanorama"
+import { PanoramaForm } from "../pages/PanoramaForm"
 import { AreaMap } from "../pages/AreaMap"
 import { Admin } from "../pages/Admin"
-import { AddEquipamento } from "../pages/AddEquipamento"
+import { EquipForm } from "../pages/EquipForm"
 import { EditEquipList } from "../pages/EditEquipList"
 import { EditPanoramaList } from "../pages/EditPanoramaList"
 
@@ -35,7 +35,7 @@ export function Routes() {
     },
     {
       path: 'admin/add-panorama',
-      element: <AddPanorama />
+      element: <PanoramaForm />
     },
     {
       path: 'admin/mapa-area',
@@ -43,16 +43,25 @@ export function Routes() {
     },
     {
       path: 'admin/add-equipamento',
-      element: <AddEquipamento />,
+      element: <EquipForm />,
     },
     {
       path: "admin/edit-equip-list",
       element: <EditEquipList />
     },
     {
+      path: "admin/edit-equip-list/:tag",
+      element: <EquipForm />
+    },
+    {
       path: "admin/edit-panorama-list",
       element: <EditPanoramaList />
     },
+    {
+      path: "admin/edit-panorama-list/:id",
+      element: <PanoramaForm />
+    },
+
   ])
   
   return (

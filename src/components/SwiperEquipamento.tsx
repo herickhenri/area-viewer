@@ -7,10 +7,13 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 
 interface SwiperEquipamentoProps {
-  image: string,
+  photos: {
+    source: string,
+    name: string
+  }[]
 }
 
-export function SwiperEquipamento({ image }: SwiperEquipamentoProps) {
+export function SwiperEquipamento({ photos }: SwiperEquipamentoProps) {
   // const [thumbsSwiper, setThumbsSwiper] = useState(null);
   return (
     <div className='w-full md:w-80'>
@@ -22,27 +25,16 @@ export function SwiperEquipamento({ image }: SwiperEquipamentoProps) {
         modules={[FreeMode, Navigation, Thumbs]}
         className='mb-4'
       >
+        {photos.map((photo, key) => (
         <SwiperSlide>
-          <img 
+          <img
+          key={key}
           className='w-full h-96 object-cover shadow-2xl shadow-black/100'
-          src={image} 
-          alt="bomba de lama" 
+          src={photo.source} 
+          alt={photo.name} 
           />
         </SwiperSlide>
-        <SwiperSlide>
-          <img 
-          className='w-full h-96 object-cover shadow-2xl shadow-black/100'
-          src={image} 
-          alt="bomba de lama" 
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img 
-          className='w-full h-96 object-cover shadow-2xl shadow-black/100'
-          src={image} 
-          alt="bomba de lama" 
-          />
-        </SwiperSlide>
+        ))}
       </Swiper>
 
       <Swiper
@@ -53,27 +45,16 @@ export function SwiperEquipamento({ image }: SwiperEquipamentoProps) {
         freeMode
         modules={[FreeMode, Navigation, Thumbs]}
       >
-        <SwiperSlide>
-          <img 
-          className='opacity-40 w-full aspect-square object-cover shadow-2xl shadow-black/100'
-          src={image} 
-          alt="bomba de lama"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img 
-          className='opacity-40 w-full aspect-square object-cover shadow-2xl shadow-black/100'
-          src={image} 
-          alt="bomba de lama" 
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img 
-          className='opacity-40 w-full aspect-square object-cover shadow-2xl shadow-black/100'
-          src={image} 
-          alt="bomba de lama" 
-          />
-        </SwiperSlide>
+        {photos.map((photo, key) => (
+          <SwiperSlide>
+            <img
+            key={key}
+            className='opacity-40 w-full aspect-square object-cover shadow-2xl shadow-black/100'
+            src={photo.source} 
+            alt={photo.name} 
+            />
+          </SwiperSlide>
+      ))}
       </Swiper>
     </div>
   )

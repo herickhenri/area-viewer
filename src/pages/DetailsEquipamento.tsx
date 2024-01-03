@@ -26,7 +26,7 @@ export function DetailsEquipamento() {
     </header>
 
       <div className='px-8 my-6 md:px-28 md:mt-11 flex flex-col md:flex-row gap-4 md:gap-20'>
-        <SwiperEquipamento image={equip.image}/>
+        <SwiperEquipamento photos={equip.photos}/>
 
         <div className='h-full flex-1 flex flex-col gap-4'>
           <h1 className='text-3xl font-semibold'>

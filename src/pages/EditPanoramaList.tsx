@@ -12,7 +12,7 @@ export function EditPanoramaList() {
         Panoramas
       </h1>
 
-      <div className="md:px-56 flex flex-col gap-6 mb-10">
+      <div className="px-6 md:px-56 flex flex-col gap-6 mb-10">
         {panoramas.map(panorama => (
           <div key={panorama.id}>
             <div className="flex justify-between items-center mb-2">
@@ -22,7 +22,7 @@ export function EditPanoramaList() {
               </Link>
             </div>
             <img 
-              className="h-80 object-cover rounded-lg"
+              className="h-40 md:h-80 object-cover rounded md:rounded-lg"
               src={panorama.image} 
               alt="" 
             />

@@ -6,11 +6,13 @@ import {
   createPanoramaFormData,
 } from '@/components/panorama-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { deleteImage } from '@/api/delete-image'
 
 export function PanoramaEdit() {
+  const navigate = useNavigate()
+
   const { id } = useParams()
 
   const { data: panorama } = useQuery({
@@ -49,6 +51,8 @@ export function PanoramaEdit() {
         image_link: image.link,
         markings,
       })
+
+      navigate(`/admin/panorama/edited/${id}`)
     } catch (error) {
       console.log(error)
       toast.error(

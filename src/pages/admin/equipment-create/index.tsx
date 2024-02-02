@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
-import { redirect, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { postEquipment } from '@/api/post-equipment'
 import { uploadImages } from '@/api/upload-images'

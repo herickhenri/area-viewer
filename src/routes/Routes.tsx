@@ -13,6 +13,8 @@ import { PanoramaEdit } from '@/pages/admin/panorama-edit'
 import { EquipmentsFeed } from '@/pages/app/equipments-feed.tsx'
 import { EquipmentDetails } from '@/pages/app/equipment-details'
 import { EquipmentEdited } from '@/pages/admin/equipment-edited'
+import { PanoramaCreated } from '@/pages/admin/panorama-created'
+import { PanoramaEdited } from '@/pages/admin/panorama-edited'
 
 export function Routes() {
   const router = createBrowserRouter([
@@ -67,8 +69,16 @@ export function Routes() {
           element: <PanoramaCreate />,
         },
         {
+          path: 'panorama/created/:id',
+          element: <PanoramaCreated />,
+        },
+        {
           path: 'panorama/edit/:id',
           element: <PanoramaEdit />,
+        },
+        {
+          path: 'panorama/edited/:id',
+          element: <PanoramaEdited />,
         },
       ],
     },

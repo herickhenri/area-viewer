@@ -5,9 +5,12 @@ import {
   createPanoramaFormData,
 } from '@/components/panorama-form'
 import { useMutation } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 export function PanoramaCreate() {
+  const navigate = useNavigate()
+
   const { mutateAsync: createPanoramaFn, isPending: isPendingCreatePanorama } =
     useMutation({
       mutationFn: createPanorama,
@@ -25,12 +28,14 @@ export function PanoramaCreate() {
       formData.append('file', file, file.name)
       const image = await uploadImageFn(formData)
 
-      await createPanoramaFn({
+      const { id } = await createPanoramaFn({
         name,
         image_key: image.key,
         image_link: image.link,
         markings,
       })
+
+      navigate(`/admin/panorama/created/${id}`)
     } catch (error) {
       console.log(error)
       toast.error(

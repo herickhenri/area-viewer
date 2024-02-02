@@ -18,15 +18,21 @@ export function PanoramaEdit() {
     queryFn: () => getPanorama(id!),
   })
 
-  const { mutateAsync: updatePanoramaFn } = useMutation({
-    mutationFn: updatePanorama,
-  })
-  const { mutateAsync: uploadImageFn } = useMutation({
-    mutationFn: uploadImage,
-  })
-  const { mutateAsync: deleteImageFn } = useMutation({
-    mutationFn: deleteImage,
-  })
+  const { mutateAsync: updatePanoramaFn, isPending: isPendingUpdatePanorama } =
+    useMutation({
+      mutationFn: updatePanorama,
+    })
+  const { mutateAsync: uploadImageFn, isPending: isPendingUploadImage } =
+    useMutation({
+      mutationFn: uploadImage,
+    })
+  const { mutateAsync: deleteImageFn, isPending: isPendingDeleteImage } =
+    useMutation({
+      mutationFn: deleteImage,
+    })
+
+  const isPendingRequest =
+    isPendingUpdatePanorama || isPendingDeleteImage || isPendingUploadImage
 
   async function handleForm({ name, file, markings }: createPanoramaFormData) {
     try {
@@ -34,7 +40,7 @@ export function PanoramaEdit() {
       formData.append('file', file, file.name)
       const image = await uploadImageFn(formData)
 
-      panorama && (await deleteImage(panorama.image_key))
+      panorama && (await deleteImageFn(panorama.image_key))
 
       await updatePanoramaFn({
         id: id!,
@@ -61,7 +67,11 @@ export function PanoramaEdit() {
         Editar panorama
       </h1>
 
-      <PanoramaForm sendForm={handleForm} data={panorama} />
+      <PanoramaForm
+        sendForm={handleForm}
+        data={panorama}
+        isPendingRequest={isPendingRequest}
+      />
     </div>
   )
 }

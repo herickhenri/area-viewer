@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
-import { redirect, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { uploadImages } from '@/api/upload-images'
@@ -20,8 +20,8 @@ type Image = {
 }
 
 export function EquipmentEdit() {
+  const navigate = useNavigate()
   const { id } = useParams()
-
   const { data: equipment } = useQuery({
     queryKey: ['equipment'],
     queryFn: () => getEquipment(id!),
@@ -74,7 +74,7 @@ export function EquipmentEdit() {
         photos,
       })
 
-      redirect(`admin/equipment/created/${id}`)
+      navigate(`/admin/equipment/edited/${id}`)
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 409) {

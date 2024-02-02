@@ -4,7 +4,7 @@ import { CameraSlash, Check } from '@phosphor-icons/react'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
 
-export function EquipmentCreated() {
+export function EquipmentEdited() {
   const { id } = useParams()
 
   const { data: equipment } = useQuery({
@@ -21,7 +21,7 @@ export function EquipmentCreated() {
   return (
     <div className="flex flex-col items-center">
       <h1 className="mx-6 my-5 text-center text-2xl font-semibold md:text-4xl">
-        Equipamento criado com sucesso
+        Equipamento editado com sucesso
         <Check weight="bold" className="ml-2 inline text-green-500" />
       </h1>
 

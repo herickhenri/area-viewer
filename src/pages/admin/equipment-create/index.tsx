@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
-import { redirect } from 'react-router-dom'
+import { redirect, useNavigate } from 'react-router-dom'
 
 import { postEquipment } from '@/api/post-equipment'
 import { uploadImages } from '@/api/upload-images'
@@ -12,6 +12,8 @@ import {
 } from '@/components/equipment-form'
 
 export function EquipmentCreate() {
+  const navigate = useNavigate()
+
   const { mutateAsync: createEquipment, isPending: isPendingCreateEquipment } =
     useMutation({
       mutationFn: postEquipment,
@@ -46,7 +48,7 @@ export function EquipmentCreate() {
         photos,
       })
 
-      redirect(`admin/equipment/created/${id}`)
+      navigate(`/admin/equipment/created/${id}`)
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 409) {

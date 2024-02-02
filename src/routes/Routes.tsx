@@ -12,6 +12,7 @@ import { PanoramaList } from '@/pages/admin/panorama-list'
 import { PanoramaEdit } from '@/pages/admin/panorama-edit'
 import { EquipmentsFeed } from '@/pages/app/equipments-feed.tsx'
 import { EquipmentDetails } from '@/pages/app/equipment-details'
+import { EquipmentEdited } from '@/pages/admin/equipment-edited'
 
 export function Routes() {
   const router = createBrowserRouter([
@@ -48,6 +49,10 @@ export function Routes() {
         {
           path: 'equipment/created/:id',
           element: <EquipmentCreated />,
+        },
+        {
+          path: 'equipment/edited/:id',
+          element: <EquipmentEdited />,
         },
         {
           path: 'equipment/edit/:id',

@@ -24,6 +24,10 @@ export function PanoramaCreate() {
 
   async function handleForm({ name, file, markings }: createPanoramaFormData) {
     try {
+      if (!file) {
+        throw new Error()
+      }
+
       const formData = new FormData()
       formData.append('file', file, file.name)
       const image = await uploadImageFn(formData)

@@ -43,7 +43,7 @@ export function PanoramaEdit() {
     try {
       const formData = file && createFormData(file)
 
-      const image = formData && (await uploadImage(formData))
+      const image = formData && (await uploadImageMutate(formData))
 
       if (image && panorama) {
         await deleteImageMutate(panorama.image_key)

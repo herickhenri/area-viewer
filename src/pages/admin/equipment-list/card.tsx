@@ -54,9 +54,9 @@ export function Card({ equipment }: cardProps) {
       <div className="mb-4 flex flex-1 flex-col px-4">
         <span className="text-xs">{equipment.tag}</span>
         <h2 className="flex-1 text-lg font-semibold">{equipment.name}</h2>
-        <div className="mt-2 flex gap-2 text-center font-semibold text-white">
-          <Link to={`/admin/equipment/edit/${equipment.id}`}>
-            <Button>Editar</Button>
+        <div className="mt-2 flex justify-evenly gap-2 text-center font-semibold text-white">
+          <Link className="flex-1" to={`/admin/equipment/edit/${equipment.id}`}>
+            <Button className="w-full px-0">Editar</Button>
           </Link>
 
           <DeleteWarning deleteEquipment={handleDeleteEquipment} />

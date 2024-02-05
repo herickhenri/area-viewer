@@ -1,15 +1,16 @@
-import { getEquipment } from '@/api/get-equipment'
-import { Button } from '@/components/button'
-import { CameraSlash, Check } from '@phosphor-icons/react'
-import { useQuery } from '@tanstack/react-query'
+import { CameraSlash } from '@phosphor-icons/react'
 import { Link, useParams } from 'react-router-dom'
+import { Button } from '@/components/button'
+import { useQuery } from '@tanstack/react-query'
+import { getEquipment } from '@/api/get-equipment'
 
-export function EquipmentEdited() {
+export function EquipmentInfo() {
   const { id } = useParams()
 
   const { data: equipment } = useQuery({
-    queryKey: ['equipment'],
+    queryKey: ['equipment', id],
     queryFn: () => getEquipment(id!),
+    gcTime: 0,
   })
 
   if (!equipment) {
@@ -19,10 +20,9 @@ export function EquipmentEdited() {
   const banner = equipment.photos?.[0]?.link
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="mx-6 flex flex-col items-center">
       <h1 className="mx-6 my-5 text-center text-2xl font-semibold md:text-4xl">
-        Equipamento editado com sucesso
-        <Check weight="bold" className="ml-2 inline text-green-500" />
+        Informações do equipamento
       </h1>
 
       <div className="flex w-full flex-col shadow-xl shadow-black/40 md:w-60">
@@ -43,7 +43,7 @@ export function EquipmentEdited() {
           <p className="line-clamp-2">{equipment.description}</p>
         </div>
       </div>
-      <div className="mt-6 flex w-[36rem] gap-2">
+      <div className="my-6 flex w-full flex-col gap-3 md:w-[36rem] md:flex-row">
         <Link className="flex-1" to={`/admin/equipment/edit/${equipment.id}`}>
           <Button className="w-full">Editar</Button>
         </Link>

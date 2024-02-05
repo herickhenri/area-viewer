@@ -8,7 +8,7 @@ export function PanoramaCreated() {
   const { id } = useParams()
 
   const { data: panorama } = useQuery({
-    queryKey: ['panorama'],
+    queryKey: ['panorama', id],
     queryFn: () => getPanorama(id!),
   })
 

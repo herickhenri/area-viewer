@@ -74,7 +74,8 @@ export function EquipmentEdit() {
         photos,
       })
 
-      navigate(`/admin/equipment/edited/${id}`)
+      toast.success('Equipamento editado com sucesso.')
+      navigate(`/admin/equipment/info/${id}`)
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 409) {

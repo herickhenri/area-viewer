@@ -11,15 +11,15 @@ interface carouselPhotosProps {
 
 export function CarouselPhotos({ sources }: carouselPhotosProps) {
   return (
-    <div className="grid gap-3 md:max-w-[30vw]">
+    <div className="flex gap-3 md:max-w-[30vw]">
       <Swiper
-        className="w-full"
+        className="aspect-square w-full"
         spaceBetween={10}
         navigation={true}
         modules={[FreeMode, Navigation]}
       >
         {sources.map((source) => (
-          <SwiperSlide key={source} className="h-96 overflow-hidden">
+          <SwiperSlide key={source} className="overflow-hidden">
             <img src={source} alt="" className="h-full w-full object-cover" />
           </SwiperSlide>
         ))}

@@ -9,7 +9,9 @@ export function DeleteWarning({ deleteEquipment }: deleteWarningProps) {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <Button theme="delete">Excluir</Button>
+        <Button className="flex-1 px-0" theme="delete">
+          Excluir
+        </Button>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 h-screen w-screen bg-black/50" />

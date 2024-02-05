@@ -173,7 +173,11 @@ export function EquipmentForm({
       <FormProvider {...newCycleForm}>
         <UploadFiles />
       </FormProvider>
-      <Button className="h-12 w-40" disabled={isPendingRequest} type="submit">
+      <Button
+        className="mx-auto h-12 w-40"
+        disabled={isPendingRequest}
+        type="submit"
+      >
         {isPendingRequest ? (
           <CircleNotch size={24} className="animate-spin" />
         ) : (

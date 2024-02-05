@@ -16,19 +16,22 @@ export function PanoramaEdit() {
   const { id } = useParams()
 
   const { data: panorama } = useQuery({
-    queryKey: ['panorama'],
+    queryKey: ['panorama', id],
     queryFn: () => getPanorama(id!),
+    gcTime: 0,
   })
 
-  const { mutateAsync: updatePanoramaFn, isPending: isPendingUpdatePanorama } =
-    useMutation({
-      mutationFn: updatePanorama,
-    })
-  const { mutateAsync: uploadImageFn, isPending: isPendingUploadImage } =
+  const {
+    mutateAsync: updatePanoramaMutate,
+    isPending: isPendingUpdatePanorama,
+  } = useMutation({
+    mutationFn: updatePanorama,
+  })
+  const { mutateAsync: uploadImageMutate, isPending: isPendingUploadImage } =
     useMutation({
       mutationFn: uploadImage,
     })
-  const { mutateAsync: deleteImageFn, isPending: isPendingDeleteImage } =
+  const { mutateAsync: deleteImageMutate, isPending: isPendingDeleteImage } =
     useMutation({
       mutationFn: deleteImage,
     })
@@ -38,27 +41,35 @@ export function PanoramaEdit() {
 
   async function handleForm({ name, file, markings }: createPanoramaFormData) {
     try {
-      const formData = new FormData()
-      formData.append('file', file, file.name)
-      const image = await uploadImageFn(formData)
+      const formData = file && createFormData(file)
 
-      panorama && (await deleteImageFn(panorama.image_key))
+      const image = formData && (await uploadImage(formData))
 
-      await updatePanoramaFn({
+      if (image && panorama) {
+        await deleteImageMutate(panorama.image_key)
+      }
+
+      await updatePanoramaMutate({
         id: id!,
         name,
-        image_key: image.key,
-        image_link: image.link,
+        image_key: image?.key,
+        image_link: image?.link,
         markings,
       })
 
       navigate(`/admin/panorama/edited/${id}`)
     } catch (error) {
-      console.log(error)
       toast.error(
         'Não foi possível criar o panorama. Tente novamente mais tarde!',
       )
     }
+  }
+
+  function createFormData(file: File) {
+    const formData = new FormData()
+    formData.append('file', file, file.name)
+
+    return formData
   }
 
   if (!panorama) {

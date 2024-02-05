@@ -10,6 +10,7 @@ export function PanoramaEdited() {
   const { data: panorama } = useQuery({
     queryKey: ['panorama'],
     queryFn: () => getPanorama(id!),
+    gcTime: 0,
   })
 
   if (!panorama) {

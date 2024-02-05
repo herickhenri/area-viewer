@@ -6,7 +6,7 @@ interface responseShema {
 }
 
 export async function getEquipments() {
-  const response = await api.get<responseShema>('/equipments')
+  const response = await api.get<responseShema>('/all-equipments')
 
   return response.data.equipments
 }

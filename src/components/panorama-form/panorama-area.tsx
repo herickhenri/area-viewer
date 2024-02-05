@@ -94,7 +94,7 @@ export function PanoramaArea({
       {points.map((point, index) => (
         <MapPin
           key={index}
-          className="absolute h-4 w-4 -translate-x-1/2 -translate-y-full text-red-600 md:h-6 md:w-6"
+          className="absolute h-4 w-4 -translate-x-1/2 -translate-y-full fill-red-600 md:h-6 md:w-6"
           weight="fill"
           style={{
             left: point.coord_x / conversionRate.width,

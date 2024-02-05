@@ -40,7 +40,7 @@ export function UploadFiles() {
       <span>Fotos:</span>
 
       <div
-        className="flex h-20 w-full cursor-pointer items-center justify-center gap-2 rounded border-2 border-dashed border-black/25 text-black/50 transition-colors hover:border-blue-500"
+        className="flex h-20 w-full cursor-pointer items-center justify-center gap-2 rounded border-2 border-dashed border-black/25 text-black/50 transition-colors hover:border-blue-500 focus:border-blue-500 focus:outline-none"
         {...getRootProps()}
       >
         <input {...getInputProps()} />

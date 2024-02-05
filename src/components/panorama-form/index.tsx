@@ -32,7 +32,7 @@ const createPanoramaFormSchema = z.object({
       }),
     )
     .optional(),
-  file: z.instanceof(File),
+  file: z.instanceof(File).optional(),
 })
 
 export type createPanoramaFormData = z.infer<typeof createPanoramaFormSchema>
@@ -50,11 +50,16 @@ export function PanoramaForm({
 }: PanoramaFormProps) {
   const [coord, setCoord] = useState<Coord | null>(null)
 
+  const markings = data?.markings?.map(({ coord_x, coord_y, equipment }) => ({
+    equipment_id: equipment.id,
+    coord_x,
+    coord_y,
+  }))
   const newCycleForm = useForm<createPanoramaFormData>({
     resolver: zodResolver(createPanoramaFormSchema),
     defaultValues: {
       name: data?.name,
-      markings: data?.markings,
+      markings,
     },
   })
 
@@ -134,7 +139,7 @@ export function PanoramaForm({
 
         <Markings coord={coord} changeCoord={changeCoord} />
 
-        <Button className="h-12 w-40" disabled={isPendingRequest}>
+        <Button className="mx-auto h-12 w-40" disabled={isPendingRequest}>
           {isPendingRequest ? (
             <CircleNotch size={24} className="animate-spin" />
           ) : (

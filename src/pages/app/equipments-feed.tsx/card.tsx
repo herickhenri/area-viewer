@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { CameraSlash } from '@phosphor-icons/react'
 import { Equipment } from '@/types/Equipment'
+import { Button } from '@/components/button'
 
 interface CardEquipamentoProps {
   equipment: Equipment
@@ -24,11 +25,8 @@ export function Card({ equipment }: CardEquipamentoProps) {
       <div className="mb-4 flex flex-1 flex-col px-4">
         <span className="text-xs">{equipment.tag}</span>
         <h2 className="flex-1 text-lg font-semibold">{equipment.name}</h2>
-        <Link
-          className="mt-2 block w-full rounded bg-green-700 px-4 py-3 text-center font-semibold text-white transition-colors hover:bg-green-800"
-          to={`/equipment/${equipment.id}`}
-        >
-          Mais informações
+        <Link to={`/equipment/${equipment.id}`}>
+          <Button className="w-full">Mais informações</Button>
         </Link>
       </div>
     </div>

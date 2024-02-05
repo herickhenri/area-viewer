@@ -5,16 +5,17 @@ import { AdminLayout } from '@/pages/_layouts/admin'
 import { AppLayout } from '@/pages/_layouts/app'
 import { EquipmentList } from '@/pages/admin/equipment-list'
 import { EquipmentCreate } from '@/pages/admin/equipment-create'
-import { EquipmentCreated } from '@/pages/admin/equipment-created'
 import { EquipmentEdit } from '@/pages/admin/equipment-edit'
 import { PanoramaCreate } from '@/pages/admin/panorama-create'
 import { PanoramaList } from '@/pages/admin/panorama-list'
 import { PanoramaEdit } from '@/pages/admin/panorama-edit'
 import { EquipmentsFeed } from '@/pages/app/equipments-feed.tsx'
 import { EquipmentDetails } from '@/pages/app/equipment-details'
-import { EquipmentEdited } from '@/pages/admin/equipment-edited'
 import { PanoramaCreated } from '@/pages/admin/panorama-created'
 import { PanoramaEdited } from '@/pages/admin/panorama-edited'
+import { EquipmentInfo } from '@/pages/admin/equipment-info'
+import { PanoramasFeed } from '@/pages/app/panoramas-feed.tsx'
+import { PanoramaViewer } from '@/pages/app/panorama-viewer'
 
 export function Routes() {
   const router = createBrowserRouter([
@@ -29,6 +30,14 @@ export function Routes() {
         {
           path: 'equipment/:id',
           element: <EquipmentDetails />,
+        },
+        {
+          path: 'panoramas',
+          element: <PanoramasFeed />,
+        },
+        {
+          path: 'panoramas/viewer/:id',
+          element: <PanoramaViewer />,
         },
       ],
     },
@@ -49,12 +58,8 @@ export function Routes() {
           element: <EquipmentCreate />,
         },
         {
-          path: 'equipment/created/:id',
-          element: <EquipmentCreated />,
-        },
-        {
-          path: 'equipment/edited/:id',
-          element: <EquipmentEdited />,
+          path: 'equipment/info/:id',
+          element: <EquipmentInfo />,
         },
         {
           path: 'equipment/edit/:id',

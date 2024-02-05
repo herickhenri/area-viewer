@@ -2,14 +2,14 @@ import { useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getEquipment } from '@/api/get-equipment'
 import { CarouselPhotos } from './carousel-photos'
-import { MapPin } from '@phosphor-icons/react'
+import { CameraSlash, MapPin } from '@phosphor-icons/react'
 import { Button } from '@/components/button'
 
 export function EquipmentDetails() {
   const { id } = useParams()
 
   const { data: equipment } = useQuery({
-    queryKey: ['equipment'],
+    queryKey: ['equipment', id],
     queryFn: () => getEquipment(id!),
   })
 
@@ -20,9 +20,14 @@ export function EquipmentDetails() {
   const sources = equipment.photos?.map((photo) => photo.link)
   return (
     <div className="my-6 flex flex-col gap-4 px-8 md:mt-11 md:flex-row md:gap-20 md:px-28">
-      {/* TODO: tratativa para falta de fotos */}
-      {sources && <CarouselPhotos sources={sources} />}
-      <div className="flex h-full flex-1 flex-col gap-4">
+      {sources && sources.length > 0 ? (
+        <CarouselPhotos sources={sources} />
+      ) : (
+        <div className="flex aspect-square flex-1 items-center justify-center bg-slate-300 opacity-50 md:max-w-[30vw]">
+          <CameraSlash size={32} />
+        </div>
+      )}
+      <div className="flex h-full flex-col gap-4">
         <h1 className="text-3xl font-semibold">{equipment.name}</h1>
 
         <div>

@@ -14,15 +14,18 @@ import {
 export function EquipmentCreate() {
   const navigate = useNavigate()
 
-  const { mutateAsync: createEquipment, isPending: isPendingCreateEquipment } =
-    useMutation({
-      mutationFn: postEquipment,
-    })
-  const { mutateAsync: uploadImagesFn, isPending: isPendingUploadImage } =
+  const {
+    mutateAsync: postEquipmentMutate,
+    isPending: isPendingPostEquipment,
+  } = useMutation({
+    mutationFn: postEquipment,
+  })
+  const { mutateAsync: uploadImagesMutate, isPending: isPendingUploadImage } =
     useMutation({
       mutationFn: uploadImages,
     })
-  const isPendingRequest = isPendingCreateEquipment || isPendingUploadImage
+
+  const isPendingRequest = isPendingPostEquipment || isPendingUploadImage
 
   async function handleForm({
     tag,
@@ -34,21 +37,18 @@ export function EquipmentCreate() {
     const tagString = `${unit}-${area}-${equipCode}-${seqNumber}`
 
     try {
-      const formData = new FormData()
-      files?.forEach(({ file }) => {
-        formData.append('file', file, file.name)
-      })
-      const haveFiles = files?.length !== 0
-      const photos = haveFiles ? await uploadImagesFn(formData) : undefined
+      const formData = files && createFormData(files)
+      const photos = formData && (await uploadImagesMutate(formData))
 
-      const { id } = await createEquipment({
+      const { id } = await postEquipmentMutate({
         tag: tagString,
         name,
         description,
         photos,
       })
 
-      navigate(`/admin/equipment/created/${id}`)
+      toast.success('Equipamento criado com sucesso.')
+      navigate(`/admin/equipment/info/${id}`)
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 409) {
@@ -57,9 +57,17 @@ export function EquipmentCreate() {
           return
         }
       }
-
       toast.error('Erro ao criar o equipamento, tente novamente mais tarde.')
     }
+  }
+
+  function createFormData(files: { file: File }[]) {
+    const formData = new FormData()
+    files?.forEach(({ file }) => {
+      formData.append('file', file, file.name)
+    })
+
+    return formData
   }
 
   return (

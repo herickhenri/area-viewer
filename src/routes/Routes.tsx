@@ -11,11 +11,10 @@ import { PanoramaList } from '@/pages/admin/panorama-list'
 import { PanoramaEdit } from '@/pages/admin/panorama-edit'
 import { EquipmentsFeed } from '@/pages/app/equipments-feed.tsx'
 import { EquipmentDetails } from '@/pages/app/equipment-details'
-import { PanoramaCreated } from '@/pages/admin/panorama-created'
-import { PanoramaEdited } from '@/pages/admin/panorama-edited'
 import { EquipmentInfo } from '@/pages/admin/equipment-info'
 import { PanoramasFeed } from '@/pages/app/panoramas-feed.tsx'
 import { PanoramaViewer } from '@/pages/app/panorama-viewer'
+import { PanoramaInfo } from '@/pages/admin/panorama-info'
 
 export function Routes() {
   const router = createBrowserRouter([
@@ -74,16 +73,12 @@ export function Routes() {
           element: <PanoramaCreate />,
         },
         {
-          path: 'panorama/created/:id',
-          element: <PanoramaCreated />,
-        },
-        {
           path: 'panorama/edit/:id',
           element: <PanoramaEdit />,
         },
         {
-          path: 'panorama/edited/:id',
-          element: <PanoramaEdited />,
+          path: 'panorama/info/:id',
+          element: <PanoramaInfo />,
         },
       ],
     },

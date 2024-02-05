@@ -57,7 +57,8 @@ export function PanoramaEdit() {
         markings,
       })
 
-      navigate(`/admin/panorama/edited/${id}`)
+      toast.success('Panorama editado com sucesso')
+      navigate(`/admin/panorama/info/${id}`)
     } catch (error) {
       toast.error(
         'Não foi possível criar o panorama. Tente novamente mais tarde!',

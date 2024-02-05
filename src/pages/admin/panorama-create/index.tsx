@@ -39,7 +39,8 @@ export function PanoramaCreate() {
         markings,
       })
 
-      navigate(`/admin/panorama/created/${id}`)
+      toast.success('Panorama criado com sucesso.')
+      navigate(`/admin/panorama/info/${id}`)
     } catch (error) {
       console.log(error)
       toast.error(

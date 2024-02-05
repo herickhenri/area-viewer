@@ -35,10 +35,10 @@ export function EquipmentsFeed() {
       </div>
 
       <h1 className="my-5 text-center text-2xl font-semibold">Equipamentos</h1>
-      {isLoading ? (
+      {isLoading || !equipmentsList ? (
         <SkeletonLoading />
       ) : (
-        equipmentsList && <List equipments={equipmentsList} />
+        <List equipments={equipmentsList} />
       )}
     </div>
   )

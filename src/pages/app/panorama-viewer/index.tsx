@@ -7,7 +7,7 @@ import {
   ReactPhotoSphereViewer,
 } from 'react-photo-sphere-viewer'
 import { useEffect, useState } from 'react'
-import Pin from '@/assets/pin-red.svg'
+import Pin from '../../../../public/pin-red.svg'
 import { EquipmentCard } from './equipment-card'
 
 type ImageSize = {

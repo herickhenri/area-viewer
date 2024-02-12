@@ -3,14 +3,17 @@ import { CameraSlash } from '@phosphor-icons/react'
 import { Equipment } from '@/types/Equipment'
 import { Button } from '@/components/button'
 
-interface cardProps {
+interface equipmentCardProps {
   equipment: Equipment
 }
 
-export function Card({ equipment }: cardProps) {
+export function EquipmentCard({ equipment }: equipmentCardProps) {
   const banner = equipment.photos?.[0]?.link
   return (
-    <div className="flex w-full flex-col shadow-xl shadow-black/40 md:w-60">
+    <div
+      id={equipment.id}
+      className="flex w-60 flex-col bg-white text-black shadow-xl shadow-black/40 [text-shadow:none]"
+    >
       {banner ? (
         <img
           className="aspect-square w-full object-cover"
@@ -25,9 +28,9 @@ export function Card({ equipment }: cardProps) {
       <div className="mb-4 flex flex-1 flex-col px-4">
         <span className="text-xs">{equipment.tag}</span>
         <h2 className="flex-1 text-lg font-semibold">{equipment.name}</h2>
-        <Link to={`/equipment/${equipment.id}`}>
-          <Button className="w-full">Mais informações</Button>
-        </Link>
+        <a href={`/equipment/${equipment.id}`}>
+          <Button className="w-full px-0">Mais informações</Button>
+        </a>
       </div>
     </div>
   )

@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { CameraSlash } from '@phosphor-icons/react'
 import { Equipment } from '@/types/Equipment'
 import { Button } from '@/components/button'

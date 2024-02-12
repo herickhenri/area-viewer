@@ -7,8 +7,9 @@ import {
   ReactPhotoSphereViewer,
 } from 'react-photo-sphere-viewer'
 import { useEffect, useState } from 'react'
-import Pin from '../../../../public/pin-red.svg'
 import { EquipmentCard } from './equipment-card'
+
+import Pin from '@/assets/pin-red.svg'
 
 type ImageSize = {
   width: number
@@ -73,7 +74,6 @@ export function PanoramaViewer() {
       textureX: coord_x,
       textureY: coord_y,
     }
-    const image = Pin
     const size = { width: 32, height: 32 }
 
     const tooltip = {
@@ -83,13 +83,16 @@ export function PanoramaViewer() {
       className: 'shadow-none bg-transparent w-auto',
       trigger: 'click',
     }
+    const image = 'image'
+    const className = 'bg-pin-red'
 
     return {
       id,
       position,
-      image,
       size,
       tooltip,
+      image,
+      className,
     }
   })
 

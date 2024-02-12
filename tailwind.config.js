@@ -6,7 +6,11 @@ export default {
     fontFamily: {
       sans: ['Inter', 'sans-serif'],
     },
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'pin-red': 'url(/pin-red.svg)',
+      },
+    },
   },
   plugins: [],
 }

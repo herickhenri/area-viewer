@@ -9,8 +9,6 @@ import {
 import { useEffect, useState } from 'react'
 import { EquipmentCard } from './equipment-card'
 
-import Pin from '@/assets/pin-red.svg'
-
 type ImageSize = {
   width: number
   height: number

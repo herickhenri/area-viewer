@@ -8,8 +8,9 @@ import {
 } from 'react-photo-sphere-viewer'
 import { useEffect, useState } from 'react'
 import { EquipmentCard } from './equipment-card'
+import { getPanoData } from './get-pano-data'
 
-type ImageSize = {
+export type ImageSize = {
   width: number
   height: number
 }
@@ -59,12 +60,7 @@ export function PanoramaViewer() {
     return <p>Ocorreu um erro ao carregar o panorama.</p>
   }
 
-  const fullWidth = imageSize.width
-  const fullHeight = imageSize.width / 2
-  const croppedWidth = imageSize.width
-  const croppedHeight = imageSize.height
-  const croppedX = 0
-  const croppedY = fullHeight / 2 - imageSize.height / 2
+  const panoData = getPanoData(imageSize)
 
   const markers = panorama.markings?.map(({ coord_x, coord_y, equipment }) => {
     const id = equipment.id
@@ -111,15 +107,7 @@ export function PanoramaViewer() {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       plugins={plugins}
-      panoData={{
-        isEquirectangular: true,
-        fullWidth,
-        fullHeight,
-        croppedWidth,
-        croppedHeight,
-        croppedX,
-        croppedY,
-      }}
+      panoData={panoData}
     ></ReactPhotoSphereViewer>
   )
 }

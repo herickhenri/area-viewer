@@ -1,15 +1,22 @@
 import { CameraSlash } from '@phosphor-icons/react'
 import { Equipment } from '@/types/Equipment'
 import { Button } from '@/components/button'
+import { useNavigate } from 'react-router-dom'
 
 interface equipmentCardProps {
   equipment: Equipment
 }
 
 export function EquipmentCard({ equipment }: equipmentCardProps) {
-  console.log(equipment)
+  const navigate = useNavigate()
+
+  function redirectEquipment() {
+    // Foi utilizado essa função ao invez do componente <Link> por ele nao funcionar nesse caso no site mobile
+    navigate(`/equipment/${equipment.id}`)
+  }
+
   const banner = equipment.photos?.[0]?.link
-  console.log(banner)
+
   return (
     <div
       id={equipment.id}
@@ -29,9 +36,9 @@ export function EquipmentCard({ equipment }: equipmentCardProps) {
       <div className="mb-4 flex flex-1 flex-col px-4">
         <span className="text-xs">{equipment.tag}</span>
         <h2 className="flex-1 text-lg font-semibold">{equipment.name}</h2>
-        <a href={`/equipment/${equipment.id}`}>
-          <Button className="w-full px-0">Mais informações</Button>
-        </a>
+        <Button className="w-full px-0" onClick={redirectEquipment}>
+          Mais informações
+        </Button>
       </div>
     </div>
   )

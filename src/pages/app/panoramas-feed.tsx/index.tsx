@@ -27,7 +27,7 @@ export function PanoramasFeed() {
               alt=""
             />
             <div className="mt-2 flex justify-start gap-4">
-              <Link to={`/photo-sphere-viewer/${panorama.id}`}>
+              <Link to={`viewer/${panorama.id}`}>
                 <Button className="mx-0">Ver no mapa</Button>
               </Link>
             </div>

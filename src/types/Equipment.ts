@@ -1,3 +1,5 @@
+import { Panorama } from './Panorama'
+
 export type Equipment = {
   id: string
   name: string
@@ -6,5 +8,8 @@ export type Equipment = {
   photos?: {
     key: string
     link: string
+  }[]
+  markings?: {
+    panorama: Panorama
   }[]
 }

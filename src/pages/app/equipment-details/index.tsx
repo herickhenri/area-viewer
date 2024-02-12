@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getEquipment } from '@/api/get-equipment'
 import { CarouselPhotos } from './carousel-photos'
@@ -39,11 +39,14 @@ export function EquipmentDetails() {
           <span className="text-sm font-semibold">Descrição:</span>
           <p>{equipment.description}</p>
         </div>
-
-        <Button className="mx-0 gap-2">
-          <MapPin size={24} />
-          Ver na área
-        </Button>
+        {equipment.markings?.[0] && (
+          <Link to={`/panoramas/viewer/${equipment.markings[0].panorama.id}`}>
+            <Button className="mx-0 gap-2">
+              <MapPin size={24} />
+              Ver na área
+            </Button>
+          </Link>
+        )}
       </div>
     </div>
   )

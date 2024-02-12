@@ -7,7 +7,9 @@ interface equipmentCardProps {
 }
 
 export function EquipmentCard({ equipment }: equipmentCardProps) {
+  console.log(equipment)
   const banner = equipment.photos?.[0]?.link
+  console.log(banner)
   return (
     <div
       id={equipment.id}

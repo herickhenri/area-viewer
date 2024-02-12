@@ -104,7 +104,7 @@ export function PanoramaViewer() {
 
   return (
     <ReactPhotoSphereViewer
-      src={panorama.image_link}
+      src={`https://corsproxy.io/?${panorama.image_link}`}
       height={'100vh'}
       width={'100%'}
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -1,6 +1,5 @@
 import { CameraSlash } from '@phosphor-icons/react'
 import { Equipment } from '@/types/Equipment'
-import { Button } from '@/components/button'
 
 interface equipmentCardProps {
   equipment: Equipment

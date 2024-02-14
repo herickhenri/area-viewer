@@ -7,7 +7,7 @@ export function App() {
   return (
     <>
       <Routes />
-      <ToastContainer autoClose={3000} limit={3} />
+      <ToastContainer autoClose={2000} limit={3} />
     </>
   )
 }

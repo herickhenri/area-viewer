@@ -74,7 +74,7 @@ export function PanoramaViewer() {
       content: ReactDOMServer.renderToString(
         <EquipmentCard equipment={equipment} />,
       ),
-      className: 'shadow-none bg-transparent w-auto',
+      className: 'shadow-none bg-transparent min-w-min p-0',
       trigger: 'click',
     }
     const image = 'image'

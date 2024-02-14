@@ -16,6 +16,7 @@ import { PanoramasFeed } from '@/pages/app/panoramas-feed.tsx'
 import { PanoramaViewer } from '@/pages/app/panorama-viewer'
 import { PanoramaInfo } from '@/pages/admin/panorama-info'
 import { Viewer } from '@/pages/app/viewer'
+import { PanoramaConnect } from '@/pages/admin/panorama-connect'
 
 export function Routes() {
   const router = createBrowserRouter([
@@ -84,6 +85,10 @@ export function Routes() {
         {
           path: 'panorama/info/:id',
           element: <PanoramaInfo />,
+        },
+        {
+          path: 'panorama/connect',
+          element: <PanoramaConnect />,
         },
       ],
     },

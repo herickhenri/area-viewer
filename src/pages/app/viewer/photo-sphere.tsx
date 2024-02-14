@@ -4,6 +4,7 @@ import { createRef, useEffect, useState } from 'react'
 import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin'
 import { Marking } from '@/types/Marking'
 import Markers from './markers'
+import { PanoramaViewerProvider } from '@/context/panorama-viewer-provider'
 
 export type MarkingWithRef = Marking & {
   ref: React.RefObject<HTMLDivElement>
@@ -33,16 +34,16 @@ export function PhotoSphere({ panorama }: photoSphereProps) {
           textureY: coord_y - 16,
         },
         // content: ref.current?.outerHTML,
-        size: { width: 32, height: 32 },
-        tooltip: {
-          content: ref.current?.outerHTML,
-          className: 'shadow-none bg-transparent min-w-min p-0 font-sans',
-          trigger: 'click',
-        },
-        image: '/pin-red.svg',
+        // size: { width: 32, height: 32 },
+        // tooltip: {
+        //   content: ref.current?.outerHTML,
+        //   className: 'shadow-none bg-transparent min-w-min p-0 font-sans',
+        //   trigger: 'click',
+        // },
+        // image: '/pin-red.svg',
         listContent: equipment.name,
-        // element: ref.current,
-        // zIndex: 10,
+        element: ref.current,
+        zIndex: 10,
       }),
     )
 
@@ -77,11 +78,13 @@ export function PhotoSphere({ panorama }: photoSphereProps) {
   return (
     <>
       <div className="h-screen" ref={sphereElementRef} />
-      {markingsComponent.map((marking) => (
-        <div key={marking.equipment.id} className="sr-only">
-          <Markers equipment={marking.equipment} ref={marking.ref} />
-        </div>
-      ))}
+      <PanoramaViewerProvider>
+        {markingsComponent.map((marking) => (
+          <div key={marking.equipment.id} className="sr-only">
+            <Markers equipment={marking.equipment} ref={marking.ref} />
+          </div>
+        ))}
+      </PanoramaViewerProvider>
     </>
   )
 }

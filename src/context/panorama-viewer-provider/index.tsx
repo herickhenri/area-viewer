@@ -22,6 +22,8 @@ const PanoramaViewerProvider = ({
     setSelectedEquipmentId(equipmentId)
   }
 
+  console.log('executei')
+
   return (
     <PanoramaViewerContext.Provider
       value={{

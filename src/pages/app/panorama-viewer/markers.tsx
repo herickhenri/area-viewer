@@ -39,7 +39,7 @@ export default forwardRef<HTMLDivElement, markersProps>(function Markers(
           <img
             className="aspect-square w-full object-cover"
             src={banner}
-            alt="bomba de dregs"
+            alt=""
           />
         ) : (
           <div className="flex aspect-square items-center justify-center bg-slate-300 opacity-50">

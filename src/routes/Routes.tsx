@@ -15,7 +15,6 @@ import { EquipmentInfo } from '@/pages/admin/equipment-info'
 import { PanoramasFeed } from '@/pages/app/panoramas-feed.tsx'
 import { PanoramaViewer } from '@/pages/app/panorama-viewer'
 import { PanoramaInfo } from '@/pages/admin/panorama-info'
-import { Viewer } from '@/pages/app/viewer'
 import { PanoramaConnect } from '@/pages/admin/panorama-connect'
 
 export function Routes() {
@@ -39,10 +38,6 @@ export function Routes() {
         {
           path: 'panoramas/viewer/:id',
           element: <PanoramaViewer />,
-        },
-        {
-          path: 'viewer/:id',
-          element: <Viewer />,
         },
       ],
     },

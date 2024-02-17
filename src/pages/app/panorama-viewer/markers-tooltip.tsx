@@ -1,23 +1,27 @@
 import { CameraSlash } from '@phosphor-icons/react'
+import { forwardRef } from 'react'
 import { Equipment } from '@/types/Equipment'
 
-interface equipmentCardProps {
+interface markersProps {
   equipment: Equipment
 }
 
-export function EquipmentCard({ equipment }: equipmentCardProps) {
-  const banner = equipment.photos?.[0]?.link
+export default forwardRef<HTMLDivElement, markersProps>(function MarkersTooltip(
+  { equipment }: markersProps,
+  ref,
+) {
+  const banner = equipment.photos?.[0].link
 
   return (
     <div
-      id={equipment.id}
-      className="z-50 flex w-60 flex-col bg-white text-black shadow-xl shadow-black/40 [text-shadow:none]"
+      className="mx-auto flex w-60 flex-col border-2 border-solid border-white bg-white text-black shadow-xl shadow-black/40 [text-shadow:none]"
+      ref={ref}
     >
       {banner ? (
         <img
           className="aspect-square w-full object-cover"
           src={banner}
-          alt="bomba de dregs"
+          alt=""
         />
       ) : (
         <div className="flex aspect-square items-center justify-center bg-slate-300 opacity-50">
@@ -36,4 +40,4 @@ export function EquipmentCard({ equipment }: equipmentCardProps) {
       </div>
     </div>
   )
-}
+})

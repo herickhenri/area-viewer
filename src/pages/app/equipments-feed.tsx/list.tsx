@@ -15,7 +15,7 @@ export function List({ equipments }: listProps) {
   }
 
   return (
-    <div className="mb-5 flex flex-wrap gap-5 px-6">
+    <div className="mb-5 flex flex-wrap justify-center gap-5 px-6">
       {equipments.map((equipment) => (
         <Card key={equipment.tag} equipment={equipment} />
       ))}

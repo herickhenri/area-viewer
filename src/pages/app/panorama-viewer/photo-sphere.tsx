@@ -15,9 +15,10 @@ export type MarkingWithRef = Marking & {
 
 interface photoSphereProps {
   panorama: Panorama
+  imageLink: string
 }
 
-export function PhotoSphere({ panorama }: photoSphereProps) {
+export function PhotoSphere({ panorama, imageLink }: photoSphereProps) {
   const [markingsComponent, setMarkingsComponent] = useState<MarkingWithRef[]>(
     [] as MarkingWithRef[],
   )
@@ -52,7 +53,7 @@ export function PhotoSphere({ panorama }: photoSphereProps) {
 
     const spherePlayerInstance = new Viewer({
       container: sphereElementRef.current,
-      panorama: `https://corsproxy.io/?${panorama.image_link}`,
+      panorama: imageLink,
       plugins: [
         [
           MarkersPlugin,
@@ -66,7 +67,7 @@ export function PhotoSphere({ panorama }: photoSphereProps) {
     return () => {
       spherePlayerInstance.destroy()
     }
-  }, [sphereElementRef, panorama, markingsComponent])
+  }, [sphereElementRef, panorama, markingsComponent, imageLink])
 
   useEffect(() => {
     if (panorama.markings) {

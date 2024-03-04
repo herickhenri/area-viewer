@@ -46,7 +46,10 @@ export function Item({ panorama }: itemProps) {
       />
       <div className="mt-2 flex justify-start gap-4">
         <Link to={`/admin/panorama/edit/${panorama.id}`}>
-          <Button className="mx-0">Editar</Button>
+          <Button>Editar</Button>
+        </Link>
+        <Link to={`/admin/panorama/connect/${panorama.id}`}>
+          <Button>Conectar</Button>
         </Link>
         <DeleteWarning deletePanorama={handleDeletePanorama} />
       </div>

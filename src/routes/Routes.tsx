@@ -82,7 +82,7 @@ export function Routes() {
           element: <PanoramaInfo />,
         },
         {
-          path: 'panorama/connect',
+          path: 'panorama/connect/:id',
           element: <PanoramaConnect />,
         },
       ],

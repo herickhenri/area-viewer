@@ -15,10 +15,9 @@ export type MarkingWithRef = Marking & {
 
 interface photoSphereProps {
   panorama: Panorama
-  imageLink: string
 }
 
-export function PhotoSphere({ panorama, imageLink }: photoSphereProps) {
+export function PhotoSphere({ panorama }: photoSphereProps) {
   const [markingsComponent, setMarkingsComponent] = useState<MarkingWithRef[]>(
     [] as MarkingWithRef[],
   )
@@ -53,7 +52,7 @@ export function PhotoSphere({ panorama, imageLink }: photoSphereProps) {
 
     const spherePlayerInstance = new Viewer({
       container: sphereElementRef.current,
-      panorama: imageLink,
+      panorama: panorama.image_link,
       plugins: [
         [
           MarkersPlugin,
@@ -67,7 +66,7 @@ export function PhotoSphere({ panorama, imageLink }: photoSphereProps) {
     return () => {
       spherePlayerInstance.destroy()
     }
-  }, [sphereElementRef, panorama, markingsComponent, imageLink])
+  }, [sphereElementRef, panorama, markingsComponent])
 
   useEffect(() => {
     if (panorama.markings) {

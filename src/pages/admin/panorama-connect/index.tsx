@@ -10,17 +10,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { updatePanorama } from '@/api/update-panorama'
 import { toast } from 'react-toastify'
 
-// regras de negócio
-// [x] o primeiro panorama deve ser fixo
-// [x] o segundo panorama deve ter mutável
-// [x] deve ser possível adicionar um point no primeiro e segundo panorama
-// [] so deve ser possível enviar o formulário com os dois panoramas preencidos e com 1 point em cada
-// [x] ao trocar o segundo panorama, deve aparecer o point de uma conexão existente, se nao houver, nao devem aparecer points
-// [] a cor do point em atual seleção deve ser verde
-// [] o primeiro panorama deve mostrar os points de todas as suas conexões, de cor branco e com o nome do panorama encima
-// [] todos os points do primeiro deve ter uma marcação com o nome do devido panorama conectado
-// [] deve aparecer uma mensagem de sucesso ou erro ao criar/editar um novo point
-
 const panoramaConnectFormSchema = z.object({
   mainLink: z.object({
     id: z.string(),
@@ -40,7 +29,7 @@ const panoramaConnectFormSchema = z.object({
 
 export type panoramaConnectFormData = z.infer<typeof panoramaConnectFormSchema>
 
-export function PanoramaConnectForm() {
+export function PanoramaConnect() {
   const { id: mainPanoramaId } = useParams()
   const { data: panoramas } = useQuery({
     queryKey: ['panorama'],
@@ -124,17 +113,21 @@ export function PanoramaConnectForm() {
           .concat(secondaryLink)
       : [secondaryLink]
 
-    updatePanoramaMutate({
-      id: secondaryLink.panorama_connect_id,
-      links: mainLinks,
-    })
-    updatePanoramaMutate({
-      id: mainLink.panorama_connect_id,
-      links: secondaryLinks,
-    })
+    try {
+      updatePanoramaMutate({
+        id: secondaryLink.panorama_connect_id,
+        links: mainLinks,
+      })
+      updatePanoramaMutate({
+        id: mainLink.panorama_connect_id,
+        links: secondaryLinks,
+      })
 
-    toast.success('Panoramas conectados com sucesso')
-    // sendForm({ mainLinks, secondaryLinks })
+      toast.success('Panoramas conectados com sucesso')
+    } catch (err) {
+      console.error(err)
+      toast.error('Erro ao criar conexão')
+    }
   }
 
   const panoramaOptions = panoramas
@@ -154,15 +147,25 @@ export function PanoramaConnectForm() {
 
   const allPointMainPanorama = mainPanorama.links
     .filter((link) => link.panorama_connect_id !== secondaryPanoramaId)
-    .map(({ coord_x, coord_y }) => {
+    .map(({ coord_x, coord_y, panorama_connect_id }) => {
+      // get the name of the panorama connected to the main panorama
+      const panorama = panoramas.find(
+        (panorama) => panorama.id === panorama_connect_id,
+      )
+      const name = panorama?.name || ''
       return {
         coord_x,
         coord_y,
+        name,
       }
     })
 
   return (
     <form className="mb-10" onSubmit={handleSubmit(handleForm)}>
+      <h1 className="mx-6 my-5 text-center text-2xl font-semibold md:text-4xl">
+        Conectar panoramas
+      </h1>
+
       <div className="mx-5 flex flex-1 flex-col gap-5 md:mx-56">
         <div className="relative">
           <Controller

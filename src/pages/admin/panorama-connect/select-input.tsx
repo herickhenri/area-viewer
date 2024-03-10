@@ -18,8 +18,6 @@ export function SelectInput({
   defaultValue,
   value,
 }: selectInputProps) {
-  // const [value, setValue] = useState('')
-
   function changeValue(item: Item | null) {
     item && onChange(item.value)
 

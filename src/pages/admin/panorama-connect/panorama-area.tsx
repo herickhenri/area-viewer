@@ -1,3 +1,4 @@
+import * as Tooltip from '@radix-ui/react-tooltip'
 import { MouseEvent, useEffect, useRef, useState } from 'react'
 import { Arrow } from './Arrow'
 
@@ -11,14 +12,14 @@ export type Coord = {
   coord_y: number
 }
 
-// type Point = Coord & {
-//   name: string
-// }
+type Point = Coord & {
+  name: string
+}
 
 interface PanoramaAreaProps {
   source: string
   value: Coord | null
-  points?: Coord[]
+  points?: Point[]
   onChange: (coord: Coord | null) => void
 }
 
@@ -99,10 +100,21 @@ export function PanoramaArea({
               top: point.coord_y / conversionRate.height,
             }}
           >
-            {/* <span className="translate-x-1/2 rounded bg-black/80 p-1 text-center text-white">
-              {point.name}
-            </span> */}
-            <Arrow className=" h-6 w-6 fill-white md:h-12 md:w-12" />
+            <Tooltip.Provider delayDuration={100}>
+              <Tooltip.Root>
+                <Tooltip.Trigger>
+                  <Arrow className=" h-6 w-6 fill-white md:h-12 md:w-12" />
+                </Tooltip.Trigger>
+                <Tooltip.Portal>
+                  <Tooltip.Content>
+                    <span className="translate-x-1/2 rounded-sm bg-black/80 p-1 text-center text-white">
+                      {point.name}
+                    </span>
+                    <Tooltip.Arrow />
+                  </Tooltip.Content>
+                </Tooltip.Portal>
+              </Tooltip.Root>
+            </Tooltip.Provider>
           </div>
         ))}
       {value && (

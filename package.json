@@ -12,7 +12,9 @@
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
     "@phosphor-icons/react": "^2.0.15",
-    "@photo-sphere-viewer/core": "^5.5.1",
+    "@photo-sphere-viewer/core": "^5.7.1",
+    "@photo-sphere-viewer/markers-plugin": "^5.7.1",
+    "@photo-sphere-viewer/virtual-tour-plugin": "^5.7.1",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-select": "^2.0.0",
@@ -29,7 +31,6 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.49.2",
-    "react-photo-sphere-viewer": "^4.0.2-psv5.4.4",
     "react-router-dom": "^6.21.1",
     "react-select": "^5.8.0",
     "react-toastify": "^9.1.3",

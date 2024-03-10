@@ -15,6 +15,11 @@ interface bodySchema {
     coord_x: number
     coord_y: number
   }[]
+  links?: {
+    panorama_connect_id: string
+    coord_x: number
+    coord_y: number
+  }[]
 }
 
 export async function updatePanorama({
@@ -23,12 +28,14 @@ export async function updatePanorama({
   image_key,
   image_link,
   markings,
+  links,
 }: bodySchema) {
   const response = await api.patch<responseShema>(`/panorama/${id}`, {
     name,
     image_key,
     image_link,
     markings,
+    links,
   })
 
   return response.data.panorama

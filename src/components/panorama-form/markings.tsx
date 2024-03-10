@@ -2,12 +2,7 @@ import { Coord, createPanoramaFormData } from '.'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import { useQuery } from '@tanstack/react-query'
 import { getEquipments } from '@/api/get-equipments'
-import { SelectInput } from './select-input'
-
-export type Item = {
-  value: string
-  label: string
-}
+import { Item, SelectInput } from './select-input'
 
 interface MarkingsProps {
   coord: Coord | null

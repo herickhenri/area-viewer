@@ -1,94 +1,113 @@
-import { Panorama } from '@/types/Panorama'
 import { Viewer } from '@photo-sphere-viewer/core'
 import { createRef, useEffect, useState } from 'react'
 import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin'
+import { VirtualTourPlugin } from '@photo-sphere-viewer/virtual-tour-plugin'
 import { Marking } from '@/types/Marking'
-import { PanoramaViewerProvider } from '@/context/panorama-viewer-provider'
 import MarkersTooltip from './markers-tooltip'
 
 import '@photo-sphere-viewer/markers-plugin/index.css'
 import '@photo-sphere-viewer/core/index.css'
+import '@photo-sphere-viewer/virtual-tour-plugin/index.css'
+import { useQuery } from '@tanstack/react-query'
+import { getPanoramas } from '@/api/get-panoramas'
+import { useParams } from 'react-router-dom'
+import { createNodes } from './create-nodes'
+import { createMarkers } from './create-markers'
 
 export type MarkingWithRef = Marking & {
   ref: React.RefObject<HTMLDivElement>
 }
 
-interface photoSphereProps {
-  panorama: Panorama
-}
+export function PhotoSphere() {
+  const { id: panoramaId } = useParams()
 
-export function PhotoSphere({ panorama }: photoSphereProps) {
+  const { data: panoramas } = useQuery({
+    queryKey: ['panorama'],
+    queryFn: getPanoramas,
+  })
+
+  const [markersPlugin, setMarkersPlugin] = useState<MarkersPlugin | null>(null)
   const [markingsComponent, setMarkingsComponent] = useState<MarkingWithRef[]>(
     [] as MarkingWithRef[],
   )
 
   const sphereElementRef = createRef<HTMLDivElement>()
 
-  useEffect(() => {
-    if (!sphereElementRef.current) {
+  function createMarkingsComponent(nodeId: string) {
+    if (!panoramas) {
       return
     }
 
-    const markers = markingsComponent?.map(
-      ({ coord_x, coord_y, equipment, ref }) => ({
-        id: equipment.id,
-        position: {
-          textureX: coord_x,
-          textureY: coord_y - 16,
-        },
-        content: ref.current?.outerHTML,
-        size: { width: 32, height: 32 },
-        // tooltip: {
-        //   content: ref.current?.outerHTML,
-        //   className: 'shadow-none bg-transparent min-w-min p-0 font-sans',
-        //   trigger: 'click',
-        // },
-        image: '/pin-red.svg',
-        listContent: equipment.name,
-        // element: ref.current,
-        // zIndex: 31,
-      }),
-    )
+    const panorama = panoramas.find((panorama) => panorama.id === nodeId)
+    const newMarkings = panorama?.markings?.map((marking) => ({
+      ...marking,
+      ref: createRef<HTMLDivElement>(),
+    }))
+
+    newMarkings && setMarkingsComponent(newMarkings)
+  }
+
+  useEffect(() => {
+    if (!sphereElementRef.current || !panoramas) {
+      return
+    }
 
     const spherePlayerInstance = new Viewer({
       container: sphereElementRef.current,
-      panorama: panorama.image_link,
       plugins: [
+        MarkersPlugin,
         [
-          MarkersPlugin,
+          VirtualTourPlugin,
           {
-            markers,
+            renderMode: 'markers',
+            // startNodeId: panoramaId,
           },
         ],
       ],
     })
 
+    // Nodes creating
+    const nodes = createNodes(panoramas)
+    const virtualTourPlugin =
+      spherePlayerInstance.getPlugin<VirtualTourPlugin>(VirtualTourPlugin)
+    virtualTourPlugin.setNodes(nodes, panoramaId)
+
+    virtualTourPlugin.addEventListener('node-changed', ({ node }) =>
+      createMarkingsComponent(node.id),
+    )
+
+    // Markers creating
+    const markersPluginInstance =
+      spherePlayerInstance.getPlugin<MarkersPlugin>(MarkersPlugin)
+    setMarkersPlugin(markersPluginInstance)
+
     return () => {
       spherePlayerInstance.destroy()
     }
-  }, [sphereElementRef, panorama, markingsComponent])
+  }, [panoramaId, panoramas])
 
   useEffect(() => {
-    if (panorama.markings) {
-      const newMarkings = panorama.markings.map((marking) => ({
-        ...marking,
-        ref: createRef<HTMLDivElement>(),
-      }))
-      setMarkingsComponent(newMarkings)
+    if (!markersPlugin || !markingsComponent.length) {
+      return
     }
-  }, [panorama])
+    const markers = createMarkers(markingsComponent)
+    markers.forEach((marker) => {
+      markersPlugin.addMarker(marker)
+    })
+  }, [markingsComponent, markersPlugin])
+
+  if (!panoramas) {
+    return
+  }
 
   return (
     <>
-      <div className="h-screen " ref={sphereElementRef} />
-      <PanoramaViewerProvider>
-        {markingsComponent.map((marking) => (
-          <div key={marking.equipment.id} className="sr-only">
-            {/* <Markers equipment={marking.equipment} ref={marking.ref} /> */}
-            <MarkersTooltip equipment={marking.equipment} ref={marking.ref} />
-          </div>
-        ))}
-      </PanoramaViewerProvider>
+      <div className="h-[calc(100vh-4.5rem)]" ref={sphereElementRef} />
+      {markingsComponent.map((marking) => (
+        <div key={marking.equipment.id} className="sr-only">
+          <MarkersTooltip equipment={marking.equipment} ref={marking.ref} />
+        </div>
+      ))}
     </>
   )
 }

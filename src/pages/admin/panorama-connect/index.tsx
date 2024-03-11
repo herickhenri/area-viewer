@@ -9,6 +9,8 @@ import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { updatePanorama } from '@/api/update-panorama'
 import { toast } from 'react-toastify'
+import { queryClient } from '@/lib/query-client'
+import { Panorama } from '@/types/Panorama'
 
 const panoramaConnectFormSchema = z.object({
   mainLink: z.object({
@@ -32,12 +34,22 @@ export type panoramaConnectFormData = z.infer<typeof panoramaConnectFormSchema>
 export function PanoramaConnect() {
   const { id: mainPanoramaId } = useParams()
   const { data: panoramas } = useQuery({
-    queryKey: ['panorama'],
+    queryKey: ['panoramas'],
     queryFn: getPanoramas,
   })
   const { mutateAsync: updatePanoramaMutate } = useMutation({
     mutationKey: ['panorama'],
     mutationFn: updatePanorama,
+    onSuccess(data) {
+      queryClient.setQueryData<Panorama[]>(['panoramas'], (oldData) => {
+        const newData = oldData?.map((panorama) =>
+          panorama.id === data.id
+            ? { ...panorama, links: data.links }
+            : panorama,
+        )
+        return newData
+      })
+    },
   })
 
   const { control, watch, setValue, resetField, handleSubmit } =

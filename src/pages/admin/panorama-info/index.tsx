@@ -31,14 +31,20 @@ export function PanoramaInfo() {
         <span className="text-lg font-semibold">{panorama.name}</span>
       </div>
 
-      <div className="relative mt-6 flex w-full flex-1 justify-center gap-2 md:w-[36rem]">
+      <div className="relative mt-6 flex w-full flex-1 justify-center gap-2 md:w-[50rem]">
         <Link className="flex-1" to={`/admin/panorama/edit/${panorama.id}`}>
           <Button className="w-full">Editar</Button>
         </Link>
         <Link className="flex-1" to="/admin/panorama/create">
           <Button className="w-full">Criar outro</Button>
         </Link>
-        <Link className="absolute bottom-10 md:static md:flex-1" to="/admin">
+        <Link className="flex-1" to={`/admin/panorama/connect/${panorama.id}`}>
+          <Button className="w-full">Conectar</Button>
+        </Link>
+        <Link
+          className="absolute bottom-10 mx-auto md:static md:flex-1"
+          to="/admin"
+        >
           <Button className="w-full">Voltar ao menu</Button>
         </Link>
       </div>

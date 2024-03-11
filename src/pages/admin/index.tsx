@@ -32,11 +32,6 @@ export function Admin() {
           icon={CubeTransparent}
           link={'panorama/list'}
         />
-        <ButtonAdm
-          content="Conectar panoramas"
-          icon={CubeTransparent}
-          link={'panorama/connect'}
-        />
 
         <div className="my-5 h-px w-full bg-black" />
 

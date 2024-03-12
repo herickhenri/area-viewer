@@ -125,7 +125,7 @@ export function PanoramaArea({
             top: value.coord_y / conversionRate.height,
           }}
         >
-          <Arrow className=" h-6 w-6 fill-green-200 md:h-12 md:w-12" />
+          <Arrow className=" h-6 w-6 fill-red-500 md:h-12 md:w-12" />
         </div>
       )}
     </div>

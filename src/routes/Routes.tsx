@@ -16,6 +16,7 @@ import { PanoramasFeed } from '@/pages/app/panoramas-feed.tsx'
 import { PanoramaViewer } from '@/pages/app/panorama-viewer'
 import { PanoramaInfo } from '@/pages/admin/panorama-info'
 import { PanoramaConnect } from '@/pages/admin/panorama-connect'
+import { PageNotFound } from '@/pages/error-404'
 
 export function Routes() {
   const router = createBrowserRouter([
@@ -86,6 +87,10 @@ export function Routes() {
           element: <PanoramaConnect />,
         },
       ],
+    },
+    {
+      path: '*',
+      element: <PageNotFound />,
     },
   ])
 

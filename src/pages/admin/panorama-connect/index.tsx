@@ -228,8 +228,15 @@ export function PanoramaConnect() {
           )}
         </div>
       </div>
-
-      <Button className="mx-auto mt-10">Conectar</Button>
+      {/* <button
+        className="mx-5 text-red-500 underline underline-offset-2 transition-colors hover:text-red-700 md:mx-56"
+        type="button"
+      >
+        Remover conexão existente
+      </button> */}
+      <Button type="submit" className="mx-auto mt-10">
+        Conectar
+      </Button>
     </form>
   )
 }

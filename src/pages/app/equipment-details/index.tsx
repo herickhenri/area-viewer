@@ -4,17 +4,18 @@ import { getEquipment } from '@/api/get-equipment'
 import { CarouselPhotos } from './carousel-photos'
 import { CameraSlash, MapPin } from '@phosphor-icons/react'
 import { Button } from '@/components/button'
+import { SkeletonLoading } from './skeleton-loading'
 
 export function EquipmentDetails() {
   const { id } = useParams()
 
-  const { data: equipment } = useQuery({
+  const { data: equipment, isLoading } = useQuery({
     queryKey: ['equipment', id],
     queryFn: () => getEquipment(id!),
   })
 
-  if (!equipment) {
-    return <h1>Equipamento não encontrado</h1>
+  if (isLoading || !equipment) {
+    return <SkeletonLoading />
   }
 
   const sources = equipment.photos?.map((photo) => photo.link)

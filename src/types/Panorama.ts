@@ -6,8 +6,6 @@ export type Panorama = {
   image_key: string
   image_link: string
   markings?: Marking[]
-  gps_x?: number
-  gps_y?: number
   links: {
     coord_x: number
     coord_y: number

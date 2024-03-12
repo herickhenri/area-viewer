@@ -1,4 +1,4 @@
-import { CubeTransparent, GearSix, Lock } from '@phosphor-icons/react'
+import { CubeTransparent, GearSix } from '@phosphor-icons/react'
 import { ButtonAdm } from '@/components/ButtonAdmin'
 
 export function Admin() {
@@ -32,11 +32,6 @@ export function Admin() {
           icon={CubeTransparent}
           link={'panorama/list'}
         />
-
-        <div className="my-5 h-px w-full bg-black" />
-
-        <ButtonAdm content="Cadastrar Bloqueios" icon={Lock} link={'/admin'} />
-        <ButtonAdm content="Editar Bloqueios" icon={Lock} link={'/admin'} />
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { Routes } from '@/routes/Routes.tsx'
+import { Routes } from '@/routes/routes.tsx'
 import { ToastContainer } from 'react-toastify'
 
 import 'react-toastify/dist/ReactToastify.css'

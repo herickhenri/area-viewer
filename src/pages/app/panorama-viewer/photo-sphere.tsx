@@ -13,6 +13,7 @@ import { getPanoramas } from '@/api/get-panoramas'
 import { useParams } from 'react-router-dom'
 import { createNodes } from './create-nodes'
 import { createMarkers } from './create-markers'
+import { getEquipments } from '@/api/get-equipments'
 
 export type MarkingWithRef = Marking & {
   ref: React.RefObject<HTMLDivElement>
@@ -24,6 +25,11 @@ export function PhotoSphere() {
   const { data: panoramas } = useQuery({
     queryKey: ['panorama'],
     queryFn: getPanoramas,
+  })
+
+  const { data: equipments } = useQuery({
+    queryKey: ['equipments'],
+    queryFn: getEquipments,
   })
 
   const [markersPlugin, setMarkersPlugin] = useState<MarkersPlugin | null>(null)
@@ -54,6 +60,8 @@ export function PhotoSphere() {
 
     const spherePlayerInstance = new Viewer({
       container: sphereElementRef.current,
+      defaultYaw: '130deg',
+      sphereCorrection: {},
       plugins: [
         MarkersPlugin,
         [
@@ -96,18 +104,24 @@ export function PhotoSphere() {
     })
   }, [markingsComponent, markersPlugin])
 
-  if (!panoramas) {
-    return
-  }
-
   return (
     <>
       <div className="h-[calc(100vh-4.5rem)]" ref={sphereElementRef} />
-      {markingsComponent.map((marking) => (
-        <div key={marking.equipment.id} className="sr-only">
-          <MarkersTooltip equipment={marking.equipment} ref={marking.ref} />
-        </div>
-      ))}
+      {markingsComponent.map((marking) => {
+        const equipment = equipments?.find(
+          (equipment) => equipment.id === marking.equipment_id,
+        )
+
+        console.log(marking)
+
+        return (
+          <div key={marking.equipment_id} className="sr-only">
+            {equipment && (
+              <MarkersTooltip equipment={equipment} ref={marking.ref} />
+            )}
+          </div>
+        )
+      })}
     </>
   )
 }

@@ -50,16 +50,11 @@ export function PanoramaForm({
 }: PanoramaFormProps) {
   const [coord, setCoord] = useState<Coord | null>(null)
 
-  const markings = data?.markings?.map(({ coord_x, coord_y, equipment }) => ({
-    equipment_id: equipment.id,
-    coord_x,
-    coord_y,
-  }))
   const newCycleForm = useForm<createPanoramaFormData>({
     resolver: zodResolver(createPanoramaFormSchema),
     defaultValues: {
       name: data?.name,
-      markings,
+      markings: data?.markings,
     },
   })
 

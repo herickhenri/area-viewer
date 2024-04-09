@@ -1,26 +1,24 @@
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { MouseEvent, useEffect, useRef, useState } from 'react'
 import { Arrow } from './Arrow'
+import { Link } from '.'
 
 type Size = {
   width: number
   height: number
 }
 
-export type Coord = {
+type Point = {
   coord_x: number
   coord_y: number
-}
-
-type Point = Coord & {
   name: string
 }
 
 interface PanoramaAreaProps {
   source: string
-  value: Coord | null
+  value: Link
   points?: Point[]
-  onChange: (coord: Coord | null) => void
+  onChange: (link: Link) => void
 }
 
 export function PanoramaArea({
@@ -75,6 +73,7 @@ export function PanoramaArea({
 
     // Atualiza o estado com as coordenadas do clique
     onChange({
+      ...value,
       coord_x: Math.round(x * conversionRate.width),
       coord_y: Math.round(y * conversionRate.height),
     })
@@ -117,7 +116,7 @@ export function PanoramaArea({
             </Tooltip.Provider>
           </div>
         ))}
-      {value && (
+      {value.coord_x && value.coord_y && (
         <div
           className="absolute -translate-x-1/2 -translate-y-1/2"
           style={{

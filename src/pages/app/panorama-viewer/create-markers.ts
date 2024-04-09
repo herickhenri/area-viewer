@@ -1,4 +1,4 @@
-import { MarkingWithRef } from './photo-sphere'
+import { MarkingWithRef } from '.'
 
 export function createMarkers(markings: MarkingWithRef[]) {
   const markers = markings.map(({ coord_x, coord_y, equipment_id, ref }) => ({

@@ -7,26 +7,21 @@ import { PanoramaArea } from './panorama-area'
 import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { updatePanorama } from '@/api/update-panorama'
 import { toast } from 'react-toastify'
-import { queryClient } from '@/lib/query-client'
-import { Panorama } from '@/types/Panorama'
+import { connectPanoramas } from '@/api/connect-panorama'
+import { useEffect } from 'react'
+
+const linkSchema = z.object({
+  panorama_id: z.string(),
+  panorama_connect_id: z.string(),
+  coord_x: z.number(),
+  coord_y: z.number(),
+})
+
+export type Link = z.infer<typeof linkSchema>
 
 const panoramaConnectFormSchema = z.object({
-  mainLink: z.object({
-    id: z.string(),
-    coords: z.object({
-      coord_x: z.number(),
-      coord_y: z.number(),
-    }),
-  }),
-  secondaryLink: z.object({
-    id: z.string(),
-    coords: z.object({
-      coord_x: z.number(),
-      coord_y: z.number(),
-    }),
-  }),
+  connection: z.tuple([linkSchema, linkSchema]),
 })
 
 export type panoramaConnectFormData = z.infer<typeof panoramaConnectFormSchema>
@@ -37,104 +32,74 @@ export function PanoramaConnect() {
     queryKey: ['panoramas'],
     queryFn: getPanoramas,
   })
-  const { mutateAsync: updatePanoramaMutate } = useMutation({
-    mutationKey: ['panorama'],
-    mutationFn: updatePanorama,
-    onSuccess(data) {
-      queryClient.setQueryData<Panorama[]>(['panoramas'], (oldData) => {
-        const newData = oldData?.map((panorama) =>
-          panorama.id === data.id
-            ? { ...panorama, links: data.links }
-            : panorama,
-        )
-        return newData
-      })
-    },
+  const { mutateAsync: connectPanoramasMutate } = useMutation({
+    mutationKey: ['connection'],
+    mutationFn: connectPanoramas,
   })
 
   const { control, watch, setValue, resetField, handleSubmit } =
     useForm<panoramaConnectFormData>({
       resolver: zodResolver(panoramaConnectFormSchema),
       defaultValues: {
-        mainLink: {
-          id: mainPanoramaId,
-        },
+        connection: [
+          {
+            panorama_id: mainPanoramaId,
+          },
+          {
+            panorama_connect_id: mainPanoramaId,
+          },
+        ],
       },
     })
+
+  const mainPanorama = panoramas?.find(
+    (panorama) => panorama.id === mainPanoramaId,
+  )
+  const secondaryPanoramaId = watch('connection.1.panorama_id')
+  const secondaryPanorama = panoramas?.find(
+    (panorama) => panorama.id === secondaryPanoramaId,
+  )
+
+  useEffect(() => {
+    secondaryPanorama &&
+      setValue('connection.0.panorama_connect_id', secondaryPanorama.id)
+
+    function handlePoints() {
+      // resetPoints
+      resetField('connection.0.coord_x')
+      resetField('connection.0.coord_y')
+      resetField('connection.1.coord_x')
+      resetField('connection.1.coord_y')
+
+      // checks if the secondary panorama has connection to the main panorama
+      const secondaryLink = secondaryPanorama?.links?.find(
+        (link) => link.panorama_connect_id === mainPanorama?.id,
+      )
+      const mainLink = mainPanorama?.links?.find(
+        (link) => link.panorama_connect_id === secondaryPanorama?.id,
+      )
+
+      // set values that exist between the two panoramas
+      mainLink && setValue('connection.0.coord_x', mainLink.coord_x)
+      mainLink && setValue('connection.0.coord_y', mainLink.coord_y)
+      secondaryLink && setValue('connection.1.coord_x', secondaryLink.coord_x)
+      secondaryLink && setValue('connection.1.coord_y', secondaryLink.coord_y)
+    }
+
+    handlePoints()
+  }, [secondaryPanorama, mainPanorama, resetField, setValue])
 
   if (!panoramas) {
     return <h1>carregando...</h1>
   }
 
-  const mainPanorama = panoramas.find(
-    (panorama) => panorama.id === mainPanoramaId,
-  )
-
   if (!mainPanorama) {
     return <h1>Panorama não econtrado</h1>
   }
 
-  function handlePoints(value: string) {
-    // resetPoints
-    resetField('mainLink.coords')
-    resetField('secondaryLink.coords')
-
-    // checks if the main panorama has a connection to the secondary panorama
-    const mainLink = mainPanorama?.links.find(
-      (link) => link.panorama_connect_id === value,
-    )
-
-    // takes the secondary panorama from the main panorama
-    const secondaryPanorama = panoramas?.find(
-      (panorama) => panorama.id === mainLink?.panorama_connect_id,
-    )
-    // checks if the secondary panorama has connection to the main panorama
-    const secondaryLink = secondaryPanorama?.links.find(
-      (link) => link.panorama_connect_id === mainPanorama?.id,
-    )
-
-    // set values that exist between the two panoramas
-    mainLink && setValue('mainLink.coords', mainLink)
-    secondaryLink && setValue('secondaryLink.coords', secondaryLink)
-  }
-
-  function handleForm(data: panoramaConnectFormData) {
-    const mainLink = {
-      ...data.mainLink.coords,
-      panorama_connect_id: data.secondaryLink.id,
-    }
-
-    const mainLinks = mainPanorama?.links
-      ? mainPanorama.links
-          .filter(
-            (link) => link.panorama_connect_id !== mainLink.panorama_connect_id,
-          )
-          .concat(mainLink)
-      : [mainLink]
-
-    const secondaryLink = {
-      ...data.secondaryLink.coords,
-      panorama_connect_id: data.mainLink.id,
-    }
-    const secondaryLinks = secondaryPanorama?.links
-      ? secondaryPanorama.links
-          .filter(
-            (link) =>
-              link.panorama_connect_id !== secondaryLink.panorama_connect_id,
-          )
-          .concat(secondaryLink)
-      : [secondaryLink]
-
+  async function handleForm({ connection }: panoramaConnectFormData) {
     try {
-      updatePanoramaMutate({
-        id: secondaryLink.panorama_connect_id,
-        links: mainLinks,
-      })
-      updatePanoramaMutate({
-        id: mainLink.panorama_connect_id,
-        links: secondaryLinks,
-      })
-
+      await connectPanoramasMutate({ connection })
       toast.success('Panoramas conectados com sucesso')
     } catch (err) {
       console.error(err)
@@ -152,13 +117,8 @@ export function PanoramaConnect() {
       return item
     })
 
-  const secondaryPanoramaId = watch('secondaryLink.id')
-  const secondaryPanorama = panoramas.find(
-    (panorama) => panorama.id === secondaryPanoramaId,
-  )
-
   const allPointMainPanorama = mainPanorama.links
-    .filter((link) => link.panorama_connect_id !== secondaryPanoramaId)
+    ?.filter((link) => link.panorama_connect_id !== secondaryPanoramaId)
     .map(({ coord_x, coord_y, panorama_connect_id }) => {
       // get the name of the panorama connected to the main panorama
       const panorama = panoramas.find(
@@ -182,7 +142,7 @@ export function PanoramaConnect() {
         <div className="relative">
           <Controller
             control={control}
-            name="mainLink.coords"
+            name="connection.0"
             render={({ field }) => (
               <PanoramaArea
                 source={mainPanorama.image_link}
@@ -195,15 +155,12 @@ export function PanoramaConnect() {
         </div>
         <Controller
           control={control}
-          name="secondaryLink.id"
+          name="connection.1.panorama_id"
           render={({ field }) => (
             <SelectInput
               options={panoramaOptions}
               value={field.value}
-              onChange={(value) => {
-                value && handlePoints(value)
-                field.onChange(value)
-              }}
+              onChange={field.onChange}
             />
           )}
         />
@@ -212,7 +169,7 @@ export function PanoramaConnect() {
           {secondaryPanorama ? (
             <Controller
               control={control}
-              name="secondaryLink.coords"
+              name="connection.1"
               render={({ field }) => (
                 <PanoramaArea
                   source={secondaryPanorama.image_link}

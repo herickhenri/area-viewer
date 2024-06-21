@@ -17,7 +17,6 @@ import { PanoramaViewer } from '@/pages/app/panorama-viewer'
 import { PanoramaInfo } from '@/pages/admin/panorama-info'
 import { PanoramaConnect } from '@/pages/admin/panorama-connect'
 import { PageNotFound } from '@/pages/error-404'
-import { PanoramaCreate360 } from '@/pages/admin/panorama-create-360'
 
 export function Routes() {
   const router = createBrowserRouter([
@@ -74,10 +73,6 @@ export function Routes() {
         {
           path: 'panorama/create',
           element: <PanoramaCreate />,
-        },
-        {
-          path: 'panorama/create-test',
-          element: <PanoramaCreate360 />,
         },
         {
           path: 'panorama/edit/:id',

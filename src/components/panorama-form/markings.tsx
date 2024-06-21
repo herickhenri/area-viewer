@@ -3,7 +3,6 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 import { useQuery } from '@tanstack/react-query'
 import { getEquipments } from '@/api/get-equipments'
 import { Item, SelectInput } from './select-input'
-import { Button } from '../button'
 
 interface MarkingsProps {
   coord: Coord | null

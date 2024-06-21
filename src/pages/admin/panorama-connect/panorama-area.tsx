@@ -80,12 +80,12 @@ export function PanoramaArea({
   }
 
   return (
-    <div className="relative h-40 overflow-x-auto overflow-y-hidden rounded md:h-80">
+    <div className="relative overflow-x-auto overflow-y-hidden rounded">
       <img
         ref={panoramaRef}
         onClick={handleClick}
         onLoad={getSizes}
-        className="h-full min-w-min cursor-pointer select-none"
+        className="h-40 w-full cursor-pointer select-none md:h-80"
         src={source}
         alt="Foto panorâmica"
       />

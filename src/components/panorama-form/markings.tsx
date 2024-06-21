@@ -3,6 +3,7 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 import { useQuery } from '@tanstack/react-query'
 import { getEquipments } from '@/api/get-equipments'
 import { Item, SelectInput } from './select-input'
+import { Button } from '../button'
 
 interface MarkingsProps {
   coord: Coord | null
@@ -59,23 +60,26 @@ export function Markings({ coord, changeCoord }: MarkingsProps) {
         const defaultValue = equip && { value: equip.id, label: equip.name }
 
         return (
-          <SelectInput
-            key={marking.equipment_id}
-            options={options}
-            onChange={(item) =>
-              item && update(index, { ...marking, equipment_id: item.value })
-            }
-            defaultValue={defaultValue}
-            remove={() => remove(index)}
-          />
+          <div key={marking.equipment_id} className="flex items-center gap-3">
+            <SelectInput
+              options={options}
+              onChange={(item) =>
+                item && update(index, { ...marking, equipment_id: item.value })
+              }
+              defaultValue={defaultValue}
+              remove={() => remove(index)}
+            />
+          </div>
         )
       })}
       {coord && (
-        <SelectInput
-          options={options}
-          onChange={addMarking}
-          remove={() => changeCoord(null)}
-        />
+        <div className="flex items-center gap-3">
+          <SelectInput
+            options={options}
+            onChange={addMarking}
+            remove={() => changeCoord(null)}
+          />
+        </div>
       )}
 
       <span className="flex text-center text-red-500 md:mx-auto">

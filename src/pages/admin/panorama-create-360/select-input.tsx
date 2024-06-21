@@ -20,7 +20,7 @@ export function SelectInput({
   remove,
 }: selectInputProps) {
   return (
-    <div className="flex flex-1 items-center justify-between rounded border border-black/25 px-2 outline-2 outline-blue-500 focus-within:border-transparent focus-within:outline">
+    <div className="flex items-center justify-between rounded border border-black/25 px-2 outline-2 outline-blue-500 focus-within:border-transparent focus-within:outline">
       <Select
         options={options}
         classNames={{

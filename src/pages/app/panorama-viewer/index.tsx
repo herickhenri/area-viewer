@@ -20,6 +20,11 @@ export type MarkingWithRef = Marking & {
 }
 
 export function PanoramaViewer() {
+  const [markersPlugin, setMarkersPlugin] = useState<MarkersPlugin | null>(null)
+  const [markingsComponent, setMarkingsComponent] = useState<MarkingWithRef[]>(
+    [] as MarkingWithRef[],
+  )
+
   const { id: panoramaId } = useParams()
 
   const { data: panoramas } = useQuery({
@@ -31,11 +36,6 @@ export function PanoramaViewer() {
     queryKey: ['equipments'],
     queryFn: getEquipments,
   })
-
-  const [markersPlugin, setMarkersPlugin] = useState<MarkersPlugin | null>(null)
-  const [markingsComponent, setMarkingsComponent] = useState<MarkingWithRef[]>(
-    [] as MarkingWithRef[],
-  )
 
   const sphereElementRef = createRef<HTMLDivElement>()
 

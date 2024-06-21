@@ -1,7 +1,8 @@
 import { MapPin } from '@phosphor-icons/react'
-import { MouseEvent, useEffect, useRef, useState } from 'react'
+import { MouseEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Coord, createPanoramaFormData } from '.'
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 
 type Size = {
   width: number
@@ -31,7 +32,7 @@ export function PanoramaArea({
     height: intrinsicSize.height / renderedSize.height,
   }
 
-  function getSizes() {
+  const getSizes = useCallback(() => {
     if (!panoramaRef.current) {
       return
     }
@@ -50,7 +51,7 @@ export function PanoramaArea({
       width: offsetWidth,
       height: offsetHeight,
     })
-  }
+  }, [])
 
   useEffect(() => {
     window.addEventListener('resize', getSizes)
@@ -58,9 +59,9 @@ export function PanoramaArea({
     return () => {
       window.removeEventListener('resize', getSizes)
     }
-  }, [])
+  }, [getSizes])
 
-  const handleClick = (e: MouseEvent) => {
+  function handleClick(e: MouseEvent) {
     // Obtém as coordenadas relativas à imagem
     const x = e.nativeEvent.offsetX
     const y = e.nativeEvent.offsetY
@@ -79,29 +80,45 @@ export function PanoramaArea({
       }))
     : []
 
-  coord && points?.push(coord)
+  // coord && points?.push(coord)
 
   return (
-    <div className="relative h-full overflow-x-auto">
-      <img
-        ref={panoramaRef}
-        onClick={handleClick}
-        onLoad={getSizes}
-        className="h-full min-w-min"
-        src={source}
-        alt="Foto panorâmica"
-      />
-      {points.map((point, index) => (
-        <MapPin
-          key={index}
-          className="absolute h-4 w-4 -translate-x-1/2 -translate-y-full fill-red-600 md:h-6 md:w-6"
-          weight="fill"
-          style={{
-            left: point.coord_x / conversionRate.width,
-            top: point.coord_y / conversionRate.height,
-          }}
-        />
-      ))}
+    <div className="relative overflow-x-auto">
+      <TransformWrapper maxScale={10}>
+        <TransformComponent
+          contentClass="relative"
+          contentProps={{ onClick: handleClick }}
+        >
+          <img
+            ref={panoramaRef}
+            onClick={handleClick}
+            onLoad={getSizes}
+            src={source}
+            alt="Foto panorâmica"
+          />
+          {coord && (
+            <MapPin
+              className="absolute h-2 w-2 -translate-x-1/2 -translate-y-full fill-red-600"
+              weight="fill"
+              style={{
+                left: coord.coord_x / conversionRate.width,
+                top: coord.coord_y / conversionRate.height,
+              }}
+            />
+          )}
+          {points.map((point, index) => (
+            <MapPin
+              key={index}
+              className="absolute h-2 w-2 -translate-x-1/2 -translate-y-full fill-slate-300"
+              weight="fill"
+              style={{
+                left: point.coord_x / conversionRate.width,
+                top: point.coord_y / conversionRate.height,
+              }}
+            />
+          ))}
+        </TransformComponent>
+      </TransformWrapper>
     </div>
   )
 }

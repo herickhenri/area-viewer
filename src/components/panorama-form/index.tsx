@@ -108,7 +108,7 @@ export function PanoramaForm({
               )}
             />
           </div>
-          <div className="h-40 cursor-pointer overflow-hidden rounded bg-slate-300 transition-colors hover:bg-slate-400 md:h-80">
+          <div className="mx-auto cursor-pointer overflow-hidden rounded transition-colors">
             {panoramaSource ? (
               <PanoramaArea
                 changeCoord={changeCoord}
@@ -121,7 +121,7 @@ export function PanoramaForm({
                 control={control}
                 render={({ field }) => (
                   <UploadPanorama
-                    className="flex h-full w-full items-center justify-center"
+                    className="mx-auto flex h-64 w-full items-center justify-center rounded border-2 border-dashed border-blue-500 transition-colors hover:border-blue-600"
                     updatePanoramaFile={field.onChange}
                   >
                     <Camera size={32} className="text-black/50" />

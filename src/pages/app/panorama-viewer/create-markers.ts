@@ -5,7 +5,7 @@ export function createMarkers(markings: MarkingWithRef[]) {
     id: equipment_id,
     position: {
       textureX: coord_x,
-      textureY: coord_y - 16,
+      textureY: coord_y - 32,
     },
     content: ref?.current?.outerHTML,
     size: { width: 32, height: 32 },

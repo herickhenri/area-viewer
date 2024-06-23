@@ -32,11 +32,6 @@ export function Admin() {
           icon={CubeTransparent}
           link={'panorama/list'}
         />
-        <ButtonAdm
-          content="Criar panoramas TESTE"
-          icon={CubeTransparent}
-          link={'panorama/create-test'}
-        />
       </div>
     </div>
   )

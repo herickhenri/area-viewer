@@ -9,7 +9,7 @@ export function createNodes(panoramas: Panorama[]) {
 
     const node = {
       id: panorama.id,
-      panorama: panorama.image_link,
+      panorama: `${panorama.image_link}?no-cache-please`,
       name: panorama.name,
       links,
     }

@@ -1,7 +1,8 @@
-import * as Tooltip from '@radix-ui/react-tooltip'
 import { MouseEvent, useEffect, useRef, useState } from 'react'
 import { Arrow } from './Arrow'
 import { Link } from '.'
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
+import { RemoveConnection } from './remove-connection'
 
 type Size = {
   width: number
@@ -12,6 +13,7 @@ type Point = {
   coord_x: number
   coord_y: number
   name: string
+  panorama_connect_id: string
 }
 
 interface PanoramaAreaProps {
@@ -31,6 +33,7 @@ export function PanoramaArea({
 
   const [renderedSize, setRenderedSize] = useState<Size>({} as Size)
   const [intrinsicSize, setIntrinsicSize] = useState<Size>({} as Size)
+  const [scale, setScale] = useState(1)
 
   const conversionRate = {
     width: intrinsicSize.width / renderedSize.width,
@@ -67,9 +70,15 @@ export function PanoramaArea({
   }, [])
 
   const handleClick = (e: MouseEvent) => {
+    const target = e.target as HTMLElement
+
+    if (target.id !== 'click-area') {
+      return
+    }
+
     // Obtém as coordenadas relativas à imagem
-    const x = e.nativeEvent.offsetX
-    const y = e.nativeEvent.offsetY
+    const x = e.nativeEvent.offsetX - 24
+    const y = e.nativeEvent.offsetY - 24
 
     // Atualiza o estado com as coordenadas do clique
     onChange({
@@ -80,53 +89,55 @@ export function PanoramaArea({
   }
 
   return (
-    <div className="relative overflow-x-auto overflow-y-hidden rounded">
-      <img
-        ref={panoramaRef}
-        onClick={handleClick}
-        onLoad={getSizes}
-        className="h-40 w-full cursor-pointer select-none md:h-80"
-        src={source}
-        alt="Foto panorâmica"
-      />
-      {points &&
-        points.map((point) => (
-          <div
-            key={point.coord_x + point.coord_y}
-            className="absolute -translate-x-1/2 -translate-y-1/2"
-            style={{
-              left: point.coord_x / conversionRate.width,
-              top: point.coord_y / conversionRate.height,
-            }}
-          >
-            <Tooltip.Provider delayDuration={100}>
-              <Tooltip.Root>
-                <Tooltip.Trigger>
-                  <Arrow className=" h-6 w-6 fill-white md:h-12 md:w-12" />
-                </Tooltip.Trigger>
-                <Tooltip.Portal>
-                  <Tooltip.Content>
-                    <span className="translate-x-1/2 rounded-sm bg-black/80 p-1 text-center text-white">
-                      {point.name}
-                    </span>
-                    <Tooltip.Arrow />
-                  </Tooltip.Content>
-                </Tooltip.Portal>
-              </Tooltip.Root>
-            </Tooltip.Provider>
-          </div>
-        ))}
-      {value.coord_x && value.coord_y && (
-        <div
-          className="absolute -translate-x-1/2 -translate-y-1/2"
-          style={{
-            left: value.coord_x / conversionRate.width,
-            top: value.coord_y / conversionRate.height,
-          }}
+    <div className="relative rounded">
+      <TransformWrapper maxScale={10} onZoom={(e) => setScale(e.state.scale)}>
+        <TransformComponent
+          contentClass="relative"
+          contentProps={{ onClick: handleClick, id: 'click-area' }}
         >
-          <Arrow className=" h-6 w-6 fill-red-500 md:h-12 md:w-12" />
-        </div>
-      )}
+          <img
+            ref={panoramaRef}
+            onClick={handleClick}
+            onLoad={getSizes}
+            className="select-none"
+            src={source}
+            alt="Foto panorâmica"
+          />
+          {points &&
+            points.map((point) => (
+              <div
+                key={point.coord_x + point.coord_y}
+                className="absolute"
+                style={{
+                  left: point.coord_x / conversionRate.width,
+                  top: point.coord_y / conversionRate.height,
+                  transform: `scale(${1 / scale})`,
+                }}
+              >
+                <RemoveConnection
+                  icon={Arrow}
+                  name={point.name}
+                  connection={{
+                    panorama_id: value.panorama_id,
+                    panorama_connect_id: point.panorama_connect_id,
+                  }}
+                />
+              </div>
+            ))}
+          {value.coord_x && value.coord_y && (
+            <div
+              className="absolute"
+              style={{
+                left: value.coord_x / conversionRate.width,
+                top: value.coord_y / conversionRate.height,
+                transform: `scale(${1 / scale})`,
+              }}
+            >
+              <Arrow className="h-4 w-4 fill-red-500 md:h-12 md:w-12" />
+            </div>
+          )}
+        </TransformComponent>
+      </TransformWrapper>
     </div>
   )
 }

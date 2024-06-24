@@ -111,7 +111,7 @@ export function PanoramaArea({
             points.map((point) => (
               <div
                 key={point.coord_x + point.coord_y}
-                className="absolute"
+                className="absolute origin-top-left"
                 style={{
                   left: point.coord_x / conversionRate.width,
                   top: point.coord_y / conversionRate.height,
@@ -130,7 +130,7 @@ export function PanoramaArea({
             ))}
           {value && (
             <div
-              className="absolute"
+              className="absolute origin-top-left"
               style={{
                 left: value.x / conversionRate.width,
                 top: value.y / conversionRate.height,

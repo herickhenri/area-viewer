@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Item, SelectInput } from './select-input'
 import { getPanoramas } from '@/api/get-panoramas'
 import { Button } from '@/components/button'
@@ -9,6 +9,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect } from 'react'
 import { CircleNotch } from '@phosphor-icons/react'
+import Select from 'react-select'
 
 const linkSchema = z.object({
   panorama_id: z.string({ required_error: 'O panorama é obrigatório' }),
@@ -35,6 +36,7 @@ interface ConnectFormProps {
 }
 
 export function ConnectForm({ handleForm, isPending }: ConnectFormProps) {
+  const navigate = useNavigate()
   const { id: mainPanoramaId } = useParams()
   const { data: panoramas } = useQuery({
     queryKey: ['panoramas'],
@@ -144,8 +146,21 @@ export function ConnectForm({ handleForm, isPending }: ConnectFormProps) {
       </h1>
 
       <div className="mx-5 flex flex-1 flex-col gap-5 md:mx-56">
-        <div className="relative">
-          <span>{mainPanorama.name}</span>
+        <div>
+          <div className="mb-5 flex items-center justify-between rounded border border-black/25 px-2 outline-2 outline-blue-500 focus-within:border-transparent focus-within:outline">
+            <Select
+              options={selectPanoramaOptions}
+              classNames={{
+                container: () => 'flex-1',
+                control: () => 'border-none shadow-none flex-1',
+              }}
+              value={{ label: mainPanorama.name, value: mainPanorama.id }}
+              onChange={(item) =>
+                item && navigate(`/admin/panorama/connect/${item.value}`)
+              }
+              placeholder="Selecione um panorama"
+            />
+          </div>
           <Controller
             control={control}
             name="connection.0.coordinates"

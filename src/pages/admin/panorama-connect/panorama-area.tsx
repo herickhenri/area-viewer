@@ -1,6 +1,5 @@
 import { MouseEvent, useEffect, useRef, useState } from 'react'
 import { Arrow } from './Arrow'
-import { Link } from '.'
 import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
 import { RemoveConnection } from './remove-connection'
 
@@ -9,18 +8,24 @@ type Size = {
   height: number
 }
 
+type Coordinates = {
+  x: number
+  y: number
+}
+
 type Point = {
   coord_x: number
   coord_y: number
   name: string
+  panorama_id: string
   panorama_connect_id: string
 }
 
 interface PanoramaAreaProps {
   source: string
-  value: Link
+  value: Coordinates
   points?: Point[]
-  onChange: (link: Link) => void
+  onChange: (coordinates: Coordinates) => void
 }
 
 export function PanoramaArea({
@@ -77,14 +82,13 @@ export function PanoramaArea({
     }
 
     // Obtém as coordenadas relativas à imagem
-    const x = e.nativeEvent.offsetX - 24
-    const y = e.nativeEvent.offsetY - 24
+    const x = e.nativeEvent.offsetX
+    const y = e.nativeEvent.offsetY
 
     // Atualiza o estado com as coordenadas do clique
     onChange({
-      ...value,
-      coord_x: Math.round(x * conversionRate.width),
-      coord_y: Math.round(y * conversionRate.height),
+      x: Math.round(x * conversionRate.width),
+      y: Math.round(y * conversionRate.height),
     })
   }
 
@@ -111,26 +115,26 @@ export function PanoramaArea({
                 style={{
                   left: point.coord_x / conversionRate.width,
                   top: point.coord_y / conversionRate.height,
-                  transform: `scale(${1 / scale})`,
+                  transform: `scale(${1 / scale}) translate(-50%,-50%)`,
                 }}
               >
                 <RemoveConnection
                   icon={Arrow}
                   name={point.name}
                   connection={{
-                    panorama_id: value.panorama_id,
+                    panorama_id: point.panorama_id,
                     panorama_connect_id: point.panorama_connect_id,
                   }}
                 />
               </div>
             ))}
-          {value.coord_x && value.coord_y && (
+          {value && (
             <div
               className="absolute"
               style={{
-                left: value.coord_x / conversionRate.width,
-                top: value.coord_y / conversionRate.height,
-                transform: `scale(${1 / scale})`,
+                left: value.x / conversionRate.width,
+                top: value.y / conversionRate.height,
+                transform: `scale(${1 / scale}) translate(-50%,-50%)`,
               }}
             >
               <Arrow className="h-4 w-4 fill-red-500 md:h-12 md:w-12" />

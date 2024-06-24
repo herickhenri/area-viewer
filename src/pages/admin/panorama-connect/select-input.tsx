@@ -1,4 +1,5 @@
 import Select from 'react-select'
+import { tv } from 'tailwind-variants'
 
 export type Item = {
   value: string
@@ -10,6 +11,7 @@ interface selectInputProps {
   onChange: (value: string | null) => void
   defaultValue?: Item
   value: string
+  isError: boolean
 }
 
 export function SelectInput({
@@ -17,6 +19,7 @@ export function SelectInput({
   onChange,
   defaultValue,
   value,
+  isError,
 }: selectInputProps) {
   function changeValue(item: Item | null) {
     item && onChange(item.value)
@@ -26,8 +29,22 @@ export function SelectInput({
 
   const selectedItem = options?.find((option) => option.value === value)
 
+  const select = tv({
+    base: 'flex items-center justify-between rounded border border-black/25 px-2 outline-2',
+    variants: {
+      outline: {
+        default:
+          'outline-blue-500 focus-within:border-transparent focus-within:outline',
+        error: 'border-transparent outline outline-red-500',
+      },
+    },
+    defaultVariants: {
+      outline: 'default',
+    },
+  })
+
   return (
-    <div className="flex items-center justify-between rounded border border-black/25 px-2 outline-2 outline-blue-500 focus-within:border-transparent focus-within:outline">
+    <div className={select({ outline: isError ? 'error' : 'default' })}>
       <Select
         options={options}
         classNames={{

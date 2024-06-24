@@ -63,11 +63,15 @@ export function PanoramaArea({
   }, [getSizes])
 
   function handleClick(e: MouseEvent) {
-    // Obtém as coordenadas relativas à imagem
-    const x = e.nativeEvent.offsetX - 12
-    const y = e.nativeEvent.offsetY - 24
+    const target = e.target as HTMLElement
 
-    // Atualiza o estado com as coordenadas do clique
+    if (target.id !== 'click-area') {
+      return
+    }
+
+    const x = e.nativeEvent.offsetX
+    const y = e.nativeEvent.offsetY
+
     changeCoord({
       coord_x: Math.round(x * conversionRate.width),
       coord_y: Math.round(y * conversionRate.height),
@@ -88,7 +92,7 @@ export function PanoramaArea({
       <TransformWrapper maxScale={10} onZoom={(e) => setScale(e.state.scale)}>
         <TransformComponent
           contentClass="relative"
-          contentProps={{ onClick: handleClick }}
+          contentProps={{ onClick: handleClick, id: 'click-area' }}
         >
           <img
             ref={panoramaRef}
@@ -98,24 +102,24 @@ export function PanoramaArea({
           />
           {coord && (
             <MapPin
-              className="absolute h-6 w-6 fill-red-600"
+              className="absolute h-6 w-6 origin-top-left fill-red-600"
               weight="fill"
               style={{
                 left: coord.coord_x / conversionRate.width,
                 top: coord.coord_y / conversionRate.height,
-                transform: `scale(${1 / scale})`,
+                transform: `scale(${1 / scale}) translate(-50%,-100%)`,
               }}
             />
           )}
           {points.map((point, index) => (
             <MapPin
               key={index}
-              className="absolute h-6 w-6 fill-slate-300"
+              className="absolute h-6 w-6 origin-top-left fill-slate-300"
               weight="fill"
               style={{
                 left: point.coord_x / conversionRate.width,
                 top: point.coord_y / conversionRate.height,
-                transform: `scale(${1 / scale})`,
+                transform: `scale(${1 / scale}) translate(-50%,-100%)`,
               }}
             />
           ))}

@@ -81,11 +81,9 @@ export function PanoramaArea({
       return
     }
 
-    // Obtém as coordenadas relativas à imagem
     const x = e.nativeEvent.offsetX
     const y = e.nativeEvent.offsetY
 
-    // Atualiza o estado com as coordenadas do clique
     onChange({
       x: Math.round(x * conversionRate.width),
       y: Math.round(y * conversionRate.height),

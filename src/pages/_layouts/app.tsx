@@ -20,6 +20,12 @@ export function AppLayout() {
           >
             Panoramas
           </Link>
+          <Link
+            className="px-2 py-2 font-semibold hover:bg-gray-100"
+            to="notes"
+          >
+            Notas
+          </Link>
         </nav>
       </header>
 

@@ -9,15 +9,16 @@ import { EquipmentEdit } from '@/pages/admin/equipment-edit'
 import { PanoramaCreate } from '@/pages/admin/panorama-create'
 import { PanoramaList } from '@/pages/admin/panorama-list'
 import { PanoramaEdit } from '@/pages/admin/panorama-edit'
-import { EquipmentsFeed } from '@/pages/app/equipments-feed.tsx'
+import { EquipmentsFeed } from '@/pages/app/equipments-feed'
 import { EquipmentDetails } from '@/pages/app/equipment-details'
 import { EquipmentInfo } from '@/pages/admin/equipment-info'
-import { PanoramasFeed } from '@/pages/app/panoramas-feed.tsx'
+import { PanoramasFeed } from '@/pages/app/panoramas-feed'
 import { PanoramaViewer } from '@/pages/app/panorama-viewer'
 import { PanoramaInfo } from '@/pages/admin/panorama-info'
 import { PanoramaConnect } from '@/pages/admin/panorama-connect'
 import { PageNotFound } from '@/pages/error-404'
 import { SubmitNotes } from '@/pages/admin/submit-notes'
+import { NotesList } from '@/pages/app/notes-list'
 
 export function Routes() {
   const router = createBrowserRouter([
@@ -40,6 +41,10 @@ export function Routes() {
         {
           path: 'panoramas/viewer/:id',
           element: <PanoramaViewer />,
+        },
+        {
+          path: 'notes',
+          element: <NotesList />,
         },
       ],
     },

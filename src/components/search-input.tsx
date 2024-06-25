@@ -17,7 +17,7 @@ export function SearchInput({
   className,
 }: searchInputProps) {
   return (
-    <div className={searchInput(className)}>
+    <div className={searchInput({ className })}>
       <MagnifyingGlass size={16} className="text-black/25" />
       <input
         className="flex-1 bg-transparent outline-none md:w-96"

@@ -1,22 +1,34 @@
 import { getPanoramas } from '@/api/get-panoramas'
 import { Button } from '@/components/button'
+import { SearchInput } from '@/components/search-input'
+import { searchPanoramasFilter } from '@/utils/search-panoramas-filter'
 import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 export function PanoramasFeed() {
+  const [search, setSeach] = useState('')
+
   const { data: panoramas } = useQuery({
     queryKey: ['panoramas'],
     queryFn: getPanoramas,
   })
 
+  const filteredPanoramas =
+    panoramas && searchPanoramasFilter({ panoramas, search })
+
+  const panoramasList = search.length > 0 ? filteredPanoramas : panoramas
+
   return (
     <div>
+      <SearchInput search={search} changeSearch={setSeach} />
+
       <h1 className="my-5 text-center text-2xl font-semibold md:text-4xl">
         Panoramas
       </h1>
 
       <div className="mb-10 flex flex-col gap-6 px-6 md:px-56">
-        {panoramas?.map((panorama) => (
+        {panoramasList?.map((panorama) => (
           <div key={panorama.id}>
             <div className="mb-2 flex items-center justify-between">
               <h2 className="text-lg">{panorama.name}</h2>

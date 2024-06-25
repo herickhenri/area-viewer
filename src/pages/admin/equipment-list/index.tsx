@@ -1,9 +1,9 @@
-import { MagnifyingGlass } from '@phosphor-icons/react'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Card } from './card'
 import { getEquipments } from '@/api/get-equipments'
 import { searchEquipmentsFilter } from '@/utils/search-equipments-filter'
+import { SearchInput } from '@/components/search-input'
 
 export function EquipmentList() {
   const [search, setSearch] = useState('')
@@ -23,16 +23,7 @@ export function EquipmentList() {
 
   return (
     <div>
-      <div className="mx-6 mt-6 flex items-center gap-2 rounded-full border border-solid border-black/25 px-4 py-2 outline-2 outline-blue-500 focus-within:border-transparent focus-within:outline md:mx-auto md:w-[32rem]">
-        <MagnifyingGlass size={16} className="text-black/25" />
-        <input
-          className="flex-1 bg-transparent outline-none md:w-96"
-          type="text"
-          placeholder="Pesquise"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </div>
+      <SearchInput search={search} changeSearch={setSearch} />
 
       <h1 className="my-5 text-center text-2xl font-semibold">
         Editar equipamentos

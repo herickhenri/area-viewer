@@ -1,3 +1,4 @@
+import { Note } from './Note'
 import { Panorama } from './Panorama'
 
 export type Equipment = {
@@ -12,4 +13,5 @@ export type Equipment = {
   markings?: {
     panorama: Panorama
   }[]
+  notes?: Note[]
 }

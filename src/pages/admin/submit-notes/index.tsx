@@ -61,7 +61,7 @@ export function SubmitNotes() {
           description: row['Descrição'],
           equipment_tag: row['Loc.instalação'],
           id: row['Nota'],
-          opportunity: Number(row['Oportunidade']),
+          opportunity: Number(row['Oportunidade']) as 0 | 1 | 2 | 3,
         }
 
         return note

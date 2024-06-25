@@ -5,6 +5,7 @@ import { CarouselPhotos } from './carousel-photos'
 import { CameraSlash, MapPin } from '@phosphor-icons/react'
 import { Button } from '@/components/button'
 import { SkeletonLoading } from './skeleton-loading'
+import { NoteDetail } from './note-detail'
 
 export function EquipmentDetails() {
   const { id } = useParams()
@@ -40,6 +41,19 @@ export function EquipmentDetails() {
           <span className="text-sm font-semibold">Descrição:</span>
           <p>{equipment.description}</p>
         </div>
+
+        <div>
+          <div className="flex items-center gap-2">
+            <div className=" h-3 w-3 rounded-full bg-yellow-400" />
+            <span className="text-sm font-semibold">Notas em aberto:</span>
+          </div>
+          {equipment.notes?.map((note) => (
+            <span key={note.id}>
+              - {note.description} (<NoteDetail note={note} />)
+            </span>
+          ))}
+        </div>
+
         {equipment.markings?.[0] && (
           <Link to={`/panoramas/viewer/${equipment.markings[0].panorama.id}`}>
             <Button className="mx-0 gap-2">

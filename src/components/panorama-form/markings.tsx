@@ -31,7 +31,10 @@ export function Markings({ coord, changeCoord }: MarkingsProps) {
 
   const options: Item[] | undefined = equipments
     ?.filter((equip) => !markingsIds.includes(equip.id))
-    .map((equip) => ({ value: equip.id, label: equip.name }))
+    .map((equip) => ({
+      value: equip.id,
+      label: `${equip.name} | ${equip.tag.replace(/-/g, '')}`,
+    }))
 
   function addMarking(item: Item | null) {
     if (item && coord) {

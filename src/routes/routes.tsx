@@ -17,6 +17,7 @@ import { PanoramaViewer } from '@/pages/app/panorama-viewer'
 import { PanoramaInfo } from '@/pages/admin/panorama-info'
 import { PanoramaConnect } from '@/pages/admin/panorama-connect'
 import { PageNotFound } from '@/pages/error-404'
+import { SubmitNotes } from '@/pages/admin/submit-notes'
 
 export function Routes() {
   const router = createBrowserRouter([
@@ -85,6 +86,10 @@ export function Routes() {
         {
           path: 'panorama/connect/:id',
           element: <PanoramaConnect />,
+        },
+        {
+          path: 'submit-notes',
+          element: <SubmitNotes />,
         },
       ],
     },

@@ -4,6 +4,7 @@
     "@typescript-eslint/no-non-null-assertion": "off",
     "camelcase": "off",
     "react/no-unknown-property": "off",
-    "no-new": "off"
+    "no-new": "off",
+    "dot-notation": "off"
   }
 }

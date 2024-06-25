@@ -1,20 +1,19 @@
 import { ReactNode } from 'react'
 import { useDropzone } from 'react-dropzone'
 
-interface uploadPanoramaProps {
-  updatePanoramaFile: (file: File) => void
+interface uploadFileProps {
+  updateFile: (newFile: File) => void
   children: ReactNode
   className?: string
 }
 
-export function UploadImage({
-  updatePanoramaFile,
+export function UploadFile({
+  updateFile,
   children,
   className,
-}: uploadPanoramaProps) {
+}: uploadFileProps) {
   const { getInputProps, getRootProps } = useDropzone({
-    onDrop: (files) => updatePanoramaFile(files[0]),
-    accept: { 'image/*': ['.png', '.jpeg', '.jpg'] },
+    onDrop: (files) => updateFile(files[0]),
     maxFiles: 1,
   })
 

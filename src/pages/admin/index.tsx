@@ -1,4 +1,4 @@
-import { CubeTransparent, GearSix } from '@phosphor-icons/react'
+import { CubeTransparent, GearSix, Note } from '@phosphor-icons/react'
 import { ButtonAdm } from '@/components/ButtonAdmin'
 
 export function Admin() {
@@ -32,6 +32,7 @@ export function Admin() {
           icon={CubeTransparent}
           link={'panorama/list'}
         />
+        <ButtonAdm content="Subir notas" icon={Note} link={'submit-notes'} />
       </div>
     </div>
   )

@@ -24,6 +24,7 @@ export function PanoramaViewer() {
   const [markingsComponent, setMarkingsComponent] = useState<MarkingWithRef[]>(
     [] as MarkingWithRef[],
   )
+  const [hasExecutedGoto, setHasExecutedGoto] = useState(false)
 
   const { id: panoramaId } = useParams()
   const query = new URLSearchParams(useLocation().search)
@@ -106,7 +107,11 @@ export function PanoramaViewer() {
     markers.forEach((marker) => {
       markersPlugin.addMarker(marker)
     })
-    equipmentFocusId && markersPlugin.gotoMarker(equipmentFocusId, '10rpm')
+
+    if (equipmentFocusId && !hasExecutedGoto) {
+      markersPlugin.gotoMarker(equipmentFocusId, '10rpm')
+      setHasExecutedGoto(true)
+    }
   }, [markingsComponent, markersPlugin, equipmentFocusId])
 
   return (

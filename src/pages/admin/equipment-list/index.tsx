@@ -4,6 +4,7 @@ import { Card } from './card'
 import { getEquipments } from '@/api/get-equipments'
 import { searchEquipmentsFilter } from '@/utils/search-equipments-filter'
 import { SearchInput } from '@/components/search-input'
+import { Title } from '@/components/title'
 
 export function EquipmentList() {
   const [search, setSearch] = useState('')
@@ -25,9 +26,7 @@ export function EquipmentList() {
     <div>
       <SearchInput search={search} changeSearch={setSearch} />
 
-      <h1 className="my-5 text-center text-2xl font-semibold">
-        Editar equipamentos
-      </h1>
+      <Title>Editar equipamentos</Title>
 
       {equipmentsList.length > 0 ? (
         <div className="mb-5 flex flex-wrap gap-5 px-6">

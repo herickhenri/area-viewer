@@ -1,12 +1,11 @@
 import { CubeTransparent, GearSix, Note } from '@phosphor-icons/react'
 import { ButtonAdm } from '@/components/ButtonAdmin'
+import { Title } from '@/components/title'
 
 export function Admin() {
   return (
     <div>
-      <h1 className="my-5 text-center text-2xl font-semibold md:text-4xl">
-        Página admnistrativa
-      </h1>
+      <Title>Página admnistrativa</Title>
 
       <div className="mb-10 flex flex-col items-center gap-5 px-6 md:mx-80">
         <ButtonAdm

@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/button'
 import { useQuery } from '@tanstack/react-query'
 import { getEquipment } from '@/api/get-equipment'
+import { Title } from '@/components/title'
 
 export function EquipmentInfo() {
   const { id } = useParams()
@@ -21,9 +22,7 @@ export function EquipmentInfo() {
 
   return (
     <div className="mx-6 flex flex-col items-center">
-      <h1 className="mx-6 my-5 text-center text-2xl font-semibold md:text-4xl">
-        Informações do equipamento
-      </h1>
+      <Title>Informações do equipamento</Title>
 
       <div className="flex w-full flex-col shadow-xl shadow-black/40 md:w-60">
         {banner ? (

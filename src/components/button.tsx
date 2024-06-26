@@ -6,7 +6,7 @@ const button = tv({
   variants: {
     theme: {
       default:
-        'bg-blue-800 px-6 py-2 text-white hover:bg-blue-900 disabled:bg-blue-900/70',
+        'bg-blue-500 px-6 py-2 text-white hover:bg-blue-400 disabled:bg-blue-500/70',
       delete:
         'border-2 border-red-500  bg-transparent px-6 py-1 text-red-500 hover:bg-red-500 hover:text-white focus:bg-red-500 focus:text-white',
     },

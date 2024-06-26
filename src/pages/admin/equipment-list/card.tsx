@@ -39,7 +39,7 @@ export function Card({ equipment }: cardProps) {
   }
 
   return (
-    <div className="flex w-full flex-col shadow-xl shadow-black/40 md:w-60">
+    <div className="flex w-full flex-col overflow-hidden rounded-lg bg-white text-gray-600 shadow-lg md:w-60">
       {banner ? (
         <img
           className="aspect-square w-full object-cover"
@@ -52,7 +52,9 @@ export function Card({ equipment }: cardProps) {
         </div>
       )}
       <div className="mb-4 flex flex-1 flex-col px-4">
-        <span className="text-xs">{equipment.tag}</span>
+        <span className="text-xs font-medium text-blue-600">
+          {equipment.tag}
+        </span>
         <h2 className="flex-1 text-lg font-semibold">{equipment.name}</h2>
         <div className="mt-2 flex justify-evenly gap-2 text-center font-semibold text-white">
           <Link className="flex-1" to={`/admin/equipment/edit/${equipment.id}`}>

@@ -10,6 +10,14 @@ export default {
       backgroundImage: {
         'pin-red': 'url(/pin-red.svg)',
       },
+      colors: {
+        gray: {
+          600: '#4D4D4D',
+        },
+        blue: {
+          600: '#0082FC',
+        },
+      },
     },
   },
   plugins: [],

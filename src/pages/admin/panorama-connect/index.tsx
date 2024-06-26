@@ -4,6 +4,7 @@ import { connectPanoramas } from '@/api/connect-panorama'
 import { toast } from 'react-toastify'
 import { queryClient } from '@/lib/query-client'
 import { Panorama } from '@/types/Panorama'
+import { Title } from '@/components/title'
 
 type Link = {
   panorama_id: string
@@ -66,5 +67,10 @@ export function PanoramaConnect() {
     }
   }
 
-  return <ConnectForm handleForm={handleForm} isPending={isPending} />
+  return (
+    <div>
+      <Title>Conectar panoramas</Title>
+      <ConnectForm handleForm={handleForm} isPending={isPending} />
+    </div>
+  )
 }

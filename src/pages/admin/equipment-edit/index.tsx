@@ -12,6 +12,7 @@ import {
 } from '@/components/equipment-form'
 import { deleteImages } from '@/api/delete-images'
 import { updateEquipment } from '@/api/update-equipment'
+import { Title } from '@/components/title'
 
 type Image = {
   link: string
@@ -124,9 +125,7 @@ export function EquipmentEdit() {
 
   return (
     <div>
-      <h1 className="mx-6 my-5 text-center text-2xl font-semibold md:text-4xl">
-        Editar um equipamento
-      </h1>
+      <Title>Editar um equipamento</Title>
 
       <EquipmentForm
         isPendingRequest={isPendingRequest}

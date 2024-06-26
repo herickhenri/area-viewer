@@ -9,6 +9,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { deleteImage } from '@/api/delete-image'
+import { Title } from '@/components/title'
 
 export function PanoramaEdit() {
   const navigate = useNavigate()
@@ -79,9 +80,7 @@ export function PanoramaEdit() {
 
   return (
     <div>
-      <h1 className="my-5 text-center text-2xl font-semibold md:text-4xl">
-        Editar panorama
-      </h1>
+      <Title>Editar panorama</Title>
 
       <PanoramaForm
         sendForm={handleForm}

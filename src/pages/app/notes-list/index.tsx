@@ -28,7 +28,7 @@ export function NotesList() {
   const notesList = search.length > 0 ? filteredNotes : notes
 
   return (
-    <div className="flex-1 bg-gray-100 pb-10">
+    <div className="flex-1 pb-10">
       <SearchInput search={search} changeSearch={setSeach} className=" " />
       <Title>Notas em aberto</Title>
       <div className="mx-6 grid grid-cols-1 gap-4 md:mx-20 md:grid-cols-3">

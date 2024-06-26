@@ -4,6 +4,7 @@ import {
   PanoramaForm,
   createPanoramaFormData,
 } from '@/components/panorama-form'
+import { Title } from '@/components/title'
 import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -51,9 +52,7 @@ export function PanoramaCreate() {
 
   return (
     <div>
-      <h1 className="my-5 text-center text-2xl font-semibold md:text-4xl">
-        Adicionar novo panorama
-      </h1>
+      <Title>Adicionar novo panorama</Title>
 
       <PanoramaForm sendForm={handleForm} isPendingRequest={isPendingRequest} />
     </div>

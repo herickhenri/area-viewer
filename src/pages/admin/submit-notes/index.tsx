@@ -9,6 +9,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { postNotes } from '@/api/post-notes'
 import { toast } from 'react-toastify'
 import { getEquipments } from '@/api/get-equipments'
+import { Title } from '@/components/title'
 
 export function SubmitNotes() {
   const [file, setFile] = useState<File>()
@@ -114,9 +115,7 @@ export function SubmitNotes() {
 
   return (
     <div className="mb-20 flex flex-col items-center">
-      <h1 className="my-5 text-center text-2xl font-semibold md:text-4xl">
-        Subir notas
-      </h1>
+      <Title>Subir notas</Title>
 
       <UploadFile
         className="flex h-16 w-80 cursor-pointer items-center justify-center gap-2 rounded border-2 border-dashed border-green-600 text-lg font-medium text-green-600 transition-colors hover:border-green-500 hover:text-green-500"

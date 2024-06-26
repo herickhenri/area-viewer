@@ -141,10 +141,6 @@ export function ConnectForm({ handleForm, isPending }: ConnectFormProps) {
 
   return (
     <form className="mb-10" onSubmit={handleSubmit(handleForm)}>
-      <h1 className="mx-6 my-5 text-center text-2xl font-semibold md:text-4xl">
-        Conectar panoramas
-      </h1>
-
       <div className="mx-5 flex flex-1 flex-col gap-5 md:mx-56">
         <div>
           <div className="mb-5 flex items-center justify-between rounded border border-black/25 px-2 outline-2 outline-blue-500 focus-within:border-transparent focus-within:outline">

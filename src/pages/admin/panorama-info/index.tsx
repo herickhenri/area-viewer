@@ -1,5 +1,6 @@
 import { getPanorama } from '@/api/get-panorama'
 import { Button } from '@/components/button'
+import { Title } from '@/components/title'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
 
@@ -18,9 +19,7 @@ export function PanoramaInfo() {
 
   return (
     <div className="mx-5 flex flex-1 flex-col items-center">
-      <h1 className="mx-6 my-5 text-center text-2xl font-semibold md:text-4xl">
-        Panorama
-      </h1>
+      <Title>Panorama</Title>
 
       <div className="mx-auto flex w-full flex-col items-center">
         <img

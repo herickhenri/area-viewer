@@ -10,6 +10,7 @@ import {
   EquipmentForm,
   CreateEquipmentFormSchema,
 } from '@/components/equipment-form'
+import { Title } from '@/components/title'
 
 export function EquipmentCreate() {
   const navigate = useNavigate()
@@ -72,9 +73,7 @@ export function EquipmentCreate() {
 
   return (
     <div>
-      <h1 className="mx-6 my-5 text-center text-2xl font-semibold md:text-4xl">
-        Adicionar novo equipamento
-      </h1>
+      <Title>Adicionar novo equipamento</Title>
 
       <EquipmentForm
         isPendingRequest={isPendingRequest}

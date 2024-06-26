@@ -5,6 +5,7 @@ import { getEquipments } from '@/api/get-equipments'
 import { SkeletonLoading } from './skeleton-loading'
 import { List } from './list'
 import { SearchInput } from '@/components/search-input'
+import { Title } from '@/components/title'
 
 export function EquipmentsFeed() {
   const [search, setSearch] = useState('')
@@ -24,7 +25,7 @@ export function EquipmentsFeed() {
     <div>
       <SearchInput search={search} changeSearch={setSearch} />
 
-      <h1 className="my-5 text-center text-2xl font-semibold">Equipamentos</h1>
+      <Title>Equipamentos</Title>
       {isLoading || !equipmentsList ? (
         <SkeletonLoading />
       ) : (

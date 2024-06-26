@@ -51,7 +51,7 @@ export default forwardRef<HTMLDivElement, markersProps>(function Markers(
           <h2 className="flex-1 text-lg font-semibold">{equipment.name}</h2>
           <a
             href={`/equipment/${equipment.id}`}
-            className="flex w-full items-center justify-center rounded bg-blue-800 py-2 text-lg font-medium text-white transition-colors hover:bg-blue-900 disabled:cursor-not-allowed disabled:bg-blue-900 disabled:opacity-80"
+            className="flex w-full items-center justify-center rounded bg-blue-500 py-2 text-lg font-medium text-white transition-colors hover:bg-blue-400 disabled:cursor-not-allowed disabled:bg-blue-500/70 disabled:opacity-80"
           >
             Mais informações
           </a>

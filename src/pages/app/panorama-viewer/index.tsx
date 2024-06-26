@@ -1,5 +1,5 @@
 import { Viewer } from '@photo-sphere-viewer/core'
-import { createRef, useEffect, useState } from 'react'
+import { createRef, useEffect, useRef, useState } from 'react'
 import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin'
 import { VirtualTourPlugin } from '@photo-sphere-viewer/virtual-tour-plugin'
 import { Marking } from '@/types/Marking'
@@ -10,7 +10,7 @@ import '@photo-sphere-viewer/core/index.css'
 import '@photo-sphere-viewer/virtual-tour-plugin/index.css'
 import { useQuery } from '@tanstack/react-query'
 import { getPanoramas } from '@/api/get-panoramas'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { createNodes } from './create-nodes'
 import { createMarkers } from './create-markers'
 import { getEquipments } from '@/api/get-equipments'
@@ -26,6 +26,8 @@ export function PanoramaViewer() {
   )
 
   const { id: panoramaId } = useParams()
+  const query = new URLSearchParams(useLocation().search)
+  const equipmentFocusId = query.get('equipmentId')
 
   const { data: panoramas } = useQuery({
     queryKey: ['panorama'],
@@ -37,7 +39,7 @@ export function PanoramaViewer() {
     queryFn: getEquipments,
   })
 
-  const sphereElementRef = createRef<HTMLDivElement>()
+  const sphereElementRef = useRef<HTMLDivElement>(null)
 
   function createMarkingsComponent(nodeId: string) {
     if (!panoramas) {
@@ -95,24 +97,25 @@ export function PanoramaViewer() {
   }, [panoramaId, panoramas])
 
   useEffect(() => {
-    if (!markersPlugin || !markingsComponent.length) {
+    if (!markersPlugin || markingsComponent.length === 0) {
       return
     }
+
     const markers = createMarkers(markingsComponent)
+
     markers.forEach((marker) => {
       markersPlugin.addMarker(marker)
     })
-  }, [markingsComponent, markersPlugin])
+    equipmentFocusId && markersPlugin.gotoMarker(equipmentFocusId, '10rpm')
+  }, [markingsComponent, markersPlugin, equipmentFocusId])
 
   return (
     <>
-      <div className="h-[calc(100vh-4.5rem)]" ref={sphereElementRef} />
+      <div className="h-[calc(100vh-3.5rem)]" ref={sphereElementRef} />
       {markingsComponent.map((marking) => {
         const equipment = equipments?.find(
           (equipment) => equipment.id === marking.equipment_id,
         )
-
-        console.log(marking)
 
         return (
           <div key={marking.equipment_id} className="sr-only">

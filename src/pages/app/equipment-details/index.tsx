@@ -42,20 +42,24 @@ export function EquipmentDetails() {
           <p>{equipment.description}</p>
         </div>
 
-        <div>
-          <div className="flex items-center gap-2">
-            <div className=" h-3 w-3 rounded-full bg-yellow-400" />
-            <span className="text-sm font-semibold">Notas em aberto:</span>
+        {!!equipment.notes?.length && (
+          <div>
+            <div className="flex items-center gap-2">
+              <div className=" h-3 w-3 rounded-full bg-yellow-400" />
+              <span className="text-sm font-semibold">Notas em aberto:</span>
+            </div>
+            {equipment.notes?.map((note) => (
+              <span key={note.id}>
+                - {note.description} (<NoteDetail note={note} />)
+              </span>
+            ))}
           </div>
-          {equipment.notes?.map((note) => (
-            <span key={note.id}>
-              - {note.description} (<NoteDetail note={note} />)
-            </span>
-          ))}
-        </div>
+        )}
 
         {equipment.markings?.[0] && (
-          <Link to={`/panoramas/viewer/${equipment.markings[0].panorama.id}`}>
+          <Link
+            to={`/panoramas/viewer/${equipment.markings[0].panorama.id}?equipmentId=${equipment.id}`}
+          >
             <Button className="mx-0 gap-2">
               <MapPin size={24} />
               Ver na área

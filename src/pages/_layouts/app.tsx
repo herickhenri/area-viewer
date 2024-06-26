@@ -45,7 +45,7 @@ export function AppLayout() {
             onClick={() => setShowMenu(true)}
           />
           <div
-            className={`${showMenu ? '' : '-translate-x-full'} fixed inset-0 flex flex-col items-center justify-center gap-3 bg-white px-8 text-center text-2xl font-semibold`}
+            className={`${showMenu ? '' : '-translate-x-full'} fixed inset-0 z-[100] flex flex-col items-center justify-center gap-3 bg-white px-8 text-center text-2xl font-semibold`}
           >
             <X
               size={24}
@@ -76,7 +76,6 @@ export function AppLayout() {
           </div>
         </div>
       </header>
-
       <Outlet />
     </div>
   )

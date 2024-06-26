@@ -53,20 +53,23 @@ export function AppLayout() {
               onClick={() => setShowMenu(false)}
             />
             <Link
-              to="/"
               className="w-full py-2 transition-colors hover:text-blue-600"
+              to="/"
+              onClick={() => setShowMenu(false)}
             >
               Equipamentos
             </Link>
             <Link
               className="w-full py-2 transition-colors hover:text-blue-600"
               to="panoramas"
+              onClick={() => setShowMenu(false)}
             >
               Panoramas
             </Link>
             <Link
               className="w-full py-2 transition-colors hover:text-blue-600"
               to="notes"
+              onClick={() => setShowMenu(false)}
             >
               Notas
             </Link>

@@ -1,5 +1,5 @@
 export const opportunityDict = {
-  0: 'em operação',
+  0: 'Em operação',
   1: 'Semanal fora de operação',
   2: 'Parada programa',
   3: 'Parada geral',

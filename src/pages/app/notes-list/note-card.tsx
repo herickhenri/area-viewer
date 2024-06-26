@@ -1,6 +1,7 @@
 import { Button } from '@/components/button'
 import { Equipment } from '@/types/Equipment'
 import { Note, opportunityDict } from '@/types/Note'
+import dayjs from 'dayjs'
 import { Link } from 'react-router-dom'
 
 interface NoteCardProps {
@@ -26,6 +27,10 @@ export function NoteCard({ note, equipment }: NoteCardProps) {
       <div className="text-sm text-gray-600">
         <span className="font-semibold">Oportunidade: </span>
         <span>{opportunityDict[note.opportunity]}</span>
+      </div>
+      <div className="text-sm text-gray-600">
+        <span className="font-semibold">Data de criação: </span>
+        <span>{dayjs(note.createdAt).format('DD/MM/YYYY')}</span>
       </div>
       <div className="text-sm text-gray-600">
         <span className="font-semibold">Nota: </span>

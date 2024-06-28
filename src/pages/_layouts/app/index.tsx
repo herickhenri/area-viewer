@@ -1,27 +1,25 @@
 import { Link, Outlet } from 'react-router-dom'
-import areaViewerLogo from '@/assets/area-viewer-logo.png'
-import { House } from '@phosphor-icons/react'
 
-export function AdminLayout() {
+import areaViewerLogo from '@/assets/area-viewer-logo.png'
+import { Menu } from './menu'
+import { Navigate } from './navigate'
+
+export function AppLayout() {
   return (
     <div className="flex min-h-screen flex-col bg-gray-100">
-      <header className="flex w-full items-center justify-between gap-8 bg-white px-4 py-2 shadow-lg">
+      <header className="flex w-full items-center justify-between gap-2 bg-white px-4 py-2 shadow-lg md:justify-normal">
         <Link
-          to="/admin"
+          to="/"
           className="flex items-center gap-2 text-xl font-semibold text-gray-600"
         >
           <img src={areaViewerLogo} alt="Logo da suzano" className="h-10" />
           <span>
             Area<span className="text-blue-600">Viewer</span>
-            <span className="text-sm">Admin</span>
           </span>
         </Link>
-        <Link to="/">
-          <House
-            size={32}
-            className="cursor-pointer text-gray-600 transition-colors hover:text-blue-600"
-          />
-        </Link>
+
+        <Navigate />
+        <Menu />
       </header>
 
       <Outlet />

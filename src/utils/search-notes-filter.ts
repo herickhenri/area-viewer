@@ -6,7 +6,7 @@ interface SearchNotesFilterProps {
 }
 
 export function searchNotesFilter({ notes, search }: SearchNotesFilterProps) {
-  const cleanSearch = search.trim().toUpperCase()
+  const cleanSearch = search.toUpperCase()
 
   const filteredNotes = notes.filter((note) => {
     const isAuthor = note.author.toUpperCase().includes(cleanSearch)
@@ -17,12 +17,10 @@ export function searchNotesFilter({ notes, search }: SearchNotesFilterProps) {
       .includes(cleanSearch)
     const isTag = note.equipment_tag.toUpperCase().includes(cleanSearch)
 
-    if (isAuthor || isDescription || isId || isOpportunity || isTag) {
-      return true
-    }
-
-    return false
+    return isAuthor || isDescription || isId || isOpportunity || isTag
   })
+
+  console.log(filteredNotes)
 
   return filteredNotes
 }

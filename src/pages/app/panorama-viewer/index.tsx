@@ -64,7 +64,7 @@ export function PanoramaViewer() {
     const spherePlayerInstance = new Viewer({
       container: sphereElementRef.current,
       defaultYaw: '130deg',
-      sphereCorrection: {},
+      loadingTxt: 'Carregando...',
       plugins: [
         MarkersPlugin,
         [

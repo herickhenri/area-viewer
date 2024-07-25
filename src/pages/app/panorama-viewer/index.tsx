@@ -2,6 +2,8 @@ import { Viewer } from '@photo-sphere-viewer/core'
 import { createRef, useEffect, useRef, useState } from 'react'
 import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin'
 import { VirtualTourPlugin } from '@photo-sphere-viewer/virtual-tour-plugin'
+import { GyroscopePlugin } from '@photo-sphere-viewer/gyroscope-plugin'
+import { StereoPlugin } from '@photo-sphere-viewer/stereo-plugin'
 import MarkersTooltip from './markers-tooltip'
 
 import '@photo-sphere-viewer/markers-plugin/index.css'
@@ -85,6 +87,12 @@ export function PanoramaViewer() {
       container: sphereElementRef.current,
       defaultYaw: '130deg',
       loadingTxt: 'Carregando...',
+      lang: {
+        stereo: 'Stereo view',
+        stereoNotification: 'Clique em qualquer lugar para sair do stereo view',
+        pleaseRotate: 'Por favor, rotacione seu celular',
+        tapToContinue: '(Clique para continuar)',
+      },
       plugins: [
         MarkersPlugin,
         [
@@ -94,6 +102,8 @@ export function PanoramaViewer() {
             // startNodeId: panoramaId,
           },
         ],
+        GyroscopePlugin,
+        StereoPlugin,
       ],
     })
 

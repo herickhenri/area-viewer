@@ -13,7 +13,9 @@ export type Note = {
   author: string
   opportunity: 0 | 1 | 2 | 3
   equipmentId?: string
-  panoramaId?: string
-  coord_x?: string
-  corrd_y?: string
+  NotesOnPanoramas?: {
+    panorama_id: string
+    coord_x: number
+    coord_y: number
+  }[]
 }

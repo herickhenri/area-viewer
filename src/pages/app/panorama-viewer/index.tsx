@@ -2,7 +2,6 @@ import { Viewer } from '@photo-sphere-viewer/core'
 import { createRef, useEffect, useRef, useState } from 'react'
 import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin'
 import { VirtualTourPlugin } from '@photo-sphere-viewer/virtual-tour-plugin'
-import { Marking } from '@/types/Marking'
 import MarkersTooltip from './markers-tooltip'
 
 import '@photo-sphere-viewer/markers-plugin/index.css'
@@ -15,14 +14,18 @@ import { createNodes } from './create-nodes'
 import { createMarkers } from './create-markers'
 import { getEquipments } from '@/api/get-equipments'
 
-export type MarkingWithRef = Marking & {
+export type MarkingWithRef = {
+  coord_x: number
+  coord_y: number
+  id: string
+  type: 'note' | 'equipment'
   ref: React.RefObject<HTMLDivElement>
 }
 
 export function PanoramaViewer() {
   const [markersPlugin, setMarkersPlugin] = useState<MarkersPlugin | null>(null)
   const [markingsComponent, setMarkingsComponent] = useState<MarkingWithRef[]>(
-    [] as MarkingWithRef[],
+    [],
   )
   const [hasExecutedGoto, setHasExecutedGoto] = useState(false)
 
@@ -48,12 +51,29 @@ export function PanoramaViewer() {
     }
 
     const panorama = panoramas.find((panorama) => panorama.id === nodeId)
-    const newMarkings = panorama?.markings?.map((marking) => ({
-      ...marking,
-      ref: createRef<HTMLDivElement>(),
-    }))
+    const markingsEquipment: MarkingWithRef[] | undefined =
+      panorama?.markings?.map((marking) => ({
+        coord_x: marking.coord_x,
+        coord_y: marking.coord_y,
+        id: marking.equipment_id,
+        type: 'equipment',
+        ref: createRef<HTMLDivElement>(),
+      }))
+    const markingsNotes: MarkingWithRef[] | undefined =
+      panorama?.NotesOnPanoramas?.map((marking) => ({
+        coord_x: marking.coord_x,
+        coord_y: marking.coord_y,
+        id: marking.note_id,
+        type: 'note',
+        ref: createRef<HTMLDivElement>(),
+      }))
 
-    newMarkings && setMarkingsComponent(newMarkings)
+    const markingsList = [
+      ...(markingsEquipment || []),
+      ...(markingsNotes || []),
+    ]
+
+    markingsList && setMarkingsComponent(markingsList)
   }
 
   useEffect(() => {
@@ -118,12 +138,16 @@ export function PanoramaViewer() {
     <>
       <div className="h-[calc(100vh-3.5rem)]" ref={sphereElementRef} />
       {markingsComponent.map((marking) => {
+        if (marking.type !== 'equipment') {
+          return null
+        }
+
         const equipment = equipments?.find(
-          (equipment) => equipment.id === marking.equipment_id,
+          (equipment) => equipment.id === marking.id,
         )
 
         return (
-          <div key={marking.equipment_id} className="sr-only">
+          <div key={marking.id} className="sr-only">
             {equipment && (
               <MarkersTooltip equipment={equipment} ref={marking.ref} />
             )}

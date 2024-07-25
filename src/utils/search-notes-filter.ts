@@ -20,7 +20,5 @@ export function searchNotesFilter({ notes, search }: SearchNotesFilterProps) {
     return isAuthor || isDescription || isId || isOpportunity || isTag
   })
 
-  console.log(filteredNotes)
-
   return filteredNotes
 }

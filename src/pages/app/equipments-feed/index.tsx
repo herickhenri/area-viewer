@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query'
 import { getEquipments } from '@/api/get-equipments'
 import { SkeletonLoading } from './skeleton-loading'
 import { List } from './list'
-import { SearchInput } from '@/components/search-input'
 import { Title } from '@/components/title'
+import { SearchInput } from '@/components/search-input'
 
 export function EquipmentsFeed() {
   const [search, setSearch] = useState('')

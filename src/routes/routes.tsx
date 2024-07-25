@@ -18,7 +18,9 @@ import { PanoramaInfo } from '@/pages/admin/panorama-info'
 import { PanoramaConnect } from '@/pages/admin/panorama-connect'
 import { PageNotFound } from '@/pages/error-404'
 import { SubmitNotes } from '@/pages/admin/submit-notes'
-import { NotesList } from '@/pages/app/notes-list'
+import { NotesFeed } from '@/pages/app/notes-feed'
+import { NoteMark } from '@/pages/admin/note-mark'
+import { NotesList } from '@/pages/admin/notes-list'
 
 export function Routes() {
   const router = createBrowserRouter([
@@ -44,7 +46,7 @@ export function Routes() {
         },
         {
           path: 'notes',
-          element: <NotesList />,
+          element: <NotesFeed />,
         },
       ],
     },
@@ -93,8 +95,16 @@ export function Routes() {
           element: <PanoramaConnect />,
         },
         {
-          path: 'submit-notes',
+          path: 'notes/submit',
           element: <SubmitNotes />,
+        },
+        {
+          path: 'notes/list',
+          element: <NotesList />,
+        },
+        {
+          path: 'notes/mark/:id',
+          element: <NoteMark />,
         },
       ],
     },

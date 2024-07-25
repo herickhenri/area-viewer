@@ -1,13 +1,13 @@
 import { getNotes } from '@/api/get-notes'
-import { SearchInput } from '@/components/search-input'
 import { Title } from '@/components/title'
 import { searchNotesFilter } from '@/utils/search-notes-filter'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { NoteCard } from './note-card'
 import { getEquipments } from '@/api/get-equipments'
+import { SearchInput } from '@/components/search-input'
 
-export function NotesList() {
+export function NotesFeed() {
   const [search, setSeach] = useState('')
 
   const { data: notes } = useQuery({
@@ -28,8 +28,8 @@ export function NotesList() {
   const notesList = search.length > 0 ? filteredNotes : notes
 
   return (
-    <div className="flex-1 pb-10">
-      <SearchInput search={search} changeSearch={setSeach} className=" " />
+    <div className="pb-10">
+      <SearchInput search={search} changeSearch={setSeach} />
       <Title>Notas em aberto</Title>
       <div className="mx-6 grid grid-cols-1 gap-4 md:mx-20 md:grid-cols-3">
         {notesList.map((note) => {

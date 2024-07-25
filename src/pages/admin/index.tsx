@@ -31,7 +31,10 @@ export function Admin() {
           icon={CubeTransparent}
           link={'panorama/list'}
         />
-        <ButtonAdm content="Subir notas" icon={Note} link={'submit-notes'} />
+        <div className="my-5 h-px w-full bg-black" />
+
+        <ButtonAdm content="Subir notas" icon={Note} link={'notes/submit'} />
+        <ButtonAdm content="Lista de notas" icon={Note} link={'notes/list'} />
       </div>
     </div>
   )

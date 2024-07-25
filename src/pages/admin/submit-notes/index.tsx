@@ -123,14 +123,14 @@ export function SubmitNotes() {
       >
         <FileXls size={32} /> {file ? file.name : 'Subir arquivo em excel'}
       </UploadFile>
-      <span className="text-sm font-medium text-red-600">
+      <span className="text-center text-sm font-medium text-red-600">
         Importante! a planilha precisa conter os campos:
       </span>
-      <span className="text-sm font-medium text-red-600">
+      <span className="text-center text-sm font-medium text-red-600">
         Autor da nota | Descrição | Loc.instalação Nota | Oportunidade
       </span>
-      <div className="mt-5 h-96 overflow-y-auto">
-        <table className="text-left">
+      <div className="mt-5 h-96 max-w-[20rem] overflow-auto">
+        <table className="min-w-max text-left">
           <thead>
             <tr>
               <th className="border border-slate-300 p-2">Data de criação</th>

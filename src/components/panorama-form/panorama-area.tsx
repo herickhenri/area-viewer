@@ -21,7 +21,7 @@ export function PanoramaArea({
   source,
 }: PanoramaAreaProps) {
   const { watch } = useFormContext<createPanoramaFormData>()
-  const markings = watch('markings')
+  const equipments = watch('equipments')
   const panoramaRef = useRef<HTMLImageElement>(null)
 
   const [renderedSize, setRenderedSize] = useState<Size>({} as Size)
@@ -78,10 +78,10 @@ export function PanoramaArea({
     })
   }
 
-  const points = markings
-    ? markings.map((marking) => ({
-        coord_x: marking.coord_x,
-        coord_y: marking.coord_y,
+  const points = equipments
+    ? equipments.map((equipment) => ({
+        coord_x: equipment.coord_x,
+        coord_y: equipment.coord_y,
       }))
     : []
 

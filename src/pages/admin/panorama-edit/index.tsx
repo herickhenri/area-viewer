@@ -1,5 +1,4 @@
 import { getPanorama } from '@/api/get-panorama'
-import { uploadImage } from '@/api/upload-image'
 import { updatePanorama } from '@/api/update-panorama'
 import {
   PanoramaForm,
@@ -8,7 +7,6 @@ import {
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { deleteImage } from '@/api/delete-image'
 import { Title } from '@/components/title'
 
 export function PanoramaEdit() {
@@ -28,35 +26,19 @@ export function PanoramaEdit() {
   } = useMutation({
     mutationFn: updatePanorama,
   })
-  const { mutateAsync: uploadImageMutate, isPending: isPendingUploadImage } =
-    useMutation({
-      mutationFn: uploadImage,
-    })
-  const { mutateAsync: deleteImageMutate, isPending: isPendingDeleteImage } =
-    useMutation({
-      mutationFn: deleteImage,
-    })
 
-  const isPendingRequest =
-    isPendingUpdatePanorama || isPendingDeleteImage || isPendingUploadImage
-
-  async function handleForm({ name, file, markings }: createPanoramaFormData) {
+  async function handleForm({
+    name,
+    file,
+    equipments,
+  }: createPanoramaFormData) {
     try {
-      const formData = file && createFormData(file)
+      const formData = new FormData()
+      formData.append('name', name)
+      file && formData.append('file', file)
+      equipments && formData.append('equipments', JSON.stringify(equipments))
 
-      const image = formData && (await uploadImageMutate(formData))
-
-      if (image && panorama) {
-        await deleteImageMutate(panorama.image_key)
-      }
-
-      await updatePanoramaMutate({
-        id: id!,
-        name,
-        image_key: image?.key,
-        image_link: image?.link,
-        markings,
-      })
+      await updatePanoramaMutate({ id: id!, formData })
 
       toast.success('Panorama editado com sucesso')
       navigate(`/admin/panorama/info/${id}`)
@@ -65,13 +47,6 @@ export function PanoramaEdit() {
         'Não foi possível criar o panorama. Tente novamente mais tarde!',
       )
     }
-  }
-
-  function createFormData(file: File) {
-    const formData = new FormData()
-    formData.append('file', file, file.name)
-
-    return formData
   }
 
   if (!panorama) {
@@ -85,7 +60,7 @@ export function PanoramaEdit() {
       <PanoramaForm
         sendForm={handleForm}
         data={panorama}
-        isPendingRequest={isPendingRequest}
+        isPendingRequest={isPendingUpdatePanorama}
       />
     </div>
   )

@@ -24,7 +24,7 @@ export function Markings({ coord, changeCoord }: MarkingsProps) {
     update,
   } = useFieldArray({
     control,
-    name: 'markings',
+    name: 'equipments',
   })
 
   const markingsIds = markings.map((marking) => marking.equipment_id)

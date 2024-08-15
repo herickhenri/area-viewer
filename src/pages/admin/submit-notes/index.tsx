@@ -53,7 +53,7 @@ export function SubmitNotes() {
 
       const newNotes = dataSheet.map((row: any) => {
         const note: Note = {
-          createdAt: adjustForTimezone(
+          created_at: adjustForTimezone(
             row['Dt.criação']
               .toString()
               .replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),

@@ -7,35 +7,14 @@ interface responseShema {
 
 interface bodySchema {
   id: string
-  name?: string
-  image_key?: string
-  image_link?: string
-  markings?: {
-    equipment_id: string
-    coord_x: number
-    coord_y: number
-  }[]
-  links?: {
-    panorama_connect_id: string
-    coord_x: number
-    coord_y: number
-  }[]
+  formData: FormData
 }
 
-export async function updatePanorama({
-  id,
-  name,
-  image_key,
-  image_link,
-  markings,
-  links,
-}: bodySchema) {
-  const response = await api.patch<responseShema>(`/panorama/${id}`, {
-    name,
-    image_key,
-    image_link,
-    markings,
-    links,
+export async function updatePanorama({ id, formData }: bodySchema) {
+  const response = await api.patch<responseShema>(`/panorama/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   })
 
   return response.data.panorama

@@ -1,34 +1,25 @@
 import { api } from '@/lib/axios'
 import { Equipment } from '@/types/Equipment'
 
-interface responseShema {
+interface ResponseShema {
   equipment: Equipment
 }
 
-interface bodySchema {
+interface BodySchema {
   id: string
-  name?: string
-  tag?: string
-  description?: string
-  photos?: {
-    key: string
-    link: string
-  }[]
+  formData: FormData
 }
 
-export async function updateEquipment({
-  id,
-  name,
-  tag,
-  description,
-  photos,
-}: bodySchema) {
-  const response = await api.patch<responseShema>(`/equipment/${id}`, {
-    name,
-    tag,
-    description,
-    photos,
-  })
+export async function updateEquipment({ id, formData }: BodySchema) {
+  const response = await api.patch<ResponseShema>(
+    `/equipment/${id}`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  )
 
   return response.data.equipment
 }

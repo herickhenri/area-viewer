@@ -3,7 +3,6 @@ import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 
 import { postEquipment } from '@/api/post-equipment'
-import { uploadImages } from '@/api/upload-images'
 import { useMutation } from '@tanstack/react-query'
 
 import {
@@ -21,12 +20,6 @@ export function EquipmentCreate() {
   } = useMutation({
     mutationFn: postEquipment,
   })
-  const { mutateAsync: uploadImagesMutate, isPending: isPendingUploadImage } =
-    useMutation({
-      mutationFn: uploadImages,
-    })
-
-  const isPendingRequest = isPendingPostEquipment || isPendingUploadImage
 
   async function handleForm({
     tag,
@@ -38,15 +31,15 @@ export function EquipmentCreate() {
     const tagString = `${unit}-${area}-${equipCode}-${seqNumber}`
 
     try {
-      const formData = files && createFormData(files)
-      const photos = formData && (await uploadImagesMutate(formData))
-
-      const { id } = await postEquipmentMutate({
-        tag: tagString,
-        name,
-        description,
-        photos,
+      const formData = new FormData()
+      formData.append('name', name)
+      formData.append('tag', tagString)
+      description && formData.append('description', description)
+      files?.forEach(({ file }) => {
+        formData.append('file', file, file.name)
       })
+
+      const { id } = await postEquipmentMutate(formData)
 
       toast.success('Equipamento criado com sucesso.')
       navigate(`/admin/equipment/info/${id}`)
@@ -62,21 +55,12 @@ export function EquipmentCreate() {
     }
   }
 
-  function createFormData(files: { file: File }[]) {
-    const formData = new FormData()
-    files?.forEach(({ file }) => {
-      formData.append('file', file, file.name)
-    })
-
-    return formData
-  }
-
   return (
     <div>
       <Title>Adicionar novo equipamento</Title>
 
       <EquipmentForm
-        isPendingRequest={isPendingRequest}
+        isPendingRequest={isPendingPostEquipment}
         sendForm={handleForm}
       />
     </div>

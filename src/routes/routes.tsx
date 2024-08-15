@@ -41,14 +41,14 @@ export function Routes() {
           element: <PanoramasFeed />,
         },
         {
-          path: 'panoramas/viewer/:id',
-          element: <PanoramaViewer />,
-        },
-        {
           path: 'notes',
           element: <NotesFeed />,
         },
       ],
+    },
+    {
+      path: 'panoramas/viewer',
+      element: <PanoramaViewer />,
     },
     {
       path: '/admin',

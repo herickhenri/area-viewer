@@ -1,5 +1,4 @@
 import { createPanorama } from '@/api/post-panorama'
-import { uploadImage } from '@/api/upload-image'
 import {
   PanoramaForm,
   createPanoramaFormData,
@@ -16,14 +15,12 @@ export function PanoramaCreate() {
     useMutation({
       mutationFn: createPanorama,
     })
-  const { mutateAsync: uploadImageFn, isPending: isPendingUploadImage } =
-    useMutation({
-      mutationFn: uploadImage,
-    })
 
-  const isPendingRequest = isPendingCreatePanorama || isPendingUploadImage
-
-  async function handleForm({ name, file, markings }: createPanoramaFormData) {
+  async function handleForm({
+    name,
+    file,
+    equipments,
+  }: createPanoramaFormData) {
     try {
       if (!file) {
         throw new Error()
@@ -31,14 +28,10 @@ export function PanoramaCreate() {
 
       const formData = new FormData()
       formData.append('file', file, file.name)
-      const image = await uploadImageFn(formData)
+      formData.append('name', name)
+      formData.append('equipments', JSON.stringify(equipments))
 
-      const { id } = await createPanoramaFn({
-        name,
-        image_key: image.key,
-        image_link: image.link,
-        markings,
-      })
+      const { id } = await createPanoramaFn(formData)
 
       toast.success('Panorama criado com sucesso.')
       navigate(`/admin/panorama/info/${id}`)
@@ -54,7 +47,10 @@ export function PanoramaCreate() {
     <div>
       <Title>Adicionar novo panorama</Title>
 
-      <PanoramaForm sendForm={handleForm} isPendingRequest={isPendingRequest} />
+      <PanoramaForm
+        sendForm={handleForm}
+        isPendingRequest={isPendingCreatePanorama}
+      />
     </div>
   )
 }

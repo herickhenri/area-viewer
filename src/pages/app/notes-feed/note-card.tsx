@@ -33,14 +33,14 @@ export function NoteCard({ note, equipment }: NoteCardProps) {
       </div>
       <div>
         <span className="font-semibold">Data de criação: </span>
-        <span>{dayjs(note.createdAt).format('DD/MM/YYYY')}</span>
+        <span>{dayjs(note.created_at).format('DD/MM/YYYY')}</span>
       </div>
       <div>
         <span className="font-semibold">Nota: </span>
         <span>{note.id}</span>
       </div>
-      {equipment?.markings && (
-        <Link to={`/panorama/viewer/${equipment.markings[0].panorama.id}`}>
+      {equipment?.panoramas && (
+        <Link to={`/panorama/viewer/${equipment.panoramas[0].panorama_id}`}>
           <Button className="mt-2 text-sm">Ver na área</Button>
         </Link>
       )}

@@ -56,9 +56,9 @@ export function EquipmentDetails() {
           </div>
         )}
 
-        {equipment.markings?.[0] && (
+        {equipment.panoramas?.length && (
           <Link
-            to={`/panoramas/viewer/${equipment.markings[0].panorama.id}?equipmentId=${equipment.id}`}
+            to={`/panoramas/viewer?nodeId=${equipment.panoramas[0].panorama_id}&equipmentId=${equipment.id}`}
           >
             <Button className="mx-0 gap-2">
               <MapPin size={24} />

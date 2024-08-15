@@ -16,3 +16,8 @@ background: #0082FC;
 border-radius: 30px;
 
 }
+
+/* Remove a animação de loading dos panoramas */
+/* .psv-loader {
+  display: none !important;
+} */

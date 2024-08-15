@@ -23,7 +23,7 @@ export type Marking = {
 
 const createPanoramaFormSchema = z.object({
   name: z.string().trim().min(1, 'O nome é obrigatório'),
-  markings: z
+  equipments: z
     .array(
       z.object({
         equipment_id: z.string(),
@@ -54,7 +54,7 @@ export function PanoramaForm({
     resolver: zodResolver(createPanoramaFormSchema),
     defaultValues: {
       name: data?.name,
-      markings: data?.markings,
+      equipments: data?.equipments,
     },
   })
 
@@ -71,7 +71,9 @@ export function PanoramaForm({
   }
 
   const file = watch('file')
-  const panoramaSource = file ? URL.createObjectURL(file) : data?.image_link
+  const panoramaSource = file
+    ? URL.createObjectURL(file)
+    : data?.images[data.images.length - 1].link
 
   return (
     <FormProvider {...newCycleForm}>

@@ -1,13 +1,8 @@
-import { api } from '@/lib/axios'
+export async function getImage(link: string) {
+  const response = await fetch(link)
+  const blob = await response.blob()
 
-type File = {
-  buffer: Buffer
-  name: string
-  contentType: string
-}
+  const nodeUrl = URL.createObjectURL(blob)
 
-export async function getImage(key: string) {
-  const file = await api.get<File>(`/image/${key}`)
-
-  return file.data
+  return nodeUrl
 }

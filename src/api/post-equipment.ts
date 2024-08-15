@@ -5,27 +5,11 @@ interface responseShema {
   equipment: Equipment
 }
 
-interface bodySchema {
-  name: string
-  tag: string
-  description?: string
-  photos?: {
-    key: string
-    link: string
-  }[]
-}
-
-export async function postEquipment({
-  name,
-  tag,
-  description,
-  photos,
-}: bodySchema) {
-  const response = await api.post<responseShema>('/equipment', {
-    name,
-    tag,
-    description,
-    photos,
+export async function postEquipment(formData: FormData) {
+  const response = await api.post<responseShema>('/equipment', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   })
 
   return response.data.equipment

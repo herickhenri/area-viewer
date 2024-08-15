@@ -2,23 +2,13 @@ import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
-
-import { uploadImages } from '@/api/upload-images'
 import { getEquipment } from '@/api/get-equipment'
-
+import { updateEquipment } from '@/api/update-equipment'
 import {
   CreateEquipmentFormSchema,
   EquipmentForm,
 } from '@/components/equipment-form'
-import { deleteImages } from '@/api/delete-images'
-import { updateEquipment } from '@/api/update-equipment'
 import { Title } from '@/components/title'
-
-type Image = {
-  link: string
-  key: string
-  isRemove: boolean
-}
 
 export function EquipmentEdit() {
   const navigate = useNavigate()
@@ -34,16 +24,6 @@ export function EquipmentEdit() {
   } = useMutation({
     mutationFn: updateEquipment,
   })
-  const { mutateAsync: uploadImagesFn, isPending: isPendingUploadImages } =
-    useMutation({
-      mutationFn: uploadImages,
-    })
-  const { mutateAsync: deleteImagesFn, isPending: isPendingDeleteImages } =
-    useMutation({
-      mutationFn: deleteImages,
-    })
-  const isPendingRequest =
-    isPendingUpdateEquipment || isPendingUploadImages || isPendingDeleteImages
 
   async function handleForm({
     tag,
@@ -56,23 +36,22 @@ export function EquipmentEdit() {
     const tagString = `${unit}-${area}-${equipCode}-${seqNumber}`
 
     try {
-      const deleteImageKeys = getDeleteImageKeys(images)
-      deleteImageKeys && (await deleteImagesFn(deleteImageKeys))
+      const photos = images
+        ?.filter((image) => !image.isRemove)
+        .map(({ key, link }) => ({ key, link }))
 
-      const haveFiles = files?.length !== 0
-      const formData = buildFormData(files)
-      const newPhotos = haveFiles ? await uploadImagesFn(formData) : undefined
-
-      const savedPhotos = getSavedPhotos(images)
-
-      const photos = savedPhotos.concat(newPhotos || [])
+      const formData = new FormData()
+      files?.forEach(({ file }) => {
+        formData.append(file.name, file, file.name)
+      })
+      formData.append('photos', JSON.stringify(photos))
+      formData.append('name', name)
+      formData.append('tag', tagString)
+      description && formData.append('description', description)
 
       await updateEquipmentFn({
         id: id!,
-        tag: tagString,
-        name,
-        description,
-        photos,
+        formData,
       })
 
       toast.success('Equipamento editado com sucesso.')
@@ -90,34 +69,6 @@ export function EquipmentEdit() {
     }
   }
 
-  function buildFormData(files?: { file: File }[]) {
-    const formData = new FormData()
-    files?.forEach(({ file }) => {
-      formData.append('file', file, file.name)
-    })
-    return formData
-  }
-
-  function getSavedPhotos(images?: Image[]) {
-    const savedPhotos =
-      images
-        ?.filter((image) => !image.isRemove)
-        .map(({ key, link }) => ({
-          key,
-          link,
-        })) || []
-
-    return savedPhotos
-  }
-
-  function getDeleteImageKeys(images?: Image[]) {
-    const imageKeys = images
-      ?.filter((image) => image.isRemove)
-      .map((image) => image.key)
-
-    return imageKeys
-  }
-
   // TODO: Create page loading
   if (!equipment) {
     return
@@ -128,7 +79,7 @@ export function EquipmentEdit() {
       <Title>Editar um equipamento</Title>
 
       <EquipmentForm
-        isPendingRequest={isPendingRequest}
+        isPendingRequest={isPendingUpdateEquipment}
         sendForm={handleForm}
         equipment={equipment}
       />

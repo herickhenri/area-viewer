@@ -1,17 +1,22 @@
-import { Marking } from './Marking'
-
 export type Panorama = {
   id: string
   name: string
-  image_key: string
-  image_link: string
-  markings?: Marking[]
+  images: {
+    key: string
+    link: string
+    quality: number
+  }[]
+  equipments?: {
+    coord_x: number
+    coord_y: number
+    equipment_id: string
+  }[]
   links?: {
     coord_x: number
     coord_y: number
     panorama_connect_id: string
   }[]
-  NotesOnPanoramas?: {
+  notes?: {
     coord_x: number
     coord_y: number
     note_id: string

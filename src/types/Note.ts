@@ -6,14 +6,14 @@ export const opportunityDict = {
 }
 
 export type Note = {
-  createdAt: Date
+  created_at: Date
   id: string
   description: string
   equipment_tag: string
   author: string
   opportunity: 0 | 1 | 2 | 3
-  equipmentId?: string
-  NotesOnPanoramas?: {
+  equipment_id?: string
+  panoramas?: {
     panorama_id: string
     coord_x: number
     coord_y: number

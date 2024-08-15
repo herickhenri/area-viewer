@@ -31,7 +31,7 @@ export function NoteCard({ note }: NoteCardProps) {
       </div>
       <div>
         <span className="font-semibold">Data de criação: </span>
-        <span>{dayjs(note.createdAt).format('DD/MM/YYYY')}</span>
+        <span>{dayjs(note.created_at).format('DD/MM/YYYY')}</span>
       </div>
       <div>
         <span className="font-semibold">Nota: </span>

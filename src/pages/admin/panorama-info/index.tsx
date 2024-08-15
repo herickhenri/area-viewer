@@ -24,7 +24,7 @@ export function PanoramaInfo() {
       <div className="mx-auto flex w-full flex-col items-center">
         <img
           className="h-40 w-full rounded object-cover shadow-xl md:h-80 md:w-4/5"
-          src={panorama.image_link}
+          src={panorama.images[panorama.images.length - 2].link}
           alt=""
         />
         <span className="text-lg font-semibold">{panorama.name}</span>

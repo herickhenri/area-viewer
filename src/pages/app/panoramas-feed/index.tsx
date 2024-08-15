@@ -34,11 +34,11 @@ export function PanoramasFeed() {
             </div>
             <img
               className="h-40 w-full rounded object-cover md:h-80 md:rounded-lg"
-              src={panorama.image_link}
+              src={panorama.images[panorama.images.length - 1].link}
               alt=""
             />
             <div className="mt-2 flex justify-start gap-4">
-              <Link to={`viewer/${panorama.id}`}>
+              <Link to={`viewer/?nodeId=${panorama.id}`}>
                 <Button className="mx-0">Ver no mapa</Button>
               </Link>
             </div>

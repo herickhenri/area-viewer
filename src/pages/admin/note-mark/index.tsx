@@ -17,7 +17,7 @@ export type Coord = {
   coord_y: number
 }
 
-type Connection = {
+type NotesOnPanorama = {
   note_id: string
   panorama_id: string
   coord_x: number
@@ -50,9 +50,9 @@ export function NoteMark() {
     setCoord(coordinates)
   }
 
-  async function markNote(connection: Connection) {
+  async function markNote(notesOnPanorama: NotesOnPanorama) {
     try {
-      await postNoteMarkupMutate(connection)
+      await postNoteMarkupMutate(notesOnPanorama)
       toast.success('Marcação criada com sucesso.')
     } catch (err) {
       console.error(err)
@@ -95,7 +95,9 @@ export function NoteMark() {
         <SelectInput options={items} onChange={changeItem} />
         {selectedPanorama && (
           <PanoramaArea
-            source={selectedPanorama.image_link}
+            source={
+              selectedPanorama.images[selectedPanorama.images.length - 1].link
+            }
             coord={coord}
             changeCoord={changeCoord}
           />

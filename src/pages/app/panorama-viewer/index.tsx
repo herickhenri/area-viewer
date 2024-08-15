@@ -1,169 +1,146 @@
-import { Viewer } from '@photo-sphere-viewer/core'
-import { createRef, useEffect, useRef, useState } from 'react'
-import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin'
-import { VirtualTourPlugin } from '@photo-sphere-viewer/virtual-tour-plugin'
-import { GyroscopePlugin } from '@photo-sphere-viewer/gyroscope-plugin'
-import { StereoPlugin } from '@photo-sphere-viewer/stereo-plugin'
-import MarkersTooltip from './markers-tooltip'
-
-import '@photo-sphere-viewer/markers-plugin/index.css'
-import '@photo-sphere-viewer/core/index.css'
-import '@photo-sphere-viewer/virtual-tour-plugin/index.css'
+import { useCallback, useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getPanoramas } from '@/api/get-panoramas'
-import { useLocation, useParams } from 'react-router-dom'
-import { createNodes } from './create-nodes'
-import { createMarkers } from './create-markers'
+import { useViewer } from '@/hooks/use-viewer'
+import { useUpdateImageQuality } from '@/hooks/use-update-image-quality'
+import { CaretLeft, MagnifyingGlass } from '@phosphor-icons/react'
 import { getEquipments } from '@/api/get-equipments'
+import { Equipment } from '@/types/Equipment'
+import { useSearchParams } from 'react-router-dom'
+import { MarkerEquipment } from './marker-equipment'
+import { Note } from '@/types/Note'
+import { getNotes } from '@/api/get-notes'
+import { MarkerNote } from './marker-note'
 
-export type MarkingWithRef = {
-  coord_x: number
-  coord_y: number
-  id: string
-  type: 'note' | 'equipment'
-  ref: React.RefObject<HTMLDivElement>
+type EquipmentMarker = {
+  equipment: Equipment
+  type: 'equipment'
+}
+
+type NoteMarker = {
+  note: Note
+  type: 'note'
 }
 
 export function PanoramaViewer() {
-  const [markersPlugin, setMarkersPlugin] = useState<MarkersPlugin | null>(null)
-  const [markingsComponent, setMarkingsComponent] = useState<MarkingWithRef[]>(
-    [],
-  )
-  const [hasExecutedGoto, setHasExecutedGoto] = useState(false)
-
-  const { id: panoramaId } = useParams()
-  const query = new URLSearchParams(useLocation().search)
-  const equipmentFocusId = query.get('equipmentId')
+  const [onSidebar, setOnSidebar] = useState(false)
+  const [selectedMarker, setSelectedMarker] = useState<
+    null | EquipmentMarker | NoteMarker
+  >(null)
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const { data: panoramas } = useQuery({
-    queryKey: ['panorama'],
+    queryKey: ['panoramas'],
     queryFn: getPanoramas,
+    staleTime: Infinity,
   })
-
   const { data: equipments } = useQuery({
     queryKey: ['equipments'],
     queryFn: getEquipments,
   })
+  const { data: notes } = useQuery({
+    queryKey: ['notes'],
+    queryFn: getNotes,
+  })
 
-  const sphereElementRef = useRef<HTMLDivElement>(null)
+  const { viewerRef, virtualTour, markersPlugin, viewer } = useViewer(panoramas)
+  const markers = markersPlugin?.getMarkers()
 
-  function createMarkingsComponent(nodeId: string) {
-    if (!panoramas) {
-      return
-    }
+  useUpdateImageQuality({ panoramas, viewer, virtualTour })
 
-    const panorama = panoramas.find((panorama) => panorama.id === nodeId)
-    const markingsEquipment: MarkingWithRef[] | undefined =
-      panorama?.markings?.map((marking) => ({
-        coord_x: marking.coord_x,
-        coord_y: marking.coord_y,
-        id: marking.equipment_id,
-        type: 'equipment',
-        ref: createRef<HTMLDivElement>(),
-      }))
-    const markingsNotes: MarkingWithRef[] | undefined =
-      panorama?.NotesOnPanoramas?.map((marking) => ({
-        coord_x: marking.coord_x,
-        coord_y: marking.coord_y,
-        id: marking.note_id,
+  const handleMarker = useCallback(
+    (markerId: string) => {
+      const equipmentsMarker: EquipmentMarker[] | undefined = equipments?.map(
+        (equipment) => ({ equipment, type: 'equipment' }),
+      )
+      const notesMarker: NoteMarker[] | undefined = notes?.map((note) => ({
+        note,
         type: 'note',
-        ref: createRef<HTMLDivElement>(),
       }))
+      const markersList = [...(equipmentsMarker || []), ...(notesMarker || [])]
 
-    const markingsList = [
-      ...(markingsEquipment || []),
-      ...(markingsNotes || []),
-    ]
+      const marker = markersList.find(
+        (marker) =>
+          (marker.type === 'equipment' && marker.equipment.id === markerId) ||
+          (marker.type === 'note' && marker.note.id === markerId),
+      )
 
-    markingsList && setMarkingsComponent(markingsList)
-  }
+      if (marker) {
+        setSelectedMarker(marker)
+        setOnSidebar(true)
+      }
+    },
+    [equipments, notes],
+  )
 
   useEffect(() => {
-    if (!sphereElementRef.current || !panoramas) {
-      return
+    if (!markersPlugin || !markers?.length) return
+
+    const equipmentFocusId = searchParams.get('equipmentId')
+
+    const markerFocus = markers.find((marker) => marker.id === equipmentFocusId)
+
+    if (markerFocus) {
+      markersPlugin.gotoMarker(markerFocus.id)
+      setOnSidebar(true)
+      handleMarker(markerFocus.id)
+
+      setSearchParams((state) => {
+        state.delete('equipmentId')
+
+        return state
+      })
+    }
+  }, [markers, searchParams, setSearchParams, markersPlugin, handleMarker])
+
+  useEffect(() => {
+    if (!markersPlugin) return
+
+    // It was necessary to use any for the event. Because addEventListener was accepting the function's typing, but removeEventListener was not.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    function handleSelectMarker(event: any) {
+      const markerId: string = event.marker.id
+      handleMarker(markerId)
     }
 
-    const spherePlayerInstance = new Viewer({
-      container: sphereElementRef.current,
-      defaultYaw: '130deg',
-      loadingTxt: 'Carregando...',
-      lang: {
-        stereo: 'Stereo view',
-        stereoNotification: 'Clique em qualquer lugar para sair do stereo view',
-        pleaseRotate: 'Por favor, rotacione seu celular',
-        tapToContinue: '(Clique para continuar)',
-      },
-      plugins: [
-        MarkersPlugin,
-        [
-          VirtualTourPlugin,
-          {
-            renderMode: 'markers',
-            // startNodeId: panoramaId,
-          },
-        ],
-        GyroscopePlugin,
-        StereoPlugin,
-      ],
-    })
-
-    // Nodes creating
-    const nodes = createNodes(panoramas)
-    const virtualTourPlugin =
-      spherePlayerInstance.getPlugin<VirtualTourPlugin>(VirtualTourPlugin)
-    virtualTourPlugin.setNodes(nodes, panoramaId)
-
-    virtualTourPlugin.addEventListener('node-changed', ({ node }) =>
-      createMarkingsComponent(node.id),
-    )
-
-    // Markers creating
-    const markersPluginInstance =
-      spherePlayerInstance.getPlugin<MarkersPlugin>(MarkersPlugin)
-    setMarkersPlugin(markersPluginInstance)
+    markersPlugin.addEventListener('select-marker', handleSelectMarker)
 
     return () => {
-      spherePlayerInstance.destroy()
+      markersPlugin.removeEventListener('select-marker', handleSelectMarker)
     }
-  }, [panoramaId, panoramas])
-
-  useEffect(() => {
-    if (!markersPlugin || markingsComponent.length === 0) {
-      return
-    }
-
-    const markers = createMarkers(markingsComponent)
-
-    markers.forEach((marker) => {
-      markersPlugin.addMarker(marker)
-    })
-
-    if (equipmentFocusId && !hasExecutedGoto) {
-      markersPlugin.gotoMarker(equipmentFocusId, '10rpm')
-      setHasExecutedGoto(true)
-    }
-  }, [markingsComponent, markersPlugin, equipmentFocusId])
+  }, [markersPlugin, handleMarker])
 
   return (
-    <>
-      <div className="h-[calc(100vh-3.5rem)]" ref={sphereElementRef} />
-      {markingsComponent.map((marking) => {
-        if (marking.type !== 'equipment') {
-          return null
-        }
+    <div>
+      <div
+        className={`${onSidebar ? '' : '-translate-x-full'} fixed left-0 top-0 z-50 h-screen w-96 bg-slate-100 shadow-lg transition-transform`}
+      >
+        <div className="absolute left-1/2 top-6 flex w-[90%] -translate-x-1/2 items-center gap-2 rounded-full bg-white px-4 py-2 shadow-lg">
+          <input
+            type="text"
+            className="flex-1 outline-none"
+            placeholder="Pesquisar"
+          />
+          <MagnifyingGlass />
+        </div>
+        {selectedMarker?.type === 'equipment' && (
+          <MarkerEquipment equipment={selectedMarker.equipment} />
+        )}
+        {selectedMarker?.type === 'note' && (
+          <MarkerNote note={selectedMarker.note} />
+        )}
 
-        const equipment = equipments?.find(
-          (equipment) => equipment.id === marking.id,
-        )
-
-        return (
-          <div key={marking.id} className="sr-only">
-            {equipment && (
-              <MarkersTooltip equipment={equipment} ref={marking.ref} />
-            )}
-          </div>
-        )
-      })}
-    </>
+        <button
+          className="absolute -right-0 top-1/2 -translate-y-1/2 translate-x-full rounded-r bg-slate-100 px-0.5 py-2 text-xl font-bold text-slate-500 transition-colors hover:bg-slate-200"
+          onClick={() => setOnSidebar((state) => !state)}
+        >
+          <CaretLeft
+            size={20}
+            className={`${onSidebar ? '' : 'rotate-180'} block transition-transform`}
+          />
+        </button>
+      </div>
+      <div className="h-screen w-full" ref={viewerRef}></div>
+    </div>
   )
 }

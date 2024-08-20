@@ -1,145 +1,95 @@
-import { MouseEvent, useEffect, useRef, useState } from 'react'
-import { Arrow } from './Arrow'
-import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch'
-import { RemoveConnection } from './remove-connection'
+import { useEffect } from 'react'
+import { useViewer } from './use-viewer'
+import { Panorama } from '@/types/Panorama'
+import { ClickData } from '@photo-sphere-viewer/core'
+import { MarkerConfig } from '@photo-sphere-viewer/markers-plugin'
+import { useSearchParams } from 'react-router-dom'
 
-type Size = {
-  width: number
-  height: number
-}
-
-type Coordinates = {
-  x: number
-  y: number
-}
-
-type Point = {
-  coord_x: number
-  coord_y: number
-  name: string
-  panorama_id: string
-  panorama_connect_id: string
+type Position = {
+  yaw: number
+  pitch: number
 }
 
 interface PanoramaAreaProps {
-  source: string
-  value: Coordinates
-  points?: Point[]
-  onChange: (coordinates: Coordinates) => void
+  panorama: Panorama
+  panoramas: Panorama[]
+  value: Position
+  onChangePosition: (value: Position) => void
 }
 
 export function PanoramaArea({
-  source,
+  panorama,
+  panoramas,
+  onChangePosition,
   value,
-  points,
-  onChange,
 }: PanoramaAreaProps) {
-  const panoramaRef = useRef<HTMLImageElement>(null)
+  const [searchParams] = useSearchParams()
+  const mainPanoramaId = searchParams.get('main_panorama_id')
+  const secondaryPanoramaId = searchParams.get('secondary_panorama_id')
 
-  const [renderedSize, setRenderedSize] = useState<Size>({} as Size)
-  const [intrinsicSize, setIntrinsicSize] = useState<Size>({} as Size)
-  const [scale, setScale] = useState(1)
+  console.log(value)
 
-  const conversionRate = {
-    width: intrinsicSize.width / renderedSize.width,
-    height: intrinsicSize.height / renderedSize.height,
-  }
-
-  function getSizes() {
-    if (!panoramaRef.current) {
-      return
-    }
-
-    // Tamanho original da imagem
-    const { naturalWidth, naturalHeight } = panoramaRef.current
-    // tamanho gerado pela página
-    const { offsetWidth, offsetHeight } = panoramaRef.current
-
-    setIntrinsicSize({
-      width: naturalWidth,
-      height: naturalHeight,
-    })
-
-    setRenderedSize({
-      width: offsetWidth,
-      height: offsetHeight,
-    })
-  }
+  const { viewerRef, viewer, markersPlugin } = useViewer(panorama)
 
   useEffect(() => {
-    window.addEventListener('resize', getSizes)
+    if (!viewer) return
+
+    viewer.setPanorama(
+      `${panorama.images[panorama.images.length - 1].link}?no-cache-please`,
+    )
+  }, [panorama, viewer])
+
+  useEffect(() => {
+    if (!viewer || !markersPlugin) return
+
+    // It was necessary to use any for the event. Because addEventListener was accepting the function's typing, but removeEventListener was not.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    function handleViewerClick(event: any) {
+      const { data }: { data: ClickData } = event
+      onChangePosition({ yaw: data.yaw, pitch: data.pitch })
+    }
+
+    viewer.addEventListener('click', handleViewerClick)
 
     return () => {
-      window.removeEventListener('resize', getSizes)
+      viewer.removeEventListener('click', handleViewerClick)
     }
-  }, [])
+  }, [markersPlugin, viewer, onChangePosition])
 
-  const handleClick = (e: MouseEvent) => {
-    const target = e.target as HTMLElement
-
-    if (target.id !== 'click-area') {
-      return
-    }
-
-    const x = e.nativeEvent.offsetX
-    const y = e.nativeEvent.offsetY
-
-    onChange({
-      x: Math.round(x * conversionRate.width),
-      y: Math.round(y * conversionRate.height),
-    })
-  }
-
-  return (
-    <div className="relative rounded">
-      <TransformWrapper maxScale={10} onZoom={(e) => setScale(e.state.scale)}>
-        <TransformComponent
-          contentClass="relative"
-          contentProps={{ onClick: handleClick, id: 'click-area' }}
-        >
-          <img
-            ref={panoramaRef}
-            onClick={handleClick}
-            onLoad={getSizes}
-            className="select-none"
-            src={source}
-            alt="Foto panorâmica"
-          />
-          {points &&
-            points.map((point) => (
-              <div
-                key={point.coord_x + point.coord_y}
-                className="absolute origin-top-left"
-                style={{
-                  left: point.coord_x / conversionRate.width,
-                  top: point.coord_y / conversionRate.height,
-                  transform: `scale(${1 / scale}) translate(-50%,-50%)`,
-                }}
-              >
-                <RemoveConnection
-                  icon={Arrow}
-                  name={point.name}
-                  connection={{
-                    panorama_id: point.panorama_id,
-                    panorama_connect_id: point.panorama_connect_id,
-                  }}
-                />
-              </div>
-            ))}
-          {value && (
-            <div
-              className="absolute origin-top-left"
-              style={{
-                left: value.x / conversionRate.width,
-                top: value.y / conversionRate.height,
-                transform: `scale(${1 / scale}) translate(-50%,-50%)`,
-              }}
-            >
-              <Arrow className="h-4 w-4 fill-red-500 md:h-12 md:w-12" />
-            </div>
-          )}
-        </TransformComponent>
-      </TransformWrapper>
-    </div>
+  const markers: MarkerConfig[] | undefined = panorama.connections_from?.map(
+    ({ connected_to_id, yaw, pitch }) => {
+      const panoramaName = panoramas.find(
+        ({ id }) => id === connected_to_id,
+      )?.name
+      return {
+        id: connected_to_id,
+        position: { yaw, pitch },
+        image: '/arrow.svg',
+        size: { width: 48, height: 48 },
+        tooltip: panoramaName ?? '',
+      }
+    },
   )
+
+  const markersWithTheCurrentOne = markers?.filter(
+    (marker) =>
+      marker.id !== mainPanoramaId && marker.id !== secondaryPanoramaId,
+  )
+
+  const marker = value && [
+    {
+      id: `#${Math.random()}`,
+      position: { yaw: value.yaw, pitch: value.pitch },
+      image: '/arrow-red.svg',
+      size: { width: 48, height: 48 },
+      tooltip: '',
+    },
+  ]
+
+  markersPlugin?.setMarkers([
+    ...(marker || []),
+    ...(markersWithTheCurrentOne || []),
+  ])
+
+  return <div className="h-96 w-full" ref={viewerRef} />
 }

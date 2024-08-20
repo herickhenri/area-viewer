@@ -13,24 +13,25 @@ const content = {
 
 export type CreateMarkersProps = {
   name: string
-  coord_x: number
-  coord_y: number
+  yaw: number
+  pitch: number
   id: string
   type: 'equipment' | 'note'
 }
 
 export function createMarkers(markers: CreateMarkersProps[]) {
   const markersConfig: MarkerConfig[] = markers.map(
-    ({ id, coord_x, coord_y, type, name }) => ({
+    ({ id, yaw, pitch, type, name }) => ({
       id,
       position: {
-        textureX: coord_x,
-        textureY: coord_y,
+        yaw,
+        pitch,
       },
-      tooltip: name,
-      size: { width: 32, height: 32 },
+      size: { width: 24, height: 24 },
+      anchor: 'bottom center',
       image: content[type].icon,
       listContent: content[type].title,
+      tooltip: name,
     }),
   )
 

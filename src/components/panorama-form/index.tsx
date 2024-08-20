@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Panorama } from '@/types/Panorama'
-import { Markings } from './markings'
 import { PanoramaArea } from './panorama-area'
 import { Button } from '../button'
 import Input from '../input'
@@ -10,16 +9,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { UploadPanorama } from './upload-panorama'
 import { Camera, CircleNotch, PencilSimple } from '@phosphor-icons/react'
 import { Label } from '../label'
-
-export type Coord = {
-  coord_x: number
-  coord_y: number
-}
-
-export type Marking = {
-  coord: Coord
-  equip_tag: string
-}
+import { EquipmentMarkers, MarkerPosition } from './equipment-markers'
+import { useQuery } from '@tanstack/react-query'
+import { getEquipments } from '@/api/get-equipments'
 
 const createPanoramaFormSchema = z.object({
   name: z.string().trim().min(1, 'O nome é obrigatório'),
@@ -27,19 +19,19 @@ const createPanoramaFormSchema = z.object({
     .array(
       z.object({
         equipment_id: z.string(),
-        coord_x: z.number(),
-        coord_y: z.number(),
+        yaw: z.number(),
+        pitch: z.number(),
       }),
     )
     .optional(),
   file: z.instanceof(File).optional(),
 })
 
-export type createPanoramaFormData = z.infer<typeof createPanoramaFormSchema>
+export type CreatePanoramaFormData = z.infer<typeof createPanoramaFormSchema>
 
 interface PanoramaFormProps {
   data?: Panorama
-  sendForm: (data: createPanoramaFormData) => void
+  sendForm: (data: CreatePanoramaFormData) => void
   isPendingRequest: boolean
 }
 
@@ -48,9 +40,16 @@ export function PanoramaForm({
   sendForm,
   isPendingRequest,
 }: PanoramaFormProps) {
-  const [coord, setCoord] = useState<Coord | null>(null)
+  const [markerPosition, setMarkerPosition] = useState<MarkerPosition | null>(
+    null,
+  )
 
-  const newCycleForm = useForm<createPanoramaFormData>({
+  const { data: equipments } = useQuery({
+    queryKey: ['equipments'],
+    queryFn: getEquipments,
+  })
+
+  const createPanoramaForm = useForm<CreatePanoramaFormData>({
     resolver: zodResolver(createPanoramaFormSchema),
     defaultValues: {
       name: data?.name,
@@ -64,19 +63,19 @@ export function PanoramaForm({
     handleSubmit,
     watch,
     formState: { errors },
-  } = newCycleForm
-
-  function changeCoord(coordenada: Coord | null) {
-    setCoord(coordenada)
-  }
+  } = createPanoramaForm
 
   const file = watch('file')
   const panoramaSource = file
     ? URL.createObjectURL(file)
     : data?.images[data.images.length - 1].link
 
+  if (!equipments) {
+    return <h1>Carregando</h1>
+  }
+
   return (
-    <FormProvider {...newCycleForm}>
+    <FormProvider {...createPanoramaForm}>
       <form
         className="mx-5 mb-10 flex flex-1 flex-col gap-5 md:mx-56"
         action=""
@@ -113,9 +112,10 @@ export function PanoramaForm({
           <div className="mx-auto cursor-pointer overflow-hidden rounded transition-colors">
             {panoramaSource ? (
               <PanoramaArea
-                changeCoord={changeCoord}
-                coord={coord}
+                equipments={equipments}
                 source={panoramaSource}
+                markerPosition={markerPosition}
+                changeMarkerPosition={setMarkerPosition}
               />
             ) : (
               <Controller
@@ -134,7 +134,11 @@ export function PanoramaForm({
           </div>
         </div>
 
-        <Markings coord={coord} changeCoord={changeCoord} />
+        <EquipmentMarkers
+          equipments={equipments}
+          markerPosition={markerPosition}
+          changeMarkerPosition={setMarkerPosition}
+        />
 
         <Button className="mx-auto h-12 w-40" disabled={isPendingRequest}>
           {isPendingRequest ? (

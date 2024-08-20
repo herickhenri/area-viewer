@@ -8,8 +8,8 @@ export type Item = {
 
 interface selectInputProps {
   options?: Item[]
-  onChange: (item: Item | null) => void
   defaultValue?: Item
+  onChange: (item: Item | null) => void
   remove: () => void
 }
 
@@ -24,8 +24,8 @@ export function SelectInput({
       <Select
         options={options}
         classNames={{
-          container: () => 'flex-1',
-          control: () => 'border-none shadow-none flex-1',
+          container: () => 'bg-transparent w-full',
+          control: () => 'border-none bg-transparent  shadow-none',
         }}
         onChange={onChange}
         defaultValue={defaultValue}

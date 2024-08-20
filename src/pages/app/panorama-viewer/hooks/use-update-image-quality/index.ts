@@ -31,12 +31,12 @@ export function useUpdateImageQuality({
       )?.images
 
       const imagesNoCached = imagesList?.filter(
-        (image) => !cacheKeys.includes(image.link),
+        (image) => !cacheKeys.includes(`${image.link}?no-cache-please`),
       )
 
       if (imagesNoCached?.length) {
         viewer
-          .setPanorama(imagesNoCached[0].link, {
+          .setPanorama(`${imagesNoCached[0].link}?no-cache-please`, {
             showLoader: false,
           })
           .then((isPanoramaLoaded) => {
@@ -46,9 +46,12 @@ export function useUpdateImageQuality({
           })
       } else {
         imagesList &&
-          viewer.setPanorama(imagesList[imagesList.length - 1].link, {
-            showLoader: false,
-          })
+          viewer.setPanorama(
+            `${imagesList[imagesList.length - 1].link}?no-cache-please`,
+            {
+              showLoader: false,
+            },
+          )
       }
     },
     [panoramas, viewer],

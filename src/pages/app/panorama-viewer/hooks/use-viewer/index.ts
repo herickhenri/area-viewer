@@ -50,7 +50,7 @@ export function useViewer(data?: Panorama[]) {
     })
     viewerInstanceRef.current = viewerInstance
     setNodes(nodesCreated)
-  }, [viewerRef, data, viewerInstanceRef])
+  }, [viewerRef, data, viewerInstanceRef, nodeId])
 
   useEffect(() => {
     if (nodes && nodeId) {

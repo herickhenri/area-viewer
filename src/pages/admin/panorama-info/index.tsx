@@ -37,7 +37,10 @@ export function PanoramaInfo() {
         <Link className="flex-1" to="/admin/panorama/create">
           <Button className="w-full">Criar outro</Button>
         </Link>
-        <Link className="flex-1" to={`/admin/panorama/connect/${panorama.id}`}>
+        <Link
+          className="flex-1"
+          to={`/admin/panorama/connections?main_panorama_id=${panorama.id}`}
+        >
           <Button className="w-full">Conectar</Button>
         </Link>
         <Link

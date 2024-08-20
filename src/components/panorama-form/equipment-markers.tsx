@@ -1,21 +1,25 @@
-import { Coord, createPanoramaFormData } from '.'
+import { CreatePanoramaFormData } from '.'
 import { useFieldArray, useFormContext } from 'react-hook-form'
-import { useQuery } from '@tanstack/react-query'
-import { getEquipments } from '@/api/get-equipments'
 import { Item, SelectInput } from './select-input'
+import { Equipment } from '@/types/Equipment'
 
-interface MarkingsProps {
-  coord: Coord | null
-  changeCoord: (coord: Coord | null) => void
+export type MarkerPosition = {
+  yaw: number
+  pitch: number
 }
 
-export function Markings({ coord, changeCoord }: MarkingsProps) {
-  const { data: equipments } = useQuery({
-    queryKey: ['equipments'],
-    queryFn: getEquipments,
-  })
+interface EquipmentMarkersProps {
+  markerPosition: MarkerPosition | null
+  equipments: Equipment[]
+  changeMarkerPosition: (markerPosition: MarkerPosition | null) => void
+}
 
-  const { control } = useFormContext<createPanoramaFormData>()
+export function EquipmentMarkers({
+  markerPosition,
+  changeMarkerPosition,
+  equipments,
+}: EquipmentMarkersProps) {
+  const { control } = useFormContext<CreatePanoramaFormData>()
 
   const {
     fields: markings,
@@ -36,16 +40,16 @@ export function Markings({ coord, changeCoord }: MarkingsProps) {
       label: `${equip.name} | ${equip.tag.replace(/-/g, '')}`,
     }))
 
-  function addMarking(item: Item | null) {
-    if (item && coord) {
+  function addMarker(item: Item | null) {
+    if (item && markerPosition) {
       append({
         equipment_id: item.value,
-        coord_x: coord.coord_x,
-        coord_y: coord.coord_y,
+        yaw: markerPosition.yaw,
+        pitch: markerPosition.pitch,
       })
     }
 
-    changeCoord(null)
+    changeMarkerPosition(null)
   }
 
   if (!equipments) {
@@ -74,12 +78,12 @@ export function Markings({ coord, changeCoord }: MarkingsProps) {
           </div>
         )
       })}
-      {coord && (
+      {markerPosition && (
         <div className="flex items-center gap-3">
           <SelectInput
             options={options}
-            onChange={addMarking}
-            remove={() => changeCoord(null)}
+            onChange={addMarker}
+            remove={() => changeMarkerPosition(null)}
           />
         </div>
       )}

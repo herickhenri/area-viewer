@@ -1,130 +1,82 @@
-import { MapPin } from '@phosphor-icons/react'
-import { MouseEvent, useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
+import { useViewer } from './use-viewer'
+import { ClickData } from '@photo-sphere-viewer/core'
+import { MarkerPosition } from './equipment-markers'
 import { useFormContext } from 'react-hook-form'
-import { Coord, createPanoramaFormData } from '.'
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
-
-type Size = {
-  width: number
-  height: number
-}
+import { CreatePanoramaFormData } from '.'
+import { MarkerConfig } from '@photo-sphere-viewer/markers-plugin'
+import { Equipment } from '@/types/Equipment'
 
 interface PanoramaAreaProps {
-  changeCoord: (coordenada: Coord) => void
-  coord: Coord | null
   source: string
+  markerPosition: MarkerPosition | null
+  equipments: Equipment[]
+  changeMarkerPosition: (markerPosition: MarkerPosition | null) => void
 }
 
 export function PanoramaArea({
-  changeCoord,
-  coord,
   source,
+  markerPosition,
+  changeMarkerPosition,
+  equipments,
 }: PanoramaAreaProps) {
-  const { watch } = useFormContext<createPanoramaFormData>()
-  const equipments = watch('equipments')
-  const panoramaRef = useRef<HTMLImageElement>(null)
+  const { viewerRef, viewer, markersPlugin } = useViewer(source)
+  const { getValues } = useFormContext<CreatePanoramaFormData>()
 
-  const [renderedSize, setRenderedSize] = useState<Size>({} as Size)
-  const [intrinsicSize, setIntrinsicSize] = useState<Size>({} as Size)
-  const [scale, setScale] = useState(1)
-
-  const conversionRate = {
-    width: intrinsicSize.width / renderedSize.width,
-    height: intrinsicSize.height / renderedSize.height,
-  }
-
-  const getSizes = useCallback(() => {
-    if (!panoramaRef.current) {
-      return
-    }
-
-    // Tamanho original da imagem
-    const { naturalWidth, naturalHeight } = panoramaRef.current
-    // tamanho gerado pela página
-    const { offsetWidth, offsetHeight } = panoramaRef.current
-
-    setIntrinsicSize({
-      width: naturalWidth,
-      height: naturalHeight,
-    })
-
-    setRenderedSize({
-      width: offsetWidth,
-      height: offsetHeight,
-    })
-  }, [])
+  const equipmentsMarkers = getValues('equipments')
+  const markers: MarkerConfig[] | undefined = equipmentsMarkers?.map(
+    ({ equipment_id, pitch, yaw }) => {
+      const equipmentName = equipments.find(
+        ({ id }) => id === equipment_id,
+      )?.name
+      return {
+        id: equipment_id,
+        position: { yaw, pitch },
+        image: '/pin-gray.svg',
+        anchor: 'bottom center',
+        size: { width: 24, height: 24 },
+        tooltip: equipmentName ?? '',
+      }
+    },
+  )
 
   useEffect(() => {
-    window.addEventListener('resize', getSizes)
+    if (!viewer || !markersPlugin) return
+
+    // It was necessary to use any for the event. Because addEventListener was accepting the function's typing, but removeEventListener was not.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    function handleViewerClick(event: any) {
+      const { data } = event as { data: ClickData }
+      if (!data.rightclick) {
+        changeMarkerPosition({ yaw: data.yaw, pitch: data.pitch })
+      }
+    }
+
+    viewer.addEventListener('click', handleViewerClick)
 
     return () => {
-      window.removeEventListener('resize', getSizes)
+      viewer.removeEventListener('click', handleViewerClick)
     }
-  }, [getSizes])
+  }, [markersPlugin, viewer, changeMarkerPosition])
 
-  function handleClick(e: MouseEvent) {
-    const target = e.target as HTMLElement
+  useEffect(() => {
+    if (!viewer) return
 
-    if (target.id !== 'click-area') {
-      return
-    }
+    const isBlobUrl = source.startsWith('blob:')
+    isBlobUrl && viewer.setPanorama(source)
+  }, [source, viewer])
 
-    const x = e.nativeEvent.offsetX
-    const y = e.nativeEvent.offsetY
+  const marker = markerPosition && [
+    {
+      id: `#${Math.random()}`,
+      position: { yaw: markerPosition.yaw, pitch: markerPosition.pitch },
+      image: '/pin-red.svg',
+      anchor: 'bottom center',
+      size: { width: 24, height: 24 },
+      tooltip: '',
+    },
+  ]
+  markersPlugin?.setMarkers([...(marker || []), ...(markers || [])])
 
-    changeCoord({
-      coord_x: Math.round(x * conversionRate.width),
-      coord_y: Math.round(y * conversionRate.height),
-    })
-  }
-
-  const points = equipments
-    ? equipments.map((equipment) => ({
-        coord_x: equipment.coord_x,
-        coord_y: equipment.coord_y,
-      }))
-    : []
-
-  // coord && points?.push(coord)
-
-  return (
-    <div className="relative overflow-x-auto">
-      <TransformWrapper maxScale={10} onZoom={(e) => setScale(e.state.scale)}>
-        <TransformComponent
-          contentClass="relative"
-          contentProps={{ onClick: handleClick, id: 'click-area' }}
-        >
-          <img
-            ref={panoramaRef}
-            onLoad={getSizes}
-            src={source}
-            alt="Foto panorâmica"
-          />
-          {coord && (
-            <MapPin
-              className="absolute h-6 w-6 origin-top-left fill-red-600"
-              weight="fill"
-              style={{
-                left: coord.coord_x / conversionRate.width,
-                top: coord.coord_y / conversionRate.height,
-                transform: `scale(${1 / scale}) translate(-50%,-100%)`,
-              }}
-            />
-          )}
-          {points.map((point, index) => (
-            <MapPin
-              key={index}
-              className="absolute h-6 w-6 origin-top-left fill-slate-300"
-              weight="fill"
-              style={{
-                left: point.coord_x / conversionRate.width,
-                top: point.coord_y / conversionRate.height,
-                transform: `scale(${1 / scale}) translate(-50%,-100%)`,
-              }}
-            />
-          ))}
-        </TransformComponent>
-      </TransformWrapper>
-    </div>
-  )
+  return <div ref={viewerRef} className="h-96 w-full" />
 }

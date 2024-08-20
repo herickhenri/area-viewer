@@ -1,5 +1,6 @@
+import { useSearchParams } from 'react-router-dom'
+import { Panorama } from '@/types/Panorama'
 import Select from 'react-select'
-import { tv } from 'tailwind-variants'
 
 export type Item = {
   value: string
@@ -7,53 +8,51 @@ export type Item = {
 }
 
 interface selectInputProps {
-  options?: Item[]
   onChange: (value: string | null) => void
-  defaultValue?: Item
   value: string
-  isError: boolean
+  panoramas: Panorama[]
+  defaultPanorama?: Panorama
+  isError?: boolean
+  inputName: string
 }
 
 export function SelectInput({
-  options,
+  panoramas,
   onChange,
-  defaultValue,
-  value,
-  isError,
+  defaultPanorama,
+  inputName,
 }: selectInputProps) {
-  function changeValue(item: Item | null) {
-    item && onChange(item.value)
+  const [, setSearchParams] = useSearchParams()
 
-    return item
+  function changeValue(value: string) {
+    setSearchParams((state) => {
+      state.set(inputName, value)
+      return state
+    })
+
+    onChange(value)
   }
 
-  const selectedItem = options?.find((option) => option.value === value)
+  const defaultValue = defaultPanorama && {
+    value: defaultPanorama.id,
+    label: defaultPanorama.name,
+  }
 
-  const select = tv({
-    base: 'flex items-center justify-between rounded border border-black/25 px-2 outline-2',
-    variants: {
-      outline: {
-        default:
-          'outline-blue-500 focus-within:border-transparent focus-within:outline',
-        error: 'border-transparent outline outline-red-500',
-      },
-    },
-    defaultVariants: {
-      outline: 'default',
-    },
-  })
+  const options = panoramas.map(({ id, name }) => ({
+    value: id,
+    label: name,
+  }))
 
   return (
-    <div className={select({ outline: isError ? 'error' : 'default' })}>
+    <div className="z-40 flex flex-1 items-center justify-between rounded border border-black/25 px-2 outline-2 outline-blue-500 focus-within:border-transparent focus-within:outline">
       <Select
         options={options}
         classNames={{
-          container: () => 'flex-1',
-          control: () => 'border-none shadow-none flex-1',
+          container: () => 'bg-transparent w-full',
+          control: () => 'border-none bg-transparent  shadow-none',
         }}
-        value={selectedItem}
-        onChange={changeValue}
         defaultValue={defaultValue}
+        onChange={(value) => value && changeValue(value.value)}
         placeholder="Selecione um panorama"
       />
     </div>

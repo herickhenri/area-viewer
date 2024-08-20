@@ -1,3 +1,10 @@
+export type Connection = {
+  yaw: number
+  pitch: number
+  connected_from_id: string
+  connected_to_id: string
+}
+
 export type Panorama = {
   id: string
   name: string
@@ -7,18 +14,15 @@ export type Panorama = {
     quality: number
   }[]
   equipments?: {
-    coord_x: number
-    coord_y: number
+    yaw: number
+    pitch: number
     equipment_id: string
   }[]
-  links?: {
-    coord_x: number
-    coord_y: number
-    panorama_connect_id: string
-  }[]
   notes?: {
-    coord_x: number
-    coord_y: number
+    yaw: number
+    pitch: number
     note_id: string
   }[]
+  connections_from?: Connection[]
+  connections_to?: Connection[]
 }

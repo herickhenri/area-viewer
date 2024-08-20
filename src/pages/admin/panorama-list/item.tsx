@@ -41,14 +41,16 @@ export function Item({ panorama }: itemProps) {
       </div>
       <img
         className="h-40 w-full rounded object-cover md:h-80 md:rounded-lg"
-        src={panorama.image_link}
+        src={panorama.images[panorama.images.length - 1].link}
         alt=""
       />
       <div className="mt-2 flex justify-start gap-4">
         <Link to={`/admin/panorama/edit/${panorama.id}`}>
           <Button>Editar</Button>
         </Link>
-        <Link to={`/admin/panorama/connect/${panorama.id}`}>
+        <Link
+          to={`/admin/panorama/connections?main_panorama_id=${panorama.id}`}
+        >
           <Button>Conectar</Button>
         </Link>
         <DeleteWarning deletePanorama={handleDeletePanorama} />

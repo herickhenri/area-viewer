@@ -1,106 +1,84 @@
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate, useParams } from 'react-router-dom'
-import { Item, SelectInput } from './select-input'
+import { useSearchParams } from 'react-router-dom'
+import { SelectInput } from './select-input'
 import { getPanoramas } from '@/api/get-panoramas'
 import { Button } from '@/components/button'
 import { PanoramaArea } from './panorama-area'
 import { z } from 'zod'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
 import { CircleNotch } from '@phosphor-icons/react'
-import Select from 'react-select'
-
-const linkSchema = z.object({
-  panorama_id: z.string({ required_error: 'O panorama é obrigatório' }),
-  coordinates: z.object(
-    {
-      x: z.number(),
-      y: z.number(),
-    },
-    { required_error: 'Marque um local no panorama' },
-  ),
-})
-
-export type Link = z.infer<typeof linkSchema>
+import { useEffect } from 'react'
 
 const panoramaConnectFormSchema = z.object({
-  connection: z.tuple([linkSchema, linkSchema]),
+  main_panorama_id: z.string(),
+  secondary_panorama_id: z.string(),
+  main_position: z.object({
+    yaw: z.number(),
+    pitch: z.number(),
+  }),
+  secondary_position: z.object({
+    yaw: z.number(),
+    pitch: z.number(),
+  }),
 })
 
-export type panoramaConnectFormData = z.infer<typeof panoramaConnectFormSchema>
+export type PanoramaConnectFormData = z.infer<typeof panoramaConnectFormSchema>
 
 interface ConnectFormProps {
-  handleForm: ({ connection }: panoramaConnectFormData) => void
+  handleForm: (data: PanoramaConnectFormData) => void
   isPending: boolean
 }
 
 export function ConnectForm({ handleForm, isPending }: ConnectFormProps) {
-  const navigate = useNavigate()
-  const { id: mainPanoramaId } = useParams()
+  const [searchParams] = useSearchParams()
+  const main_panorama_id = searchParams.get('main_panorama_id')
+  const secondary_panorama_id = searchParams.get('secondary_panorama_id')
+
   const { data: panoramas } = useQuery({
     queryKey: ['panoramas'],
     queryFn: getPanoramas,
   })
 
-  const {
-    control,
-    watch,
-    setValue,
-    resetField,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<panoramaConnectFormData>({
+  const newConnectionForm = useForm<PanoramaConnectFormData>({
     resolver: zodResolver(panoramaConnectFormSchema),
     defaultValues: {
-      connection: [
-        {
-          panorama_id: mainPanoramaId,
-        },
-      ],
+      main_panorama_id: main_panorama_id || undefined,
+      secondary_panorama_id: secondary_panorama_id || undefined,
     },
   })
 
+  const { handleSubmit, control, resetField, setValue } = newConnectionForm
+
   const mainPanorama = panoramas?.find(
-    (panorama) => panorama.id === mainPanoramaId,
+    (panorama) => panorama.id === main_panorama_id,
   )
-  const secondaryPanoramaId = watch('connection.1.panorama_id')
+
   const secondaryPanorama = panoramas?.find(
-    (panorama) => panorama.id === secondaryPanoramaId,
+    (panorama) => panorama.id === secondary_panorama_id,
   )
 
   useEffect(() => {
-    const secondaryLink = secondaryPanorama?.links?.find(
-      (link) => link.panorama_connect_id === mainPanorama?.id,
+    const mainPosition = mainPanorama?.connections_from?.find(
+      ({ connected_to_id }) => connected_to_id === secondaryPanorama?.id,
     )
-    const mainLink = mainPanorama?.links?.find(
-      (link) => link.panorama_connect_id === secondaryPanorama?.id,
+    const secondaryPosition = secondaryPanorama?.connections_from?.find(
+      ({ connected_to_id }) => connected_to_id === mainPanorama?.id,
     )
 
-    function handlePoints() {
-      // checks if the secondary panorama has connection to the main panorama
-
-      if (!mainLink || !secondaryLink) {
-        // resetPoints
-        resetField('connection.0.coordinates')
-        resetField('connection.1.coordinates')
-
-        return
-      }
-
-      // set values that exist between the two panoramas
-      setValue('connection.0.coordinates', {
-        x: mainLink.coord_x,
-        y: mainLink.coord_y,
-      })
-      setValue('connection.1.coordinates', {
-        x: secondaryLink.coord_x,
-        y: secondaryLink.coord_y,
-      })
-    }
-
-    handlePoints()
-  }, [secondaryPanorama, mainPanorama, resetField, setValue])
+    mainPosition
+      ? setValue('main_position', {
+          yaw: mainPosition.yaw,
+          pitch: mainPosition.pitch,
+        })
+      : resetField('main_position')
+    secondaryPosition
+      ? setValue('secondary_position', {
+          yaw: secondaryPosition.yaw,
+          pitch: secondaryPosition.pitch,
+        })
+      : resetField('secondary_position')
+  }, [mainPanorama, secondaryPanorama, setValue, resetField])
 
   if (!panoramas) {
     return <h1>carregando...</h1>
@@ -110,119 +88,80 @@ export function ConnectForm({ handleForm, isPending }: ConnectFormProps) {
     return <h1>Panorama não econtrado</h1>
   }
 
-  const selectPanoramaOptions = panoramas
-    .filter((panorama) => panorama.id !== mainPanorama.id)
-    .map((panorama) => {
-      const item: Item = {
-        label: panorama.name,
-        value: panorama.id,
-      }
-      return item
-    })
-
-  const allPointMainPanorama = mainPanorama.links
-    ?.filter((link) => link.panorama_connect_id !== secondaryPanoramaId)
-    .map(({ coord_x, coord_y, panorama_connect_id }) => {
-      // get the name of the panorama connected to the main panorama
-      const panorama = panoramas.find(
-        (panorama) => panorama.id === panorama_connect_id,
-      )
-      const name = panorama?.name || ''
-      const panorama_id = mainPanorama.id
-
-      return {
-        panorama_id,
-        panorama_connect_id,
-        coord_x,
-        coord_y,
-        name,
-      }
-    })
+  function handleConnectPanorama(data: PanoramaConnectFormData) {
+    handleForm(data)
+  }
 
   return (
-    <form className="mb-10" onSubmit={handleSubmit(handleForm)}>
-      <div className="mx-5 flex flex-1 flex-col gap-5 md:mx-56">
-        <div>
-          <div className="mb-5 flex items-center justify-between rounded border border-black/25 px-2 outline-2 outline-blue-500 focus-within:border-transparent focus-within:outline">
-            <Select
-              options={selectPanoramaOptions}
-              classNames={{
-                container: () => 'flex-1',
-                control: () => 'border-none shadow-none flex-1',
-              }}
-              value={{ label: mainPanorama.name, value: mainPanorama.id }}
-              onChange={(item) =>
-                item && navigate(`/admin/panorama/connect/${item.value}`)
-              }
-              placeholder="Selecione um panorama"
-            />
-          </div>
+    <form className="mb-10" onSubmit={handleSubmit(handleConnectPanorama)}>
+      <FormProvider {...newConnectionForm}>
+        <div className="mx-5 flex flex-1 flex-col gap-5 md:mx-56">
           <Controller
             control={control}
-            name="connection.0.coordinates"
+            name="main_panorama_id"
             render={({ field }) => (
-              <PanoramaArea
-                source={mainPanorama.image_link}
+              <SelectInput
+                panoramas={panoramas}
+                defaultPanorama={mainPanorama}
                 value={field.value}
                 onChange={field.onChange}
-                points={allPointMainPanorama}
+                inputName={field.name}
               />
             )}
           />
-          {errors.connection?.[0]?.coordinates && (
-            <span className="text-sm font-medium text-red-500">
-              {errors.connection?.[0]?.coordinates.message}
-            </span>
-          )}
-        </div>
-        <Controller
-          control={control}
-          name="connection.1.panorama_id"
-          render={({ field }) => (
-            <SelectInput
-              options={selectPanoramaOptions}
-              value={field.value}
-              onChange={field.onChange}
-              isError={!!errors.connection?.[1]?.panorama_id}
-            />
-          )}
-        />
 
-        <div className="relative">
-          {secondaryPanorama ? (
-            <>
+          <Controller
+            control={control}
+            name="main_position"
+            render={({ field }) => (
+              <PanoramaArea
+                panoramas={panoramas}
+                value={field.value}
+                onChangePosition={field.onChange}
+                panorama={mainPanorama}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="secondary_panorama_id"
+            render={({ field }) => (
+              <SelectInput
+                panoramas={panoramas}
+                defaultPanorama={secondaryPanorama}
+                value={field.value}
+                onChange={field.onChange}
+                inputName={field.name}
+              />
+            )}
+          />
+
+          <div className="relative">
+            {secondaryPanorama ? (
               <Controller
                 control={control}
-                name="connection.1.coordinates"
+                name="secondary_position"
                 render={({ field }) => (
                   <PanoramaArea
-                    source={secondaryPanorama.image_link}
+                    panoramas={panoramas}
                     value={field.value}
-                    onChange={field.onChange}
+                    onChangePosition={field.onChange}
+                    panorama={secondaryPanorama}
                   />
                 )}
               />
-              {errors.connection?.[1]?.coordinates && (
-                <span className="text-sm font-medium text-red-500">
-                  {errors.connection?.[1]?.coordinates.message}
-                </span>
-              )}
-            </>
-          ) : (
-            <div className="flex h-64 w-full items-center justify-center rounded bg-slate-300 text-lg text-black/80 md:h-80">
-              <span>Selecione um panorama acima</span>
-            </div>
-          )}
-          {errors.connection?.[1]?.panorama_id && (
-            <span className="text-sm font-medium text-red-500">
-              {errors.connection?.[1]?.panorama_id.message}
-            </span>
-          )}
+            ) : (
+              <div className="flex h-64 w-full items-center justify-center rounded bg-slate-300 text-lg text-black/80 md:h-80">
+                <span>Selecione um panorama acima</span>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      <Button type="submit" className="mx-auto mt-10">
-        {isPending ? <CircleNotch className="animate-spin" /> : 'Conectar'}
-      </Button>
+        <Button type="submit" className="mx-auto mt-10">
+          {isPending ? <CircleNotch className="animate-spin" /> : 'Conectar'}
+        </Button>
+      </FormProvider>
     </form>
   )
 }

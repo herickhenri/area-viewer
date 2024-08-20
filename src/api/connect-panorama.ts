@@ -1,14 +1,14 @@
 import { api } from '@/lib/axios'
 
-type Link = {
-  panorama_id: string
-  panorama_connect_id: string
-  coord_x: number
-  coord_y: number
+type Connection = {
+  yaw: number
+  pitch: number
+  connected_from_id: string
+  connected_to_id: string
 }
 
 interface bodySchema {
-  connection: [Link, Link]
+  connections: [Connection, Connection]
 }
 
 export async function connectPanoramas(data: bodySchema) {

@@ -15,7 +15,7 @@ export type Note = {
   equipment_id?: string
   panoramas?: {
     panorama_id: string
-    coord_x: number
-    coord_y: number
+    yaw: number
+    pitch: number
   }[]
 }

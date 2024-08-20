@@ -4,16 +4,18 @@ import { createMarkers, CreateMarkersProps } from './create-markers'
 
 export function createNodes(panoramas: Panorama[]) {
   const nodes = panoramas.map((panorama) => {
-    const links = panorama.links?.map((link) => ({
-      nodeId: link.panorama_connect_id,
-      position: { textureX: link.coord_x, textureY: link.coord_y },
-    }))
+    const links = panorama.connections_from?.map(
+      ({ connected_to_id, yaw, pitch }) => ({
+        nodeId: connected_to_id,
+        position: { yaw, pitch },
+      }),
+    )
 
     const equipmentsMarkers = panorama.equipments?.map(
-      ({ coord_x, coord_y, equipment_id }) => {
+      ({ yaw, pitch, equipment_id }) => {
         const marker: CreateMarkersProps = {
-          coord_x,
-          coord_y,
+          yaw,
+          pitch,
           id: equipment_id,
           name: 'equipment | mudar',
           type: 'equipment',
@@ -22,19 +24,17 @@ export function createNodes(panoramas: Panorama[]) {
         return marker
       },
     )
-    const notesMarkers = panorama.notes?.map(
-      ({ coord_x, coord_y, note_id }) => {
-        const marker: CreateMarkersProps = {
-          coord_x,
-          coord_y,
-          id: note_id,
-          name: 'note | mudar',
-          type: 'note',
-        } as const
+    const notesMarkers = panorama.notes?.map(({ yaw, pitch, note_id }) => {
+      const marker: CreateMarkersProps = {
+        yaw,
+        pitch,
+        id: note_id,
+        name: 'note | mudar',
+        type: 'note',
+      } as const
 
-        return marker
-      },
-    )
+      return marker
+    })
     const allMarkers = [...(notesMarkers || []), ...(equipmentsMarkers || [])]
 
     const node: VirtualTourNode = {

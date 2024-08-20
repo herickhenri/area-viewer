@@ -1,7 +1,7 @@
 import { createPanorama } from '@/api/post-panorama'
 import {
   PanoramaForm,
-  createPanoramaFormData,
+  CreatePanoramaFormData,
 } from '@/components/panorama-form'
 import { Title } from '@/components/title'
 import { useMutation } from '@tanstack/react-query'
@@ -20,7 +20,7 @@ export function PanoramaCreate() {
     name,
     file,
     equipments,
-  }: createPanoramaFormData) {
+  }: CreatePanoramaFormData) {
     try {
       if (!file) {
         throw new Error()

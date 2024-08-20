@@ -2,7 +2,7 @@ import { getPanorama } from '@/api/get-panorama'
 import { updatePanorama } from '@/api/update-panorama'
 import {
   PanoramaForm,
-  createPanoramaFormData,
+  CreatePanoramaFormData,
 } from '@/components/panorama-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -31,7 +31,7 @@ export function PanoramaEdit() {
     name,
     file,
     equipments,
-  }: createPanoramaFormData) {
+  }: CreatePanoramaFormData) {
     try {
       const formData = new FormData()
       formData.append('name', name)

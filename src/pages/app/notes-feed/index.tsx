@@ -34,7 +34,7 @@ export function NotesFeed() {
       <div className="mx-6 grid grid-cols-1 gap-4 md:mx-20 md:grid-cols-3">
         {notesList.map((note) => {
           const equipment = equipments.find(
-            (equipment) => equipment.id === note.equipmentId,
+            (equipment) => equipment.id === note.equipment_id,
           )
 
           return <NoteCard key={note.id} note={note} equipment={equipment} />

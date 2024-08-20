@@ -51,6 +51,7 @@ export function SubmitNotes() {
 
       const dataSheet = XLSX.utils.sheet_to_json(worksheet, { raw: true })
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const newNotes = dataSheet.map((row: any) => {
         const note: Note = {
           created_at: adjustForTimezone(
@@ -147,7 +148,7 @@ export function SubmitNotes() {
             {notes?.map((note) => (
               <tr key={note.id}>
                 <th className="border border-slate-300 p-2 font-normal">
-                  {dayjs(note.createdAt).format('DD-MM-YYYY')}
+                  {dayjs(note.created_at).format('DD-MM-YYYY')}
                 </th>
                 <th className="border border-slate-300 p-2 font-normal">
                   {note.id}

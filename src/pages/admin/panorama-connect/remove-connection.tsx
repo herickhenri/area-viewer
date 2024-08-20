@@ -1,6 +1,4 @@
 import { deleteConnection } from '@/api/delete-connection'
-import { queryClient } from '@/lib/query-client'
-import { Panorama } from '@/types/Panorama'
 import { CircleNotch, Trash } from '@phosphor-icons/react'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { useMutation } from '@tanstack/react-query'
@@ -24,31 +22,6 @@ export function RemoveConnection({
   const { mutateAsync: deleteConnectionMutate, isPending } = useMutation({
     mutationKey: ['deleteConnection'],
     mutationFn: deleteConnection,
-    onSuccess: () => {
-      queryClient.setQueryData<Panorama[]>(['panoramas'], (oldData) => {
-        const { panorama_id, panorama_connect_id } = connection
-
-        const newData = oldData?.map((panorama) => {
-          // filters panoramas that are not part of the connection
-          if (
-            panorama.id !== panorama_id &&
-            panorama.id !== panorama_connect_id
-          ) {
-            return panorama
-          }
-
-          // remove the connection links from the panorama
-          const newLinks = panorama.links
-            ?.filter((link) => link.panorama_connect_id !== panorama_connect_id)
-            .filter((link) => link.panorama_connect_id !== panorama_id)
-
-          // returns the panorama with the filtered links
-          return { ...panorama, links: newLinks }
-        })
-
-        return newData
-      })
-    },
   })
 
   function removeConnection() {

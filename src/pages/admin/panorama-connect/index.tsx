@@ -2,8 +2,6 @@ import { useMutation } from '@tanstack/react-query'
 import { ConnectForm, PanoramaConnectFormData } from './connect-form'
 import { connectPanoramas } from '@/api/connect-panorama'
 import { toast } from 'react-toastify'
-import { queryClient } from '@/lib/query-client'
-import { Connection, Panorama } from '@/types/Panorama'
 import { Title } from '@/components/title'
 
 export function PanoramaConnect() {

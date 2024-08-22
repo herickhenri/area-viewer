@@ -21,7 +21,11 @@ export function PanoramaViewer() {
     queryFn: getNotes,
   })
 
-  const { viewerRef, virtualTour, markersPlugin, viewer } = useViewer(panoramas)
+  const { viewerRef, virtualTour, markersPlugin, viewer } = useViewer({
+    panoramas,
+    equipments,
+    notes,
+  })
 
   useUpdateImageQuality({ panoramas, viewer, virtualTour })
 

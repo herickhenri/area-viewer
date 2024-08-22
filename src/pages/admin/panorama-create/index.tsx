@@ -23,7 +23,8 @@ export function PanoramaCreate() {
   }: CreatePanoramaFormData) {
     try {
       if (!file) {
-        throw new Error()
+        toast.error('A foto é obrigatória!')
+        return
       }
 
       const formData = new FormData()

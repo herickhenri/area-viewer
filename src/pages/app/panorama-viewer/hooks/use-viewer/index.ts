@@ -12,8 +12,16 @@ import '@photo-sphere-viewer/markers-plugin/index.css'
 import { useLocation } from 'react-router-dom'
 import { Panorama } from '@/types/Panorama'
 import { createNodes } from './create-nodes'
+import { Equipment } from '@/types/Equipment'
+import { Note } from '@/types/Note'
 
-export function useViewer(data?: Panorama[]) {
+interface UseViewerProps {
+  panoramas?: Panorama[]
+  equipments?: Equipment[]
+  notes?: Note[]
+}
+
+export function useViewer({ panoramas, equipments, notes }: UseViewerProps) {
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
   const nodeId = queryParams.get('nodeId')
@@ -28,11 +36,11 @@ export function useViewer(data?: Panorama[]) {
   const markersPlugin = viewer?.getPlugin<MarkersPlugin>(MarkersPlugin)
 
   useEffect(() => {
-    if (!viewerRef.current || !data || viewerInstanceRef.current) {
+    if (!viewerRef.current || !panoramas || viewerInstanceRef.current) {
       return
     }
 
-    const nodesCreated = createNodes(data)
+    const nodesCreated = createNodes({ panoramas, equipments, notes })
 
     const viewerInstance = new Viewer({
       container: viewerRef.current,
@@ -50,7 +58,7 @@ export function useViewer(data?: Panorama[]) {
     })
     viewerInstanceRef.current = viewerInstance
     setNodes(nodesCreated)
-  }, [viewerRef, data, viewerInstanceRef, nodeId])
+  }, [viewerRef, panoramas, viewerInstanceRef, nodeId, equipments, notes])
 
   useEffect(() => {
     if (nodes && nodeId) {

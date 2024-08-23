@@ -3,8 +3,8 @@ import { api } from '@/lib/axios'
 interface NoteMarkupSchema {
   panorama_id: string
   note_id: string
-  coord_x: number
-  coord_y: number
+  yaw: number
+  pitch: number
 }
 
 export async function postNoteMarkup(connection: NoteMarkupSchema) {

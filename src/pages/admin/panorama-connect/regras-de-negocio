@@ -1,7 +1,0 @@
-Markers
-
-- todas as conexões do panorama em tela devem aparecer, assim sao mostradas no viewer
-- os ponteiros devem ser funcionais, ou seja, ao clicar nele o usuário deve ser movido para o panorama correspondente
-- a conexão que corresponde aos panoramas atuais devem ser mostradas em vermelho
-- caso a conexao entre os panoramas em tela ja exista, ela deve ficar em vermelho e deve poder ser movida, assim como uma conexao criada agora
-- caso uma conexao entre panoramas igual seja requisitada, a pagina deve mostrar um erro

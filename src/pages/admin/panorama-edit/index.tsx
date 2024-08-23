@@ -5,14 +5,15 @@ import {
   CreatePanoramaFormData,
 } from '@/components/panorama-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { Title } from '@/components/title'
 
 export function PanoramaEdit() {
   const navigate = useNavigate()
 
-  const { id } = useParams()
+  const [searchParams] = useSearchParams()
+  const id = searchParams.get('nodeId')
 
   const { data: panorama } = useQuery({
     queryKey: ['panorama', id],

@@ -38,7 +38,7 @@ export function NoteCard({ note }: NoteCardProps) {
         <span>{note.id}</span>
       </div>
       <Link
-        to={`/admin/notes/mark/${note.id}`}
+        to={`/admin/notes/mark?noteId=${note.id}`}
         className="mt-2 grid flex-1 items-end"
       >
         <Button className="text-sm">Marcar na área</Button>

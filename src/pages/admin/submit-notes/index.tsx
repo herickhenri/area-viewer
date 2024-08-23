@@ -35,6 +35,7 @@ export function SubmitNotes() {
     }
 
     function adjustForTimezone(dateString: string) {
+      console.log(dateString)
       const date = new Date(dateString)
       date.setHours(date.getHours() + 3)
       return date
@@ -55,7 +56,7 @@ export function SubmitNotes() {
       const newNotes = dataSheet.map((row: any) => {
         const note: Note = {
           created_at: adjustForTimezone(
-            row['Dt.criação']
+            row['Data da nota']
               .toString()
               .replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'),
           ),

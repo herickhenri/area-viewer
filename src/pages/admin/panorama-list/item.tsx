@@ -45,7 +45,7 @@ export function Item({ panorama }: itemProps) {
         alt=""
       />
       <div className="mt-2 flex justify-start gap-4">
-        <Link to={`/admin/panorama/edit/${panorama.id}`}>
+        <Link to={`/admin/panorama/edit?nodeId=${panorama.id}`}>
           <Button>Editar</Button>
         </Link>
         <Link

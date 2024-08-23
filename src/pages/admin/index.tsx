@@ -35,6 +35,11 @@ export function Admin() {
 
         <ButtonAdm content="Subir notas" icon={Note} link={'notes/submit'} />
         <ButtonAdm content="Lista de notas" icon={Note} link={'notes/list'} />
+        <ButtonAdm
+          content="Marcar nota no panorama"
+          icon={Note}
+          link={'notes/mark'}
+        />
       </div>
     </div>
   )

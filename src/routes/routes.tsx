@@ -83,7 +83,7 @@ export function Routes() {
           element: <PanoramaCreate />,
         },
         {
-          path: 'panorama/edit/:id',
+          path: 'panorama/edit',
           element: <PanoramaEdit />,
         },
         {
@@ -103,7 +103,7 @@ export function Routes() {
           element: <NotesList />,
         },
         {
-          path: 'notes/mark/:id',
+          path: 'notes/mark',
           element: <NoteMark />,
         },
       ],

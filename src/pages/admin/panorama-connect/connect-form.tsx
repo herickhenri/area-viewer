@@ -84,10 +84,6 @@ export function ConnectForm({ handleForm, isPending }: ConnectFormProps) {
     return <h1>carregando...</h1>
   }
 
-  if (!mainPanorama) {
-    return <h1>Panorama não econtrado</h1>
-  }
-
   function handleConnectPanorama(data: PanoramaConnectFormData) {
     handleForm(data)
   }
@@ -109,19 +105,24 @@ export function ConnectForm({ handleForm, isPending }: ConnectFormProps) {
               />
             )}
           />
-
-          <Controller
-            control={control}
-            name="main_position"
-            render={({ field }) => (
-              <PanoramaArea
-                panoramas={panoramas}
-                value={field.value}
-                onChangePosition={field.onChange}
-                panorama={mainPanorama}
-              />
-            )}
-          />
+          {mainPanorama ? (
+            <Controller
+              control={control}
+              name="main_position"
+              render={({ field }) => (
+                <PanoramaArea
+                  panoramas={panoramas}
+                  value={field.value}
+                  onChangePosition={field.onChange}
+                  panorama={mainPanorama}
+                />
+              )}
+            />
+          ) : (
+            <div className="flex h-64 w-full items-center justify-center rounded bg-slate-300 text-lg text-black/80 md:h-80">
+              <span>Selecione um panorama acima</span>
+            </div>
+          )}
 
           <Controller
             control={control}

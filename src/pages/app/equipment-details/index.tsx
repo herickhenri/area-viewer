@@ -56,7 +56,7 @@ export function EquipmentDetails() {
           </div>
         )}
 
-        {equipment.panoramas?.length && (
+        {!!equipment.panoramas?.length && (
           <Link
             to={`/panoramas/viewer?nodeId=${equipment.panoramas[0].panorama_id}&equipmentId=${equipment.id}`}
           >

@@ -32,7 +32,7 @@ export function PanoramaArea({
       return {
         id: equipment_id,
         position: { yaw, pitch },
-        image: '/pin-gray.svg',
+        image: '/pin-red.svg',
         anchor: 'bottom center',
         size: { width: 24, height: 24 },
         tooltip: equipmentName ?? '',
@@ -70,7 +70,7 @@ export function PanoramaArea({
     {
       id: `#${Math.random()}`,
       position: { yaw: markerPosition.yaw, pitch: markerPosition.pitch },
-      image: '/pin-red.svg',
+      image: '/pin-yellow.svg',
       anchor: 'bottom center',
       size: { width: 24, height: 24 },
       tooltip: '',

@@ -21,9 +21,14 @@ import { SubmitNotes } from '@/pages/admin/submit-notes'
 import { NotesFeed } from '@/pages/app/notes-feed'
 import { NoteMark } from '@/pages/admin/note-mark'
 import { NotesList } from '@/pages/admin/notes-list'
+import { ModuleGraph } from '@/pages/module-graph'
 
 export function Routes() {
   const router = createBrowserRouter([
+    {
+      path: '/module-graph',
+      element: <ModuleGraph />,
+    },
     {
       path: '/',
       element: <AppLayout />,

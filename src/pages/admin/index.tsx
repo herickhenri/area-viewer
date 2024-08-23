@@ -1,45 +1,75 @@
-import { CubeTransparent, GearSix, Note } from '@phosphor-icons/react'
-import { ButtonAdm } from '@/components/ButtonAdmin'
 import { Title } from '@/components/title'
+import { Gear, GitDiff, Note, Panorama } from '@phosphor-icons/react'
+import { QuickAccessLink } from './quick-access-link'
 
 export function Admin() {
+  const links = [
+    {
+      title: 'Criar panoramas',
+      icon: Panorama,
+      link: 'panorama/create',
+      color: '#22c55e',
+    },
+    {
+      title: 'Listar panoramas',
+      icon: Panorama,
+      link: 'panorama/list',
+      color: '#22c55e',
+    },
+    {
+      title: 'Conectar panoramas',
+      icon: GitDiff,
+      link: 'panorama/connections',
+      color: '#22c55e',
+    },
+    {
+      title: 'Criar novo equipamento',
+      icon: Gear,
+      link: 'equipment/create',
+      color: '#3b82f6',
+    },
+    {
+      title: 'Listar equipamentos',
+      icon: Gear,
+      link: 'equipment/list',
+      color: '#3b82f6',
+    },
+    {
+      title: 'Cadastrar notas',
+      icon: Note,
+      link: 'notes/submit',
+      color: '#eab308',
+    },
+    {
+      title: 'Listar notas',
+      icon: Note,
+      link: 'notes/list',
+      color: '#eab308',
+    },
+    {
+      title: 'Marcar nota no panorama',
+      icon: Note,
+      link: 'notes/mark',
+      color: '#eab308',
+    },
+  ]
+
   return (
-    <div>
-      <Title>Página admnistrativa</Title>
-
-      <div className="mb-10 flex flex-col items-center gap-5 px-6 md:mx-80">
-        <ButtonAdm
-          content="Cadastrar Equipamentos"
-          icon={GearSix}
-          link={'equipment/create'}
-        />
-        <ButtonAdm
-          content="Editar Equipamentos"
-          icon={GearSix}
-          link={'equipment/list'}
-        />
-
-        <div className="my-5 h-px w-full bg-black" />
-
-        <ButtonAdm
-          content="Cadastrar Panoramas"
-          icon={CubeTransparent}
-          link={'panorama/create'}
-        />
-        <ButtonAdm
-          content="Editar Panoramas"
-          icon={CubeTransparent}
-          link={'panorama/list'}
-        />
-        <div className="my-5 h-px w-full bg-black" />
-
-        <ButtonAdm content="Subir notas" icon={Note} link={'notes/submit'} />
-        <ButtonAdm content="Lista de notas" icon={Note} link={'notes/list'} />
-        <ButtonAdm
-          content="Marcar nota no panorama"
-          icon={Note}
-          link={'notes/mark'}
-        />
+    <div className="flex">
+      <div className="mx-20">
+        <Title>Página admnistrativa</Title>
+        <h2 className="text-lg font-semibold">Acesso rápido</h2>
+        <div className="mt-5 flex flex-wrap gap-3">
+          {links.map(({ icon, link, title, color }) => (
+            <QuickAccessLink
+              key={title}
+              icon={icon}
+              link={link}
+              title={title}
+              color={color}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )

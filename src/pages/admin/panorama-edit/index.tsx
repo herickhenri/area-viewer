@@ -13,7 +13,7 @@ export function PanoramaEdit() {
   const navigate = useNavigate()
 
   const [searchParams] = useSearchParams()
-  const id = searchParams.get('nodeId')
+  const id = searchParams.get('panoramaId')
 
   const { data: panorama } = useQuery({
     queryKey: ['panorama', id],

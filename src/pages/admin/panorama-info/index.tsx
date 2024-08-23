@@ -31,7 +31,10 @@ export function PanoramaInfo() {
       </div>
 
       <div className="relative mt-6 flex w-full flex-1 justify-center gap-2 md:w-[50rem]">
-        <Link className="flex-1" to={`/admin/panorama/edit/${panorama.id}`}>
+        <Link
+          className="flex-1"
+          to={`/admin/panorama/edit?panoramaId=${panorama.id}`}
+        >
           <Button className="w-full">Editar</Button>
         </Link>
         <Link className="flex-1" to="/admin/panorama/create">
